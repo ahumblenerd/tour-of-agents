@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`traceToMermaid > flowchart > snapshot full trace flowchart 1`] = `
+"flowchart TD
+  n0([Agent loop started])
+  n1[State: count=0]
+  n0 --> n1
+  n2{{LLM call}}
+  n1 --> n2
+  n3[LLM response]
+  n2 --> n3
+  n4[/Call: search/]
+  n3 --> n4
+  n5[Result: search]
+  n4 --> n5
+  n6[Rule 'max_tokens': pass]
+  n5 --> n6
+  n7[Remember: last_query]
+  n6 --> n7
+  n8([Done: completed])
+  n7 --> n8
+  classDef error fill:#f96,stroke:#333"
+`;
+
+exports[`traceToMermaid > stateDiagram > snapshot full trace state diagram 1`] = `
+"stateDiagram-v2
+  [*] --> Agent_loop_started
+  Agent_loop_started --> State:_count=0
+  State:_count=0 --> LLM_call
+  LLM_call --> LLM_response
+  LLM_response --> Call:_search
+  Call:_search --> Result:_search
+  Result:_search --> Rule_'max_tokens':_pass
+  Rule_'max_tokens':_pass --> Remember:_last_query
+  Remember:_last_query --> [*]"
+`;
