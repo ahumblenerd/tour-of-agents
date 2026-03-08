@@ -11,10 +11,11 @@ export function layoutGraph(
 ): { nodes: Node[]; edges: Edge[] } {
   const g = new dagre.graphlib.Graph();
   g.setDefaultEdgeLabel(() => ({}));
+  const isVertical = (graph.direction ?? "LR") === "TB";
   g.setGraph({
     rankdir: graph.direction ?? "LR",
-    nodesep: 40,
-    ranksep: 60,
+    nodesep: isVertical ? 50 : 40,
+    ranksep: isVertical ? 50 : 60,
     marginx: 20,
     marginy: 20,
   });
@@ -42,7 +43,7 @@ export function layoutGraph(
       id: node.id,
       type: isDiamond ? "decision" : "agent",
       position: { x: pos.x - w / 2, y: pos.y - h / 2 },
-      data: { label: node.label, icon: node.icon, state: "idle" as const },
+      data: { label: node.label, icon: node.icon, state: "idle" as const, vertical: isVertical },
     };
   });
 

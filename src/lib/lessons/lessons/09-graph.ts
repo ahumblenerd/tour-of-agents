@@ -1,6 +1,7 @@
 import type { GraphDefinition } from "@/lib/graph/types";
 
 export const lesson09Graph: GraphDefinition = {
+  direction: "TB",
   nodes: [
     { id: "input", label: "User input", icon: "⟩", phase: "input" },
     { id: "igate", label: "Input policy", shape: "diamond", phase: "policy" },

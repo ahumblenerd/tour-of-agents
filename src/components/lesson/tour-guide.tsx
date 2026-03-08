@@ -42,9 +42,9 @@ const STEPS: TourStep[] = [
   },
   {
     target: "playback-controls",
-    title: "Debugger Controls",
-    body: "Replay the agent's execution step-by-step. Pause, rewind, change speed.",
-    position: "bottom",
+    title: "Playback Controls",
+    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance. When you send multiple messages, use the Turn arrows to jump between conversation turns. Speed is remembered across lessons.",
+    position: "top",
   },
   {
     target: "full-code",

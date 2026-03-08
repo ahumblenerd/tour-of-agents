@@ -8,22 +8,23 @@ export const lesson08: LessonDefinition = {
   subtitle: "The agent enqueues its own follow-up work. BFS over a task queue.",
   concepts: ["self-scheduling", "task queue", "BFS", "convergence", "budget"],
   graph: {
+    direction: "TB",
     nodes: [
       { id: "queue", label: "Task queue", icon: "⟩", phase: "input" },
       { id: "pop", label: "Pop task", phase: "input" },
       { id: "agent", label: "Agent loop", icon: "⟡", phase: "llm" },
-      { id: "enqueue", label: "Enqueue followup", icon: "⚙", phase: "tool" },
       { id: "check", label: "Queue empty?", shape: "diamond", phase: "decide" },
       { id: "done", label: "All done", icon: "◆", phase: "output" },
+      { id: "enqueue", label: "Enqueue followup", icon: "⚙", phase: "tool" },
     ],
     edges: [
       { id: "queue-pop", source: "queue", target: "pop" },
       { id: "pop-agent", source: "pop", target: "agent" },
+      { id: "agent-check", source: "agent", target: "check", label: "done" },
+      { id: "check-done", source: "check", target: "done", label: "yes" },
+      { id: "check-pop", source: "check", target: "pop", label: "no" },
       { id: "agent-enqueue", source: "agent", target: "enqueue", label: "schedule" },
       { id: "enqueue-queue", source: "enqueue", target: "queue" },
-      { id: "agent-check", source: "agent", target: "check", label: "done" },
-      { id: "check-pop", source: "check", target: "pop", label: "no" },
-      { id: "check-done", source: "check", target: "done", label: "yes" },
     ],
   },
   frameworkName:

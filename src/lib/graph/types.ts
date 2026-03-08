@@ -20,4 +20,4 @@ export interface GraphDefinition {
   direction?: "LR" | "TB";
 }
 
-export type NodeState = "idle" | "active" | "visited";
+export type NodeState = "idle" | "active" | "visited" | "done";

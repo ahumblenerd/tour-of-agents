@@ -7,10 +7,10 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { LessonDefinition } from "@/lib/lessons/types";
-import { TraceEvent } from "@/lib/trace/types";
 import { useStepRunner } from "@/hooks/use-step-runner";
 import { useMonitor } from "@/hooks/use-monitor";
 import { usePlayback } from "@/hooks/use-playback";
+import { useTurns } from "@/hooks/use-turns";
 import { usePyodide } from "@/lib/pyodide/pyodide-provider";
 import { ProseColumn } from "./prose-column";
 import { AgentGraph } from "./agent-graph";
@@ -45,8 +45,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   const monitorRef = useRef(monitor);
   useEffect(() => { runnerRef.current = runner; monitorRef.current = monitor; });
 
-  const [traceEvents, setTraceEvents] = useState<TraceEvent[]>([]);
-  const playback = usePlayback(monitor.entries.length, runner.running);
+  const turns = useTurns(monitor.entries);
+  const playback = usePlayback(monitor.entries.length, runner.running, turns);
 
   const inputStep = useMemo(() => {
     for (let i = lesson.steps.length - 1; i >= 0; i--) {
@@ -59,8 +59,11 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     async (stepId: string, userInput?: string) => {
       const result = await runnerRef.current.runStep(stepId, lesson.steps, userInput);
       if (result.traceEvents.length > 0) {
-        monitorRef.current.addFromTrace(result.traceEvents);
-        setTraceEvents((prev) => [...prev, ...result.traceEvents]);
+        const hasStart = result.traceEvents.some((e) => e.type === "agent_start");
+        monitorRef.current.addFromTrace(
+          result.traceEvents,
+          hasStart ? undefined : (userInput || "Run"),
+        );
       }
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
       markCompleted(lesson.slug);
@@ -83,15 +86,15 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   const handleRunAll = useCallback(async () => {
     const result = await runnerRef.current.runAll(lesson.fullCode);
     if (result) {
-      monitorRef.current.addFromTrace(result.traceEvents);
-      setTraceEvents((prev) => [...prev, ...result.traceEvents]);
+      const hasStart = result.traceEvents.some((e) => e.type === "agent_start");
+      monitorRef.current.addFromTrace(result.traceEvents, hasStart ? undefined : "Full code");
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
     }
     markCompleted(lesson.slug);
   }, [lesson.fullCode, lesson.slug]);
 
   const handleClear = useCallback(() => {
-    monitor.clear(); setTraceEvents([]); playback.reset();
+    monitor.clear(); playback.reset();
   }, [monitor, playback]);
 
   return (
@@ -124,17 +127,21 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
               <div className="h-[45%] min-h-[150px] border-b" data-tour="agent-graph">
                 <AgentGraph
                   graph={lesson.graph}
-                  traceEvents={traceEvents}
+                  entries={monitor.entries}
                   cursor={playback.cursor}
+                  turns={turns}
                 />
               </div>
-              <PlaybackControls playback={playback} entryCount={monitor.entries.length} />
+              <PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />
               <div className="flex-1 overflow-hidden">
                 <TraceLog
                   entries={monitor.entries}
                   cursor={playback.cursor}
                   isLive={playback.isLive}
                   running={runner.running}
+                  turns={turns}
+                  activeTurnIndex={playback.activeTurnIndex}
+                  onGoToTurn={playback.goToTurn}
                 />
               </div>
               <InputBar

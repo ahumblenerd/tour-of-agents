@@ -8,12 +8,13 @@ export const lesson03: LessonDefinition = {
   subtitle: "LLM calls a tool, gets the result, decides again. This IS AgentExecutor.",
   concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
   graph: {
+    direction: "TB",
     nodes: [
       { id: "start", label: "Build messages", icon: "⟩", phase: "input" },
       { id: "llm", label: "Ask LLM", icon: "⟡", phase: "llm" },
       { id: "check", label: "tool_calls?", shape: "diamond", phase: "decide" },
-      { id: "exec", label: "Execute tool", icon: "⚙", phase: "tool" },
       { id: "done", label: "Return answer", icon: "◆", phase: "output" },
+      { id: "exec", label: "Execute tool", icon: "⚙", phase: "tool" },
     ],
     edges: [
       { id: "start-llm", source: "start", target: "llm" },

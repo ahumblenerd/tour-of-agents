@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 import type { Node, Edge } from "@xyflow/react";
 import type { GraphDefinition } from "@/lib/graph/types";
-import type { TraceEvent } from "@/lib/trace/types";
+import type { MonitorEntry } from "@/hooks/use-monitor";
+import type { Turn } from "@/hooks/use-turns";
 import { layoutGraph } from "@/lib/graph/layout";
 import { eventToPhase } from "@/components/lesson/agent-phases";
 
@@ -15,9 +16,10 @@ function buildAdj(graph: GraphDefinition) {
   return adj;
 }
 
-/** Walk the graph sequentially based on trace events up to cursor. */
+/** Walk the graph based on entries in a range [from..upTo]. */
 function buildTraversal(
-  graph: GraphDefinition, traceEvents: TraceEvent[], upTo: number,
+  graph: GraphDefinition, entries: MonitorEntry[],
+  from: number, upTo: number,
 ): { visited: string[]; activeId: string } {
   const adj = buildAdj(graph);
   const phaseToNodes = new Map<string, string[]>();
@@ -31,8 +33,10 @@ function buildTraversal(
   const visited: string[] = [];
   let current = graph.nodes[0]?.id ?? "";
 
-  for (let i = 0; i <= upTo && i < traceEvents.length; i++) {
-    const phase = eventToPhase(traceEvents[i].type);
+  for (let i = from; i <= upTo && i < entries.length; i++) {
+    const traceType = entries[i].traceType;
+    if (!traceType) continue;
+    const phase = eventToPhase(traceType);
     if (!phase) continue;
     const candidates = phaseToNodes.get(phase) ?? [];
     const reachable = adj.get(current) ?? [];
@@ -44,19 +48,16 @@ function buildTraversal(
       current = next;
     }
   }
-  // current is the active node — add all prior stops but NOT current
-  if (!visited.includes(current)) {
-    // current is fresh (not yet in visited) — that's correct for "active"
-  }
 
   return { visited, activeId: current };
 }
 
-/** Compute React Flow nodes/edges with visual state from trace + cursor. */
+/** Compute React Flow nodes/edges with visual state from entries + cursor. */
 export function useGraphState(
   graph: GraphDefinition | undefined,
-  traceEvents: TraceEvent[],
+  entries: MonitorEntry[],
   cursor: number,
+  turns: Turn[],
   highlightNodes?: string[],
 ): { nodes: Node[]; edges: Edge[] } {
   const layout = useMemo(
@@ -66,18 +67,41 @@ export function useGraphState(
 
   return useMemo(() => {
     if (!graph) return layout;
+    if (entries.length === 0 || cursor >= entries.length) return layout;
 
-    const hasTrace = traceEvents.length > 0 && cursor < traceEvents.length;
-    const { visited, activeId } = hasTrace
-      ? buildTraversal(graph, traceEvents, cursor)
+    // Find which turn the cursor is in
+    let activeTurnIdx = 0;
+    for (let i = turns.length - 1; i >= 0; i--) {
+      if (cursor >= turns[i].start) { activeTurnIdx = i; break; }
+    }
+
+    // Pre-visit: walk all previous turns to completion
+    const preVisited = new Set<string>();
+    for (let t = 0; t < activeTurnIdx; t++) {
+      const { visited, activeId } = buildTraversal(
+        graph, entries, turns[t].start, turns[t].end,
+      );
+      visited.forEach((v) => preVisited.add(v));
+      preVisited.add(activeId);
+    }
+
+    // Current turn: walk from turn start to cursor
+    const currentTurn = turns[activeTurnIdx];
+    const { visited, activeId } = currentTurn
+      ? buildTraversal(graph, entries, currentTurn.start, cursor)
       : { visited: [] as string[], activeId: "" };
 
-    const visitedSet = new Set(visited);
+    const visitedSet = new Set([...preVisited, ...visited]);
 
-    // Node states — active takes priority
+    // Check if the active node is an output/end node
+    const activeNode = graph.nodes.find((n) => n.id === activeId);
+    const atCursorEntry = entries[cursor];
+    const isEnd = activeNode?.phase === "output"
+      && atCursorEntry?.traceType === "agent_end";
+
     const getState = (id: string) => {
       if (highlightNodes?.includes(id)) return "active" as const;
-      if (id === activeId) return "active" as const;
+      if (id === activeId) return isEnd ? "done" as const : "active" as const;
       if (visitedSet.has(id)) return "visited" as const;
       return "idle" as const;
     };
@@ -87,16 +111,21 @@ export function useGraphState(
       data: { ...n.data, state: getState(n.id) },
     }));
 
-    // Edge: active if leading into the active node from a visited/active node
-    const reachable = new Set([...visited, activeId]);
+    const reachable = new Set([...visitedSet, activeId]);
     const edges = layout.edges.map((e) => {
       const srcIn = reachable.has(e.source);
       const tgtIn = reachable.has(e.target);
-      const isTraversed = srcIn && tgtIn;
-      const isActive = srcIn && e.target === activeId;
-      return { ...e, data: { traversed: isTraversed, active: isActive } };
+      const isActiveEdge = srcIn && e.target === activeId;
+      return {
+        ...e,
+        data: {
+          traversed: srcIn && tgtIn,
+          active: isActiveEdge && !isEnd,
+          done: isActiveEdge && isEnd,
+        },
+      };
     });
 
     return { nodes, edges };
-  }, [layout, graph, traceEvents, cursor, highlightNodes]);
+  }, [layout, graph, entries, cursor, turns, highlightNodes]);
 }

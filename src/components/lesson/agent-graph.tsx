@@ -10,7 +10,8 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { GraphDefinition } from "@/lib/graph/types";
-import type { TraceEvent } from "@/lib/trace/types";
+import type { MonitorEntry } from "@/hooks/use-monitor";
+import type { Turn } from "@/hooks/use-turns";
 import { useGraphState } from "@/hooks/use-graph-state";
 import { AgentGraphNode } from "./agent-graph-node";
 import { AgentGraphDecision } from "./agent-graph-decision";
@@ -18,8 +19,9 @@ import { AgentGraphEdge } from "./agent-graph-edge";
 
 interface AgentGraphProps {
   graph?: GraphDefinition;
-  traceEvents: TraceEvent[];
+  entries: MonitorEntry[];
   cursor: number;
+  turns: Turn[];
   highlightNodes?: string[];
 }
 
@@ -35,9 +37,9 @@ const edgeTypes: EdgeTypes = {
 const proOptions = { hideAttribution: true };
 
 export function AgentGraph({
-  graph, traceEvents, cursor, highlightNodes,
+  graph, entries, cursor, turns, highlightNodes,
 }: AgentGraphProps) {
-  const { nodes, edges } = useGraphState(graph, traceEvents, cursor, highlightNodes);
+  const { nodes, edges } = useGraphState(graph, entries, cursor, turns, highlightNodes);
   const onInit = useCallback((instance: { fitView: () => void }) => {
     setTimeout(() => instance.fitView(), 50);
   }, []);

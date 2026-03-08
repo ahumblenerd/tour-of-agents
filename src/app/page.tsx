@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { allLessons } from "@/lib/lessons/registry";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,9 @@ import { getProgress, type CourseProgress } from "@/lib/settings/progress";
 import Link from "next/link";
 
 export default function HomePage() {
-  const [progress] = useState<CourseProgress>(() => getProgress());
+  const [progress, setProgress] = useState<CourseProgress>({ visited: [], completed: [] });
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setProgress(getProgress()); }, []);
 
   const completedCount = progress.completed.length;
   const total = allLessons.length;

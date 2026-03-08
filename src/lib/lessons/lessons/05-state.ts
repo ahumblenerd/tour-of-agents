@@ -8,6 +8,7 @@ export const lesson05: LessonDefinition = {
   subtitle: "Track structured data alongside the messages array.",
   concepts: ["state", "structured tracking", "metadata", "observability"],
   graph: {
+    direction: "TB",
     nodes: [
       { id: "loop", label: "Agent loop", icon: "⟩", phase: "input" },
       { id: "tool", label: "Tool call", icon: "⚙", phase: "tool" },

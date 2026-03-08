@@ -10,6 +10,7 @@ import {
 interface EdgeData {
   traversed?: boolean;
   active?: boolean;
+  done?: boolean;
   [key: string]: unknown;
 }
 
@@ -17,15 +18,15 @@ export function AgentGraphEdge({
   id, sourceX, sourceY, targetX, targetY,
   sourcePosition, targetPosition, label, data,
 }: EdgeProps) {
-  const { traversed, active } = (data ?? {}) as EdgeData;
+  const { traversed, active, done } = (data ?? {}) as EdgeData;
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX, sourceY, targetX, targetY,
     sourcePosition, targetPosition,
     borderRadius: 8,
   });
 
-  const stroke = active ? "#ddd" : traversed ? "#555" : "#2a2a2a";
-  const width = active ? 1.5 : 1;
+  const stroke = done ? "#10b981" : active ? "#ddd" : traversed ? "#555" : "#2a2a2a";
+  const width = (active || done) ? 1.5 : 1;
 
   return (
     <>
@@ -35,7 +36,7 @@ export function AgentGraphEdge({
         style={{ stroke, strokeWidth: width, transition: "stroke 0.3s, stroke-width 0.3s" }}
       />
       {traversed && (
-        <circle r="2" fill={active ? "#fff" : "#777"}>
+        <circle r="2" fill={done ? "#10b981" : active ? "#fff" : "#777"}>
           <animateMotion dur={active ? "0.8s" : "2s"} repeatCount="indefinite" path={edgePath} />
         </circle>
       )}

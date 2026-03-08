@@ -8,50 +8,34 @@ export interface MonitorEntry {
   role: "user" | "agent" | "tool" | "llm" | "system";
   content: string;
   detail?: Record<string, unknown>;
+  /** Original trace event type, used for graph phase mapping */
+  traceType?: TraceEvent["type"];
 }
 
 function traceToEntry(event: TraceEvent): MonitorEntry | null {
-  switch (event.type) {
+  const t = event.type;
+  switch (t) {
     case "agent_start":
-      return { id: event.id, role: "user", content: event.label };
+      return { id: event.id, role: "user", content: event.label, traceType: t };
     case "agent_end":
-      return { id: event.id, role: "agent", content: event.label };
+      return { id: event.id, role: "agent", content: event.label, traceType: t };
     case "tool_call":
-      return { id: event.id, role: "agent", content: event.label };
+      return { id: event.id, role: "agent", content: event.label, traceType: t };
     case "tool_result":
-      return { id: event.id, role: "tool", content: event.label };
+      return { id: event.id, role: "tool", content: event.label, traceType: t };
     case "llm_call":
-      return {
-        id: event.id,
-        role: "llm",
-        content: event.label,
-        detail: event.data,
-      };
+      return { id: event.id, role: "llm", content: event.label, detail: event.data, traceType: t };
     case "llm_request":
-      return {
-        id: event.id,
-        role: "llm",
-        content: "→ Request",
-        detail: event.data,
-      };
+      return { id: event.id, role: "llm", content: "→ Request", detail: event.data, traceType: t };
     case "llm_response":
-      return {
-        id: event.id,
-        role: "llm",
-        content: "← Response",
-        detail: event.data,
-      };
+      return { id: event.id, role: "llm", content: "← Response", detail: event.data, traceType: t };
     case "policy_check":
-      return { id: event.id, role: "system", content: event.label };
     case "policy_block":
-      return { id: event.id, role: "system", content: event.label };
     case "state_update":
-      return { id: event.id, role: "system", content: event.label };
     case "event_received":
-      return { id: event.id, role: "system", content: event.label };
     case "memory_read":
     case "memory_write":
-      return { id: event.id, role: "system", content: event.label };
+      return { id: event.id, role: "system", content: event.label, traceType: t };
     default:
       return null;
   }
@@ -60,11 +44,21 @@ function traceToEntry(event: TraceEvent): MonitorEntry | null {
 export function useMonitor() {
   const [entries, setEntries] = useState<MonitorEntry[]>([]);
 
-  const addFromTrace = useCallback((events: TraceEvent[]) => {
+  const addFromTrace = useCallback((events: TraceEvent[], turnStart?: string) => {
     const newEntries = events
       .map(traceToEntry)
       .filter((e): e is MonitorEntry => e !== null);
-    setEntries((prev) => [...prev, ...newEntries]);
+    if (turnStart !== undefined) {
+      const startEntry: MonitorEntry = {
+        id: `turn-${Date.now()}`,
+        role: "user",
+        content: turnStart,
+        traceType: "agent_start",
+      };
+      setEntries((prev) => [...prev, startEntry, ...newEntries]);
+    } else {
+      setEntries((prev) => [...prev, ...newEntries]);
+    }
   }, []);
 
   const addOutput = useCallback((stdout: string) => {

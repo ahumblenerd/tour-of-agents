@@ -67,7 +67,7 @@ describe("useMonitor", () => {
     });
 
     expect(result.current.entries).toEqual([
-      { id: "1", role: "system", content: "msg" },
+      { id: "1", role: "system", content: "msg", traceType: "event_received" },
     ]);
   });
 
@@ -88,5 +88,40 @@ describe("useMonitor", () => {
 
     expect(result.current.entries[0].role).toBe("llm");
     expect(result.current.entries[0].detail).toEqual({ model: "gpt-4o" });
+  });
+
+  it("injects turnStart as agent_start before trace entries", () => {
+    const { result } = renderHook(() => useMonitor());
+
+    act(() => {
+      result.current.addFromTrace(
+        [
+          { id: "1", timestamp: 0, type: "llm_call", label: "thinking" },
+          { id: "2", timestamp: 0, type: "agent_end", label: "done" },
+        ],
+        "add 1 and 1",
+      );
+    });
+
+    expect(result.current.entries).toHaveLength(3);
+    expect(result.current.entries[0].traceType).toBe("agent_start");
+    expect(result.current.entries[0].content).toBe("add 1 and 1");
+    expect(result.current.entries[0].role).toBe("user");
+    expect(result.current.entries[1].traceType).toBe("llm_call");
+    expect(result.current.entries[2].traceType).toBe("agent_end");
+  });
+
+  it("does not inject turnStart when undefined", () => {
+    const { result } = renderHook(() => useMonitor());
+
+    act(() => {
+      result.current.addFromTrace([
+        { id: "1", timestamp: 0, type: "agent_start", label: "hello" },
+        { id: "2", timestamp: 0, type: "agent_end", label: "done" },
+      ]);
+    });
+
+    expect(result.current.entries).toHaveLength(2);
+    expect(result.current.entries[0].traceType).toBe("agent_start");
   });
 });
