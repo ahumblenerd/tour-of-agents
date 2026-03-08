@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve out -l tcp://0.0.0.0:${PORT:-3000}",
     "lint": "eslint",
     "test": "vitest run --project=unit",
     "test:watch": "vitest --project=unit",
