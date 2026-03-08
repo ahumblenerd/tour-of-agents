@@ -21,7 +21,7 @@ export function InlineCodeBlock({
   const html = useHighlightedCode(code);
 
   return (
-    <div className="relative group rounded-lg border my-4 overflow-hidden shiki-wrapper">
+    <div className="relative group rounded-lg border my-4 overflow-hidden shiki-wrapper" {...(runnable ? { "data-tour": "run-button" } : {})}>
       {html ? (
         <div
           className={`overflow-x-auto text-[13px] leading-relaxed ${runnable ? "pr-12" : ""} [&_pre]:!bg-transparent [&_pre]:p-4 [&_pre]:m-0 [&_code]:!text-[13px]`}

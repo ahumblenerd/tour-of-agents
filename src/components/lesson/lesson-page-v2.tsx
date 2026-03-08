@@ -19,6 +19,7 @@ import { LessonSelector } from "./lesson-selector";
 import { ProviderPicker } from "./provider-picker";
 import { MermaidDiagram } from "./mermaid-diagram";
 import { CourseComplete } from "./course-complete";
+import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
 import { getNextLesson } from "@/lib/lessons/registry";
 import { markVisited, markCompleted } from "@/lib/settings/progress";
@@ -110,12 +111,9 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     setTraceEvents([]);
   }, [monitor]);
 
-  const tabClass = (tab: RightTab) =>
-    `px-3 py-1.5 text-xs font-medium transition-colors ${
-      rightTab === tab
-        ? "text-foreground border-b-2 border-primary"
-        : "text-muted-foreground hover:text-foreground"
-    }`;
+  const tc = (t: RightTab) => `px-3 py-1.5 text-xs font-medium transition-colors ${
+    rightTab === t ? "text-foreground border-b-2 border-primary" : "text-muted-foreground hover:text-foreground"
+  }`;
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
@@ -126,13 +124,14 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
             <Badge variant="outline" className="text-[10px]">LLM</Badge>
           )}
           <ProviderPicker />
+          <TourButton />
         </div>
       </div>
 
       {mounted ? (
         <ResizablePanelGroup id={`lesson-${lesson.slug}`} className="flex-1">
           <ResizablePanel id={`prose-${lesson.slug}`} defaultSize={55} minSize={30}>
-            <div className="h-full overflow-auto" data-scroll-root="">
+            <div className="h-full overflow-auto" data-scroll-root="" data-tour="prose-column">
               <ProseColumn
                 steps={lesson.steps}
                 stepResults={runner.stepResults}
@@ -146,10 +145,10 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
           <ResizablePanel id={`monitor-${lesson.slug}`} defaultSize={45} minSize={25}>
             <div className="h-full flex flex-col">
               <div className="flex items-center border-b bg-muted/30 shrink-0">
-                <button className={tabClass("architecture")} onClick={() => setRightTab("architecture")}>
+                <button className={tc("architecture")} onClick={() => setRightTab("architecture")} data-tour="architecture-tab">
                   Architecture
                 </button>
-                <button className={tabClass("agent")} onClick={() => setRightTab("agent")}>
+                <button className={tc("agent")} onClick={() => setRightTab("agent")} data-tour="agent-tab">
                   Agent
                   {monitor.entries.length > 0 && (
                     <span className="ml-1.5 text-[10px] bg-primary/20 text-primary px-1 rounded">
@@ -179,13 +178,13 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
                   />
                 )}
               </div>
-              <FullCodeBlock
+              <div data-tour="full-code"><FullCodeBlock
                 code={lesson.fullCode}
                 onRun={handleRunAll}
                 running={runner.runningStepId === "__all__"}
                 disabled={pyLoading || runner.running}
                 result={runner.stepResults["__all__"]}
-              />
+              /></div>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
@@ -195,6 +194,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
 
       {!getNextLesson(lesson) && <CourseComplete />}
       <LessonNav lesson={lesson} />
+      <TourGuide />
     </div>
   );
 }

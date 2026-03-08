@@ -31,7 +31,7 @@ export function AgentPanelHeader({
   return (
     <div className="border-b bg-muted/20 shrink-0">
       {/* Phase pipeline */}
-      <div className="flex items-center px-3 py-2.5 overflow-x-auto">
+      <div className="flex items-center px-3 py-2.5 overflow-x-auto" data-tour="phase-pipeline">
         {phases.map((p, i) => (
           <div key={p.id} className="flex items-center flex-1 min-w-0">
             {i > 0 && <div className="flex-1 h-px bg-border mx-1" />}
@@ -53,7 +53,7 @@ export function AgentPanelHeader({
 
       {/* Playback bar */}
       {hasEntries && (
-        <div className="flex items-center gap-1 px-2 py-1.5 border-t border-border/40">
+        <div className="flex items-center gap-1 px-2 py-1.5 border-t border-border/40" data-tour="playback-controls">
           <button onClick={onRestart} className={ghost} title="Restart">⟲</button>
 
           <div className="flex flex-col">
