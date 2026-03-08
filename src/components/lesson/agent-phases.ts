@@ -1,6 +1,7 @@
 import { TraceEvent } from "@/lib/trace/types";
+import { PhaseConfig } from "@/lib/lessons/types";
 
-export const PHASES = [
+export const PHASES: PhaseConfig[] = [
   { id: "input", label: "Input", icon: "⟩" },
   { id: "policy", label: "Policy", icon: "◇" },
   { id: "llm", label: "LLM", icon: "⟡" },

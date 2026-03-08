@@ -31,6 +31,12 @@ export interface LlmConfig {
   mockResponses: { match: string; response: MockResponse }[];
 }
 
+export interface PhaseConfig {
+  id: string;
+  label: string;
+  icon: string;
+}
+
 export interface LessonDefinition {
   slug: string;
   number: number;
@@ -46,5 +52,5 @@ export interface LessonDefinition {
   frameworkName: string;
   promptForClaude: string;
   /** Which agent phases to show in the debugger pipeline. Defaults to all. */
-  phases?: string[];
+  phases?: PhaseConfig[];
 }

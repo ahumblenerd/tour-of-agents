@@ -7,9 +7,16 @@ export const lesson09: LessonDefinition = {
   title: "The Whole Thing",
   subtitle: "All 8 concepts composed in ~60 lines. This is a framework.",
   concepts: ["complete agent", "integration", "no framework"],
-  phases: ["input", "policy", "llm", "decide", "tool", "output"],
+  phases: [
+    { id: "input", label: "User input", icon: "⟩" },
+    { id: "policy", label: "Input policy", icon: "◇" },
+    { id: "llm", label: "LLM + memory", icon: "⟡" },
+    { id: "decide", label: "tool_calls?", icon: "?" },
+    { id: "tool", label: "Tools + state", icon: "⚙" },
+    { id: "output", label: "Done", icon: "◆" },
+  ],
   buildingOn: "Everything from Lessons 1-8",
-  conceptDiagram: `flowchart TD
+  conceptDiagram: `flowchart LR
     input["User input"] --> igate{"Input policy"}
     igate -->|block| reject["Rejected"]
     igate -->|pass| loop["Agent loop"]

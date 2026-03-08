@@ -92,6 +92,24 @@ describe("lesson registry", () => {
     expect(getPreviousLesson(l1)).toBeUndefined();
   });
 
+  it("every lesson has phases with id, label, and icon", () => {
+    for (const lesson of allLessons) {
+      expect(lesson.phases).toBeDefined();
+      expect(lesson.phases!.length).toBeGreaterThan(0);
+      for (const phase of lesson.phases!) {
+        expect(phase.id).toBeTruthy();
+        expect(phase.label).toBeTruthy();
+        expect(phase.icon).toBeTruthy();
+      }
+    }
+  });
+
+  it("all diagrams use flowchart LR", () => {
+    for (const lesson of allLessons) {
+      expect(lesson.conceptDiagram).toMatch(/^flowchart LR/);
+    }
+  });
+
   it("filenames match content", () => {
     const expected = [
       "agent-function", "tools", "agent-loop", "conversation",

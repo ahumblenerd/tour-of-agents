@@ -5,7 +5,7 @@ import { MonitorEntry } from "@/hooks/use-monitor";
 import { TraceEvent } from "@/lib/trace/types";
 import { MonitorEntryRow } from "./monitor-entry";
 import { MonitorJsonBlock } from "./monitor-json-block";
-import { InputConfig } from "@/lib/lessons/types";
+import { InputConfig, PhaseConfig } from "@/lib/lessons/types";
 import { AgentPanelHeader } from "./agent-panel-header";
 import { PHASES, eventToPhase } from "./agent-phases";
 
@@ -17,8 +17,8 @@ interface AgentPanelProps {
   onSend?: (userInput: string) => void;
   running?: boolean;
   disabled?: boolean;
-  /** Which phase IDs to show (defaults to all) */
-  visiblePhases?: string[];
+  /** Lesson-specific phase configs (defaults to generic PHASES) */
+  visiblePhases?: PhaseConfig[];
 }
 
 export function AgentPanel({
@@ -28,9 +28,7 @@ export function AgentPanel({
   const bottomRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
   const [speed, setSpeed] = useState(1500);
-  const phases = visiblePhases
-    ? PHASES.filter((p) => visiblePhases.includes(p.id))
-    : PHASES;
+  const phases = visiblePhases ?? PHASES;
 
   // Cursor = which entry is highlighted. Always 0-based index into entries.
   const [cursor, setCursor] = useState(0);
