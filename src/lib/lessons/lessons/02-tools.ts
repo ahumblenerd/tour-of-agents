@@ -107,7 +107,9 @@ One line does the work: \`tools[name](**args)\`. Same pattern as an Express rout
     if d.get("tool") and d["tool"] in tools:
         result = tools[d["tool"]](**d["args"])
         trace("tool_result", f"{d['tool']} → {result}")
+        trace("agent_end", f"{d['tool']}({d['args']}) = {result}")
         return f"{d['tool']}({d['args']}) = {result}"
+    trace("agent_end", d.get("text", "No tool needed"))
     return d.get("text", "No tool needed")`,
     },
     {
