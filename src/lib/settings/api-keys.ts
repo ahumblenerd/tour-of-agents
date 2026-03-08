@@ -95,3 +95,40 @@ export function getLlmConfig() {
     model: getModel(),
   };
 }
+
+/** Fire a minimal chat completion to verify the key + model work. */
+export async function testConnection(
+  baseUrl: string, apiKey: string, model: string,
+): Promise<{ ok: boolean; message: string }> {
+  try {
+    const res = await fetch(`${baseUrl}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "user", content: "Say hi in 3 words." }],
+        max_tokens: 20,
+      }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      const msg = tryParseError(body) || `${res.status} ${res.statusText}`;
+      return { ok: false, message: msg };
+    }
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content ?? "";
+    return { ok: true, message: reply.slice(0, 60) };
+  } catch (err) {
+    return { ok: false, message: (err as Error).message };
+  }
+}
+
+function tryParseError(body: string): string | null {
+  try {
+    const j = JSON.parse(body);
+    return j.error?.message || j.error?.code || null;
+  } catch { return null; }
+}

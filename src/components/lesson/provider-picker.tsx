@@ -9,6 +9,7 @@ import {
   setApiKeys,
   getModel,
   setModel,
+  testConnection,
   PROVIDER_CONFIGS,
   type LlmProvider,
 } from "@/lib/settings/api-keys";
@@ -22,6 +23,8 @@ export function ProviderPicker() {
   const [model, setLocalModel] = useState("");
   const [open, setOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [testResult, setTestResult] = useState<{ ok: boolean; message: string } | null>(null);
+  const [testing, setTesting] = useState(false);
 
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
@@ -49,6 +52,15 @@ export function ProviderPicker() {
     const updated = { ...keys, [provider]: "" };
     setKeys(updated);
     setApiKeys(updated);
+  };
+
+  const handleTest = async () => {
+    const activeModel = model || PROVIDER_CONFIGS[provider].defaultModel;
+    setTesting(true);
+    setTestResult(null);
+    const result = await testConnection(PROVIDER_CONFIGS[provider].baseUrl, keys[provider], activeModel);
+    setTesting(false);
+    setTestResult(result);
   };
 
   const config = PROVIDER_CONFIGS[provider];
@@ -105,15 +117,31 @@ export function ProviderPicker() {
             </Button>
             {hasKey && (
               <Button
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={handleTest}
+                disabled={testing}
+              >
+                {testing ? "Testing..." : "Test"}
+              </Button>
+            )}
+            {hasKey && (
+              <Button
                 variant="destructive"
                 size="sm"
                 className="h-7 text-xs"
                 onClick={handleClearKey}
               >
-                Clear key
+                Clear
               </Button>
             )}
           </div>
+          {testResult && (
+            <p className={`text-[10px] leading-relaxed ${testResult.ok ? "text-emerald-400" : "text-red-400"}`}>
+              {testResult.ok ? `OK — "${testResult.message}"` : `Failed — ${testResult.message}`}
+            </p>
+          )}
           <KeyStorageHelp show={showHelp} onToggle={() => setShowHelp(!showHelp)} />
         </div>
       )}
