@@ -92,6 +92,20 @@ describe("lesson registry", () => {
     expect(getPreviousLesson(l1)).toBeUndefined();
   });
 
+  it("every lesson has a valid graph definition", () => {
+    for (const lesson of allLessons) {
+      expect(lesson.graph).toBeDefined();
+      const { nodes, edges } = lesson.graph!;
+      expect(nodes.length).toBeGreaterThan(0);
+      expect(edges.length).toBeGreaterThan(0);
+      const nodeIds = new Set(nodes.map((n) => n.id));
+      for (const edge of edges) {
+        expect(nodeIds.has(edge.source)).toBe(true);
+        expect(nodeIds.has(edge.target)).toBe(true);
+      }
+    }
+  });
+
   it("every lesson has phases with id, label, and icon", () => {
     for (const lesson of allLessons) {
       expect(lesson.phases).toBeDefined();

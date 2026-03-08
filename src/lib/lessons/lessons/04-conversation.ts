@@ -13,6 +13,23 @@ export const lesson04: LessonDefinition = {
     { id: "output", label: "Correct answer", icon: "◆" },
   ],
   buildingOn: "Lesson 3's agent loop",
+  graph: {
+    nodes: [
+      { id: "conv", label: "Conversation list", icon: "⟩", phase: "input" },
+      { id: "call1", label: "Agent call 1", phase: "llm" },
+      { id: "grow1", label: "List grows", phase: "tool" },
+      { id: "call2", label: "Agent call 2", phase: "llm" },
+      { id: "grow2", label: "Sees full history", phase: "tool" },
+      { id: "answer", label: "Correct answer", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "conv-call1", source: "conv", target: "call1" },
+      { id: "call1-grow1", source: "call1", target: "grow1" },
+      { id: "grow1-call2", source: "grow1", target: "call2" },
+      { id: "call2-grow2", source: "call2", target: "grow2" },
+      { id: "grow2-answer", source: "grow2", target: "answer" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     conv["Conversation list"] --> call1["Agent call 1"]
     call1 --> grow1["List grows"]

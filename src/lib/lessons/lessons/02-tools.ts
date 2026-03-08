@@ -14,6 +14,25 @@ export const lesson02: LessonDefinition = {
     { id: "output", label: "Result", icon: "◆" },
   ],
   buildingOn: "Lesson 1's agent function",
+  graph: {
+    nodes: [
+      { id: "user", label: "User", icon: "⟩", phase: "input" },
+      { id: "agent", label: "Agent", phase: "input" },
+      { id: "llm", label: "LLM + tools", icon: "⟡", phase: "llm" },
+      { id: "tc", label: "tool_calls?", shape: "diamond", phase: "decide" },
+      { id: "dispatch", label: "Dispatch tool", icon: "⚙", phase: "tool" },
+      { id: "result", label: "Result", icon: "◆", phase: "output" },
+      { id: "text", label: "Text response", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "user-agent", source: "user", target: "agent" },
+      { id: "agent-llm", source: "agent", target: "llm" },
+      { id: "llm-tc", source: "llm", target: "tc" },
+      { id: "tc-dispatch", source: "tc", target: "dispatch", label: "yes" },
+      { id: "dispatch-result", source: "dispatch", target: "result" },
+      { id: "tc-text", source: "tc", target: "text", label: "no" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     user["User"] --> agent["Agent"]
     agent --> llm["LLM + tools"]

@@ -10,14 +10,17 @@ import { LessonDefinition } from "@/lib/lessons/types";
 import { TraceEvent } from "@/lib/trace/types";
 import { useStepRunner } from "@/hooks/use-step-runner";
 import { useMonitor } from "@/hooks/use-monitor";
+import { usePlayback } from "@/hooks/use-playback";
 import { usePyodide } from "@/lib/pyodide/pyodide-provider";
 import { ProseColumn } from "./prose-column";
-import { AgentPanel } from "./agent-panel";
+import { AgentGraph } from "./agent-graph";
+import { TraceLog } from "./trace-log";
+import { PlaybackControls } from "./playback-controls";
+import { InputBar } from "./input-bar";
 import { FullCodeBlock } from "./full-code-block";
 import { LessonNav } from "./lesson-nav";
 import { LessonSelector } from "./lesson-selector";
 import { ProviderPicker } from "./provider-picker";
-import { MermaidDiagram } from "./mermaid-diagram";
 import { CourseComplete } from "./course-complete";
 import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
@@ -27,8 +30,6 @@ import { markVisited, markCompleted } from "@/lib/settings/progress";
 interface LessonPageV2Props {
   lesson: LessonDefinition;
 }
-
-type RightTab = "architecture" | "agent";
 
 export function LessonPageV2({ lesson }: LessonPageV2Props) {
   const [mounted, setMounted] = useState(false);
@@ -44,18 +45,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   const monitorRef = useRef(monitor);
   useEffect(() => { runnerRef.current = runner; monitorRef.current = monitor; });
 
-  const [rightTab, setRightTab] = useState<RightTab>("architecture");
   const [traceEvents, setTraceEvents] = useState<TraceEvent[]>([]);
-
-  // Auto-switch to agent panel when entries arrive
-  const prevCount = useRef(0);
-  useEffect(() => {
-    if (monitor.entries.length > prevCount.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRightTab("agent");
-    }
-    prevCount.current = monitor.entries.length;
-  }, [monitor.entries.length]);
+  const playback = usePlayback(monitor.entries.length, runner.running);
 
   const inputStep = useMemo(() => {
     for (let i = lesson.steps.length - 1; i >= 0; i--) {
@@ -66,16 +57,12 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
 
   const handleRunStep = useCallback(
     async (stepId: string, userInput?: string) => {
-      const result = await runnerRef.current.runStep(
-        stepId, lesson.steps, userInput
-      );
+      const result = await runnerRef.current.runStep(stepId, lesson.steps, userInput);
       if (result.traceEvents.length > 0) {
         monitorRef.current.addFromTrace(result.traceEvents);
         setTraceEvents((prev) => [...prev, ...result.traceEvents]);
       }
-      if (result.stdout) {
-        monitorRef.current.addOutput(result.stdout);
-      }
+      if (result.stdout) monitorRef.current.addOutput(result.stdout);
       markCompleted(lesson.slug);
     },
     [lesson.steps, lesson.slug]
@@ -89,10 +76,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   }, [lesson.steps]);
 
   const handleSend = useCallback(
-    (userInput: string) => {
-      if (!lastCodeStepId) return;
-      handleRunStep(lastCodeStepId, userInput);
-    },
+    (userInput: string) => { if (lastCodeStepId) handleRunStep(lastCodeStepId, userInput); },
     [lastCodeStepId, handleRunStep]
   );
 
@@ -106,20 +90,16 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     markCompleted(lesson.slug);
   }, [lesson.fullCode, lesson.slug]);
 
-  const handleClear = useCallback(() => { monitor.clear(); setTraceEvents([]); }, [monitor]);
-
-  const tc = (t: RightTab) => `px-3 py-1.5 text-xs font-medium transition-colors ${
-    rightTab === t ? "text-foreground border-b-2 border-primary" : "text-muted-foreground hover:text-foreground"
-  }`;
+  const handleClear = useCallback(() => {
+    monitor.clear(); setTraceEvents([]); playback.reset();
+  }, [monitor, playback]);
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
       <div className="flex items-center gap-3 px-4 py-2 border-b bg-muted/30">
         <LessonSelector current={lesson} />
         <div className="flex items-center gap-2 ml-auto">
-          {lesson.llmConfig && (
-            <Badge variant="outline" className="text-[10px]">LLM</Badge>
-          )}
+          {lesson.llmConfig && <Badge variant="outline" className="text-[10px]">LLM</Badge>}
           <ProviderPicker />
           <TourButton />
         </div>
@@ -127,7 +107,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
 
       {mounted ? (
         <ResizablePanelGroup id={`lesson-${lesson.slug}`} className="flex-1">
-          <ResizablePanel id={`prose-${lesson.slug}`} defaultSize={55} minSize={30}>
+          <ResizablePanel id={`prose-${lesson.slug}`} defaultSize={50} minSize={30}>
             <div className="h-full overflow-auto" data-scroll-root="" data-tour="prose-column">
               <ProseColumn
                 steps={lesson.steps}
@@ -139,43 +119,33 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel id={`monitor-${lesson.slug}`} defaultSize={45} minSize={25}>
+          <ResizablePanel id={`monitor-${lesson.slug}`} defaultSize={50} minSize={25}>
             <div className="h-full flex flex-col">
-              <div className="flex items-center border-b bg-muted/30 shrink-0">
-                <button className={tc("architecture")} onClick={() => setRightTab("architecture")} data-tour="architecture-tab">
-                  Architecture
-                </button>
-                <button className={tc("agent")} onClick={() => setRightTab("agent")} data-tour="agent-tab">
-                  Agent
-                  {monitor.entries.length > 0 && (
-                    <span className="ml-1.5 text-[10px] bg-primary/20 text-primary px-1 rounded">
-                      {monitor.entries.length}
-                    </span>
-                  )}
-                </button>
+              <div className="h-[45%] min-h-[150px] border-b" data-tour="agent-graph">
+                <AgentGraph
+                  graph={lesson.graph}
+                  traceEvents={traceEvents}
+                  cursor={playback.cursor}
+                />
               </div>
+              <PlaybackControls playback={playback} entryCount={monitor.entries.length} />
               <div className="flex-1 overflow-hidden">
-                {rightTab === "architecture" ? (
-                  <div className="h-full overflow-auto flex items-center justify-center">
-                    {lesson.conceptDiagram ? (
-                      <MermaidDiagram chart={lesson.conceptDiagram} />
-                    ) : (
-                      <p className="text-sm text-muted-foreground">No diagram</p>
-                    )}
-                  </div>
-                ) : (
-                  <AgentPanel
-                    entries={monitor.entries}
-                    traceEvents={traceEvents}
-                    onClear={handleClear}
-                    inputConfig={inputStep?.inputConfig}
-                    onSend={handleSend}
-                    running={runner.running}
-                    disabled={pyLoading}
-                    visiblePhases={lesson.phases}
-                  />
-                )}
+                <TraceLog
+                  entries={monitor.entries}
+                  cursor={playback.cursor}
+                  isLive={playback.isLive}
+                  running={runner.running}
+                />
               </div>
+              <InputBar
+                inputConfig={inputStep?.inputConfig}
+                onSend={handleSend}
+                onClear={handleClear}
+                running={runner.running}
+                disabled={pyLoading}
+                replaying={playback.replaying}
+                entryCount={monitor.entries.length}
+              />
               <div data-tour="full-code"><FullCodeBlock
                 code={lesson.fullCode}
                 onRun={handleRunAll}

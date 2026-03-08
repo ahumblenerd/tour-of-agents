@@ -13,6 +13,19 @@ export const lesson06: LessonDefinition = {
     { id: "output", label: "Answer", icon: "◆" },
   ],
   buildingOn: "Lesson 5's state tracking",
+  graph: {
+    nodes: [
+      { id: "run1", label: "Run 1: save fact", icon: "⟩", phase: "input" },
+      { id: "mem", label: "Memory dict", icon: "⟡", phase: "llm" },
+      { id: "run2", label: "Run 2: recall", phase: "llm" },
+      { id: "answer", label: "Correct answer", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "run1-mem", source: "run1", target: "mem", label: "remember" },
+      { id: "mem-run2", source: "mem", target: "run2", label: "inject" },
+      { id: "run2-answer", source: "run2", target: "answer" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     run1["Run 1: save fact"] -->|remember| mem["Memory dict"]
     mem -->|inject into prompt| run2["Run 2: recall fact"]

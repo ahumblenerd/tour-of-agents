@@ -14,6 +14,25 @@ export const lesson08: LessonDefinition = {
     { id: "output", label: "All done", icon: "◆" },
   ],
   buildingOn: "Lesson 7's policy gates",
+  graph: {
+    nodes: [
+      { id: "queue", label: "Task queue", icon: "⟩", phase: "input" },
+      { id: "pop", label: "Pop task", phase: "input" },
+      { id: "agent", label: "Agent loop", icon: "⟡", phase: "llm" },
+      { id: "enqueue", label: "Enqueue followup", icon: "⚙", phase: "tool" },
+      { id: "check", label: "Queue empty?", shape: "diamond", phase: "decide" },
+      { id: "done", label: "All done", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "queue-pop", source: "queue", target: "pop" },
+      { id: "pop-agent", source: "pop", target: "agent" },
+      { id: "agent-enqueue", source: "agent", target: "enqueue", label: "schedule" },
+      { id: "enqueue-queue", source: "enqueue", target: "queue" },
+      { id: "agent-check", source: "agent", target: "check", label: "done" },
+      { id: "check-pop", source: "check", target: "pop", label: "no" },
+      { id: "check-done", source: "check", target: "done", label: "yes" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     queue["Task queue"] --> pop["Pop task"]
     pop --> agent["Agent loop"]

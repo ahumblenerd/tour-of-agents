@@ -15,14 +15,28 @@ export const lesson03: LessonDefinition = {
     { id: "output", label: "Return answer", icon: "◆" },
   ],
   buildingOn: "Lesson 2's tool dispatch",
+  graph: {
+    nodes: [
+      { id: "start", label: "Build messages", icon: "⟩", phase: "input" },
+      { id: "llm", label: "Ask LLM", icon: "⟡", phase: "llm" },
+      { id: "check", label: "tool_calls?", shape: "diamond", phase: "decide" },
+      { id: "exec", label: "Execute tool", icon: "⚙", phase: "tool" },
+      { id: "done", label: "Return answer", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "start-llm", source: "start", target: "llm" },
+      { id: "llm-check", source: "llm", target: "check" },
+      { id: "check-done", source: "check", target: "done", label: "no" },
+      { id: "check-exec", source: "check", target: "exec", label: "yes" },
+      { id: "exec-llm", source: "exec", target: "llm" },
+    ],
+  },
   conceptDiagram: `flowchart LR
-    start["Build messages"] --> loop{"Next turn"}
-    loop --> llm["Ask LLM"]
+    start["Build messages"] --> llm["Ask LLM"]
     llm --> check{"tool_calls?"}
     check -->|no| done["Return answer"]
     check -->|yes| exec["Execute tool"]
-    exec --> append["Append result"]
-    append --> loop`,
+    exec --> llm`,
   frameworkName:
     "LangChain AgentExecutor, OpenAI Agents SDK, AutoGen — a while loop over messages.",
   promptForClaude:

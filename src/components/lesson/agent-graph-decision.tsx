@@ -1,0 +1,33 @@
+"use client";
+
+import { Handle, Position } from "@xyflow/react";
+import type { NodeProps } from "@xyflow/react";
+
+type NodeState = "idle" | "active" | "visited";
+
+interface DecisionNodeData {
+  label: string;
+  state: NodeState;
+  [key: string]: unknown;
+}
+
+const stateStyles: Record<NodeState, string> = {
+  idle: "border-border/40 text-muted-foreground bg-muted/30",
+  active: "border-primary bg-primary/15 text-foreground shadow-[0_0_12px_rgba(var(--primary-rgb),0.3)] scale-105",
+  visited: "border-primary/50 bg-primary/5 text-foreground",
+};
+
+export function AgentGraphDecision({ data }: NodeProps) {
+  const { label, state } = data as DecisionNodeData;
+  return (
+    <div
+      className={`w-[70px] h-[70px] rotate-45 border-2 transition-all duration-300 flex items-center justify-center ${stateStyles[state]}`}
+    >
+      <Handle type="target" position={Position.Left} className="!bg-border !w-2 !h-2 !-rotate-45" />
+      <span className="text-[10px] font-medium -rotate-45 text-center leading-tight px-1">
+        {label}
+      </span>
+      <Handle type="source" position={Position.Right} className="!bg-border !w-2 !h-2 !-rotate-45" />
+    </div>
+  );
+}

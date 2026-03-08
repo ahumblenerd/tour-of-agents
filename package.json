@@ -16,9 +16,12 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@types/dagre": "^0.7.54",
+    "@xyflow/react": "^12.10.1",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dagre": "^0.8.5",
     "lucide-react": "^0.577.0",
     "mermaid": "^11.12.3",
     "next": "16.1.6",

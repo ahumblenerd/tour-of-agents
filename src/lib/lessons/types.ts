@@ -1,4 +1,5 @@
 import { DiagramType } from "@/lib/trace/trace-to-mermaid";
+import { GraphDefinition } from "@/lib/graph/types";
 
 export interface InputConfig {
   placeholder: string;
@@ -49,6 +50,7 @@ export interface LessonDefinition {
   diagramType: DiagramType;
   buildingOn: string;
   conceptDiagram: string;
+  graph?: GraphDefinition;
   frameworkName: string;
   promptForClaude: string;
   /** Which agent phases to show in the debugger pipeline. Defaults to all. */

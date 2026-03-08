@@ -13,6 +13,19 @@ export const lesson01: LessonDefinition = {
     { id: "output", label: "Response", icon: "◆" },
   ],
   buildingOn: "",
+  graph: {
+    nodes: [
+      { id: "input", label: "Your message", icon: "⟩", phase: "input" },
+      { id: "fn", label: "agent()", phase: "llm" },
+      { id: "api", label: "POST /completions", phase: "llm" },
+      { id: "out", label: "Response", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "input-fn", source: "input", target: "fn" },
+      { id: "fn-api", source: "fn", target: "api" },
+      { id: "api-out", source: "api", target: "out" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     input["Your message"] --> fn["agent()"]
     fn --> api["POST /chat/completions"]

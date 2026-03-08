@@ -13,6 +13,20 @@ export const lesson05: LessonDefinition = {
     { id: "output", label: "Answer + state", icon: "◆" },
   ],
   buildingOn: "Lesson 4's conversation history",
+  graph: {
+    nodes: [
+      { id: "loop", label: "Agent loop", icon: "⟩", phase: "input" },
+      { id: "tool", label: "Tool call", icon: "⚙", phase: "tool" },
+      { id: "track", label: "Track in state", phase: "tool" },
+      { id: "done", label: "Answer + state", icon: "◆", phase: "output" },
+    ],
+    edges: [
+      { id: "loop-tool", source: "loop", target: "tool" },
+      { id: "tool-track", source: "tool", target: "track" },
+      { id: "track-loop", source: "track", target: "loop" },
+      { id: "loop-done", source: "loop", target: "done" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     loop["Agent Loop"] --> tool["Tool call"]
     tool --> track["Track in state dict"]

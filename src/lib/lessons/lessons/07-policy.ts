@@ -14,6 +14,25 @@ export const lesson07: LessonDefinition = {
     { id: "output", label: "Output gate", icon: "◆" },
   ],
   buildingOn: "Lesson 6's memory injection",
+  graph: {
+    nodes: [
+      { id: "input", label: "User input", icon: "⟩", phase: "input" },
+      { id: "igate", label: "Input gate", shape: "diamond", phase: "policy" },
+      { id: "reject", label: "Rejected", phase: "policy" },
+      { id: "llm", label: "L3 loop", icon: "⟡", phase: "llm" },
+      { id: "ogate", label: "Output gate", shape: "diamond", phase: "policy" },
+      { id: "user", label: "User gets answer", icon: "◆", phase: "output" },
+      { id: "redact", label: "Redacted", phase: "policy" },
+    ],
+    edges: [
+      { id: "input-igate", source: "input", target: "igate" },
+      { id: "igate-llm", source: "igate", target: "llm", label: "pass" },
+      { id: "igate-reject", source: "igate", target: "reject", label: "block" },
+      { id: "llm-ogate", source: "llm", target: "ogate" },
+      { id: "ogate-user", source: "ogate", target: "user", label: "pass" },
+      { id: "ogate-redact", source: "ogate", target: "redact", label: "block" },
+    ],
+  },
   conceptDiagram: `flowchart LR
     input["User input"] --> igate{"Input gate"}
     igate -->|pass| llm["L3 loop"]

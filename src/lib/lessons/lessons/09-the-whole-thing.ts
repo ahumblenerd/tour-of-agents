@@ -1,5 +1,6 @@
 import { LessonDefinition } from "../types";
 import { lesson09FullCode } from "./09-full-code";
+import { lesson09Graph } from "./09-graph";
 
 export const lesson09: LessonDefinition = {
   slug: "the-whole-thing",
@@ -16,6 +17,7 @@ export const lesson09: LessonDefinition = {
     { id: "output", label: "Done", icon: "◆" },
   ],
   buildingOn: "Everything from Lessons 1-8",
+  graph: lesson09Graph,
   conceptDiagram: `flowchart LR
     input["User input"] --> igate{"Input policy"}
     igate -->|block| reject["Rejected"]
