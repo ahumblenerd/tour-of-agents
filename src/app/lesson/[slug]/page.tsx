@@ -1,6 +1,5 @@
 import { allLessons, getLessonBySlug } from "@/lib/lessons/registry";
-import { LessonPage } from "@/components/lesson/lesson-page";
-import { SidebarNav } from "@/components/layout/sidebar-nav";
+import { LessonPageV2 } from "@/components/lesson/lesson-page-v2";
 
 export function generateStaticParams() {
   return allLessons.map((lesson) => ({
@@ -24,14 +23,5 @@ export default async function LessonRoute({
     );
   }
 
-  return (
-    <div className="flex h-[calc(100vh-3.5rem)]">
-      <aside className="w-56 shrink-0 border-r hidden md:block">
-        <SidebarNav currentSlug={slug} />
-      </aside>
-      <main className="flex-1 min-w-0">
-        <LessonPage lesson={lesson} />
-      </main>
-    </div>
-  );
+  return <LessonPageV2 lesson={lesson} />;
 }

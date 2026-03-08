@@ -4,9 +4,13 @@ import { useEffect, useRef, useState } from "react";
 
 interface MermaidDiagramProps {
   chart: string;
+  placeholder?: string;
 }
 
-export function MermaidDiagram({ chart }: MermaidDiagramProps) {
+export function MermaidDiagram({
+  chart,
+  placeholder = "Run your code to see the execution diagram.",
+}: MermaidDiagramProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>("");
   const [error, setError] = useState<string>("");
@@ -20,10 +24,15 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     async function render() {
       try {
         const mermaid = (await import("mermaid")).default;
+        const isDark = document.documentElement.classList.contains("dark");
         mermaid.initialize({
           startOnLoad: false,
-          theme: "dark",
+          theme: isDark ? "dark" : "default",
           securityLevel: "loose",
+          flowchart: { curve: "basis", padding: 12 },
+          themeVariables: isDark
+            ? { primaryColor: "#3b82f6", primaryTextColor: "#f8fafc", lineColor: "#64748b", secondaryColor: "#1e293b" }
+            : { primaryColor: "#3b82f6", primaryTextColor: "#fff", lineColor: "#94a3b8", secondaryColor: "#e2e8f0" },
         });
 
         const id = `mermaid-${++idRef.current}`;
@@ -46,16 +55,17 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   }, [chart]);
 
   if (!chart) {
+    if (!placeholder) return null;
     return (
       <div className="flex items-center justify-center h-full min-h-[200px] text-zinc-500 text-sm">
-        Run your code to see the execution diagram.
+        {placeholder}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-4 text-red-400 text-sm font-mono">
+      <div className="p-2 text-red-400 text-xs font-mono">
         Diagram error: {error}
       </div>
     );
@@ -64,7 +74,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   return (
     <div
       ref={containerRef}
-      className="flex items-center justify-center p-4 overflow-auto"
+      className="flex items-center justify-center p-4 overflow-auto w-full h-full [&_svg]:w-full [&_svg]:h-auto [&_svg]:max-h-full"
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

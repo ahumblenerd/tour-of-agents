@@ -1,23 +1,26 @@
 import { LessonDefinition } from "../types";
 
-export const lesson05: LessonDefinition = {
-  slug: "state",
-  number: 5,
-  title: "State = Dict",
-  subtitle: "Track structured data alongside the messages array.",
-  concepts: ["state", "structured tracking", "metadata", "observability"],
-  buildingOn: "Lesson 4's conversation history",
+export const lesson03: LessonDefinition = {
+  slug: "agent-loop",
+  number: 3,
+  title: "The Agent Loop",
+  subtitle: "LLM calls a tool, gets the result, decides again. This IS AgentExecutor.",
+  concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
+  buildingOn: "Lesson 2's tool dispatch",
   conceptDiagram: `flowchart TD
-    loop["Agent Loop"] --> tool["Tool call"]
-    tool --> track["Track in state dict"]
-    track --> loop
-    loop --> done["Return answer + state"]`,
+    start["Build messages"] --> loop{"Next turn"}
+    loop --> llm["Ask LLM"]
+    llm --> check{"tool_calls?"}
+    check -->|no| done["Return answer"]
+    check -->|yes| exec["Execute tool"]
+    exec --> append["Append result"]
+    append --> loop`,
   frameworkName:
-    "LangGraph state channels, Redux store — structured data alongside the conversation.",
+    "LangChain AgentExecutor, OpenAI Agents SDK, AutoGen — a while loop over messages.",
   promptForClaude:
-    "Add a state dict that tracks tool calls and results alongside the agent loop.",
+    "Build the real agent loop: LLM decides tool or done, results fed back via messages.",
   llmConfig: {
-    systemPrompt: "You have tools. Use them. Be concise.",
+    systemPrompt: "Use tools to answer. Be concise.",
     tools: [
       { name: "add", description: "Add two numbers",
         parameters: { a: { type: "number" }, b: { type: "number" } } },
@@ -29,20 +32,22 @@ export const lesson05: LessonDefinition = {
   steps: [
     {
       id: "intro",
-      prose: `# State = Dict
+      prose: `# The Agent Loop
 
-The messages array is the **raw tape** — every message the LLM sent and received. But you often need structured answers: *which tools ran? how many turns? what were the results?*
+**This is the most important lesson.** Everything after this builds on this loop.
 
-That's **state** — a dict updated inside the loop, returned alongside the answer.
+L2's agent made one tool call and stopped. Real agents **loop**: call a tool → see the result → decide what's next → repeat until done.
 
-> **Framework parallel:** LangGraph calls these "state channels" with typed reducers. Strip the abstraction: it's a dict updated in a loop.`,
+The \`messages\` array grows each turn. The LLM sees what it asked for and what it got back. This is the entire runtime of LangChain's \`AgentExecutor\`.
+
+> **Key insight:** The LLM decides when to stop. No \`tool_calls\` in the response = done.`,
     },
     {
       id: "setup",
-      highlightNodes: ["loop"],
+      highlightNodes: ["call"],
       prose: `## Step 1: Tools + ask_llm
 
-Same L3 ingredients. No changes.`,
+Same tools as L2. But now \`ask_llm\` takes the full \`messages\` array and returns the raw message object — we need \`tool_calls\` and \`tool_call_id\` for the multi-turn protocol.`,
       code: `tools = {"add": lambda a, b: a + b, "upper": lambda text: text.upper()}
 TOOL_DEFS = [
     {"type": "function", "function": {"name": "add", "description": "Add two numbers",
@@ -52,6 +57,7 @@ TOOL_DEFS = [
         "parameters": {"type": "object",
             "properties": {"text": {"type": "string"}}}}},
 ]
+
 async def ask_llm(messages):
     resp = await pyfetch(f"{LLM_BASE_URL}/chat/completions",
         method="POST",
@@ -61,54 +67,57 @@ async def ask_llm(messages):
     return json.loads(await resp.string())["choices"][0]["message"]`,
     },
     {
-      id: "agent",
-      highlightNodes: ["tool", "track"],
-      prose: `## Step 2: The loop with state tracking
+      id: "loop",
+      highlightNodes: ["loop", "call", "check", "exec", "append"],
+      prose: `## Step 2: The loop
 
-Same L3 loop. One addition: a \`state\` dict that records every tool call and result as the loop runs. The agent returns \`state\` instead of just the answer string.
+Three things happen each turn:
 
-This gives you a structured audit trail — not just "the answer was 15", but *which tools ran, with what args, producing what results, in how many turns.*`,
+1. **Call LLM** with the full messages array
+2. **No \`tool_calls\`?** Return the answer — the LLM is done
+3. **Has \`tool_calls\`?** Execute each one, append results with \`tool_call_id\`, loop back
+
+The \`tool_call_id\` links each result to its request. This is the **tool calling protocol** — the wire format that makes multi-step work.`,
       code: `async def agent(task, max_turns=5):
-    state = {"turns": 0, "tool_calls": [], "results": []}
     messages = [
         {"role": "system", "content": "Use tools to answer. Be concise."},
         {"role": "user", "content": task},
     ]
     for turn in range(max_turns):
-        state["turns"] += 1
-        trace("llm_call", f"Turn {state['turns']}")
+        trace("llm_call", f"Turn {turn + 1}")
         msg = await ask_llm(messages)
+
         if not msg.get("tool_calls"):
-            state["answer"] = msg.get("content", "")
-            trace("agent_end", f"Done in {state['turns']} turns")
-            return state
+            trace("agent_end", msg.get("content", ""))
+            return msg.get("content", "")
+
         messages.append(msg)
         for tc in msg["tool_calls"]:
             name = tc["function"]["name"]
             args = json.loads(tc["function"]["arguments"])
             result = tools[name](**args)
-            state["tool_calls"].append({"tool": name, "args": args})
-            state["results"].append(result)
             trace("tool_result", f"{name}({args}) → {result}")
-            messages.append({"role": "tool", "tool_call_id": tc["id"], "content": str(result)})
-    state["answer"] = "Max turns reached"
-    return state`,
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tc["id"],
+                "content": str(result),
+            })
+    return "Max turns reached"`,
     },
     {
       id: "run",
-      highlightNodes: ["done"],
+      highlightNodes: ["start", "done"],
       prose: `## Try it
 
-Try *"add 10 and 5, then uppercase hello"*. You'll see the full state: which tools ran, what they returned, how many turns it took. This is observability — you can log it, store it, debug with it.`,
-      code: `result = await agent(USER_INPUT)
-print(f">> {result['answer']}")
-print(f"Tools used: {result['tool_calls']}")
-print(f"Results: {result['results']}")
-print(f"Turns: {result['turns']}")`,
+- *"add 10 and 5"* — one tool call, one turn
+- *"add 3 and 4, then uppercase hello"* — two tool calls, the LLM chains them
+
+Watch the diagram: each turn cycles through the loop. The messages array grows with each tool call.`,
+      code: `print(f">> {await agent(USER_INPUT)}")`,
       inputConfig: {
-        placeholder: 'Try "add 10 and 5, then uppercase hello"',
+        placeholder: 'Try "add 10 and 5" or "add 3 and 4, then uppercase hello"',
         variable: "USER_INPUT",
-        samples: ["add 10 and 5, then uppercase hello", "uppercase foo then add 7 and 8", "add 1 and 1"],
+        samples: ["add 3 and 4, then uppercase hello", "uppercase agent then add 1 and 2", "add 100 and 200"],
       },
     },
   ],
@@ -130,26 +139,19 @@ async def ask_llm(messages):
         body=json.dumps({"model": LLM_MODEL, "messages": messages, "tools": TOOL_DEFS}))
     return json.loads(await resp.string())["choices"][0]["message"]
 async def agent(task, max_turns=5):
-    state = {"turns": 0, "tool_calls": [], "results": []}
-    messages = [{"role": "system", "content": "Use tools. Be concise."},
+    messages = [{"role": "system", "content": "Use tools to answer. Be concise."},
                 {"role": "user", "content": task}]
     for turn in range(max_turns):
-        state["turns"] += 1
         msg = await ask_llm(messages)
-        if not msg.get("tool_calls"):
-            state["answer"] = msg.get("content", "")
-            return state
+        if not msg.get("tool_calls"): return msg.get("content", "")
         messages.append(msg)
         for tc in msg["tool_calls"]:
             name = tc["function"]["name"]
             args = json.loads(tc["function"]["arguments"])
             result = tools[name](**args)
-            state["tool_calls"].append(name)
-            state["results"].append(result)
             messages.append({"role": "tool", "tool_call_id": tc["id"], "content": str(result)})
-    return state
-r = await agent("add 10 and 5, then uppercase hello")
-print(f">> {r.get('answer','')}")
-print(f"Tools: {r['tool_calls']}, Results: {r['results']}, Turns: {r['turns']}")`,
+    return "Max turns"
+print(f">> {await agent('add 10 and 5')}")
+print(f">> {await agent('uppercase hello world')}")`,
   diagramType: "sequence",
 };

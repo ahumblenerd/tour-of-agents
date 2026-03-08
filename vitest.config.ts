@@ -23,7 +23,6 @@ export default defineConfig({
       include: ["src/lib/**", "src/hooks/**"],
       exclude: [
         "src/lib/lessons/lessons/**",
-        "src/lib/python-runtime/**",
         "**/*.test.*",
         "**/*.stories.*",
       ],

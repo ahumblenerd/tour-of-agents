@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { usePyodide } from "@/lib/pyodide/pyodide-provider";
-import { loadRuntimeModules } from "@/lib/pyodide/runtime-loader";
 import { parseTraceEvents } from "@/lib/trace/parse-trace";
 import { TraceEvent } from "@/lib/trace/types";
 import { getApiKeys } from "@/lib/settings/api-keys";
@@ -13,7 +12,7 @@ interface CodeRunResult {
   traceEvents: TraceEvent[];
   running: boolean;
   error: string | null;
-  run: (code: string, runtimeModules: string[]) => Promise<void>;
+  run: (code: string) => Promise<void>;
 }
 
 export function useCodeRunner(): CodeRunResult {
@@ -25,7 +24,7 @@ export function useCodeRunner(): CodeRunResult {
   const [error, setError] = useState<string | null>(null);
 
   const run = useCallback(
-    async (code: string, runtimeModules: string[]) => {
+    async (code: string) => {
       if (!pyodide || loading) {
         setError("Pyodide is not loaded yet");
         return;
@@ -41,19 +40,15 @@ export function useCodeRunner(): CodeRunResult {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const py = pyodide as any;
 
-        // Load runtime modules to virtual FS
-        loadRuntimeModules(py, runtimeModules);
-
-        // Inject API keys into environment
+        // Inject API keys as Python variables the lesson code can use
         const keys = getApiKeys();
-        if (keys.openai) {
-          py.runPython(`import os; os.environ["OPENAI_API_KEY"] = "${keys.openai}"`);
-        }
-        if (keys.anthropic) {
-          py.runPython(`import os; os.environ["ANTHROPIC_API_KEY"] = "${keys.anthropic}"`);
-        }
+        const openaiKey = keys.openai || "";
+        const anthropicKey = keys.anthropic || "";
+        py.runPython(`
+OPENAI_API_KEY = "${openaiKey}"
+ANTHROPIC_API_KEY = "${anthropicKey}"
+`);
 
-        // Capture stdout
         py.runPython(`
 import sys
 from io import StringIO
@@ -62,13 +57,10 @@ sys.stdout = _captured_output
 sys.stderr = _captured_output
 `);
 
-        // Run user code
-        py.runPython(code);
+        await py.runPythonAsync(code);
 
-        // Get captured output
         const output = py.runPython(`_captured_output.getvalue()`);
 
-        // Reset stdout
         py.runPython(`
 sys.stdout = sys.__stdout__
 sys.stderr = sys.__stderr__
