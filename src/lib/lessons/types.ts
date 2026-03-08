@@ -45,4 +45,6 @@ export interface LessonDefinition {
   conceptDiagram: string;
   frameworkName: string;
   promptForClaude: string;
+  /** Which agent phases to show in the debugger pipeline. Defaults to all. */
+  phases?: string[];
 }

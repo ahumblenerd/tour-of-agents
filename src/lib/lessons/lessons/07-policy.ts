@@ -6,6 +6,7 @@ export const lesson07: LessonDefinition = {
   title: "Policy = Guardrails",
   subtitle: "Gates before the LLM and after it. The agent obeys rules.",
   concepts: ["policy", "guardrails", "input gate", "output gate", "safety"],
+  phases: ["input", "policy", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 6's memory injection",
   conceptDiagram: `flowchart LR
     input["User input"] --> igate{"Input gate"}

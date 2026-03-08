@@ -6,6 +6,7 @@ export const lesson03: LessonDefinition = {
   title: "The Agent Loop",
   subtitle: "LLM calls a tool, gets the result, decides again. This IS AgentExecutor.",
   concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
+  phases: ["input", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 2's tool dispatch",
   conceptDiagram: `flowchart TD
     start["Build messages"] --> loop{"Next turn"}

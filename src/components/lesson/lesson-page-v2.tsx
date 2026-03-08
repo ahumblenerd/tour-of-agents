@@ -106,10 +106,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     markCompleted(lesson.slug);
   }, [lesson.fullCode, lesson.slug]);
 
-  const handleClear = useCallback(() => {
-    monitor.clear();
-    setTraceEvents([]);
-  }, [monitor]);
+  const handleClear = useCallback(() => { monitor.clear(); setTraceEvents([]); }, [monitor]);
 
   const tc = (t: RightTab) => `px-3 py-1.5 text-xs font-medium transition-colors ${
     rightTab === t ? "text-foreground border-b-2 border-primary" : "text-muted-foreground hover:text-foreground"
@@ -175,6 +172,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
                     onSend={handleSend}
                     running={runner.running}
                     disabled={pyLoading}
+                    visiblePhases={lesson.phases}
                   />
                 )}
               </div>

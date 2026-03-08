@@ -6,6 +6,7 @@ export const lesson04: LessonDefinition = {
   title: "Conversation = Messages Array",
   subtitle: "The messages array persists across calls. That's how agents remember within a session.",
   concepts: ["conversation history", "multi-turn", "context window", "ChatGPT pattern"],
+  phases: ["input", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 3's agent loop",
   conceptDiagram: `flowchart TD
     conv["Conversation list"] --> call1["Agent call 1"]

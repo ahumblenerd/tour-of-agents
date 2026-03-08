@@ -6,6 +6,7 @@ export const lesson01: LessonDefinition = {
   title: "The Agent Function",
   subtitle: "An agent is a function that calls an LLM. That's it.",
   concepts: ["agent", "function", "HTTP POST", "system prompt", "messages"],
+  phases: ["input", "output"],
   buildingOn: "",
   conceptDiagram: `flowchart LR
     input["Your message"] --> fn["agent()"]

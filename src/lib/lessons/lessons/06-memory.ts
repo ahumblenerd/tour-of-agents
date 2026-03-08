@@ -6,6 +6,7 @@ export const lesson06: LessonDefinition = {
   title: "Memory Across Runs",
   subtitle: "Conversation dies per session. Memory survives forever.",
   concepts: ["memory", "persistence", "long-term", "retrieval"],
+  phases: ["input", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 5's state tracking",
   conceptDiagram: `flowchart LR
     run1["Run 1: save fact"] -->|remember| mem["Memory dict"]

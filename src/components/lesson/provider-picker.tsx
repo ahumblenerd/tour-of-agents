@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   getProvider,
@@ -16,17 +16,22 @@ import {
 const PROVIDERS: LlmProvider[] = ["groq", "openai", "anthropic"];
 
 export function ProviderPicker() {
-  const [provider, setLocal] = useState<LlmProvider>(() => getProvider());
-  const [keys, setKeys] = useState(() => {
-    const stored = getApiKeys();
-    return {
-      groq: stored.groq || "",
-      openai: stored.openai || "",
-      anthropic: stored.anthropic || "",
-    };
-  });
-  const [model, setLocalModel] = useState(() => getModel());
+  const [mounted, setMounted] = useState(false);
+  const [provider, setLocal] = useState<LlmProvider>("groq");
+  const [keys, setKeys] = useState({ groq: "", openai: "", anthropic: "" });
+  const [model, setLocalModel] = useState("");
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    // Hydrate from localStorage after mount to avoid SSR mismatch
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setLocal(getProvider());
+    setLocalModel(getModel());
+    const stored = getApiKeys();
+    setKeys({ groq: stored.groq || "", openai: stored.openai || "", anthropic: stored.anthropic || "" });
+    setMounted(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
 
   const handleProviderSwitch = (p: LlmProvider) => {
     setLocal(p);
@@ -50,7 +55,7 @@ export function ProviderPicker() {
         className="text-xs h-7"
         onClick={() => setOpen(!open)}
       >
-        {keys[provider] ? config.label : "Set API Key"}
+        {mounted ? (keys[provider] ? config.label : "Set API Key") : "..."}
       </Button>
       {open && (
         <div className="absolute right-0 top-full mt-1 z-50 w-72 rounded-md border bg-popover p-3 shadow-lg space-y-3">

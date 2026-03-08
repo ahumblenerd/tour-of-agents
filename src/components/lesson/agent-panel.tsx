@@ -17,14 +17,20 @@ interface AgentPanelProps {
   onSend?: (userInput: string) => void;
   running?: boolean;
   disabled?: boolean;
+  /** Which phase IDs to show (defaults to all) */
+  visiblePhases?: string[];
 }
 
 export function AgentPanel({
   entries, traceEvents, onClear, inputConfig, onSend, running, disabled,
+  visiblePhases,
 }: AgentPanelProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [input, setInput] = useState("");
-  const [speed, setSpeed] = useState(1500); // default 0.5x
+  const [speed, setSpeed] = useState(1500);
+  const phases = visiblePhases
+    ? PHASES.filter((p) => visiblePhases.includes(p.id))
+    : PHASES;
 
   // Cursor = which entry is highlighted. Always 0-based index into entries.
   const [cursor, setCursor] = useState(0);
@@ -45,20 +51,10 @@ export function AgentPanel({
     prevEntryLen.current = entries.length;
   }, [entries.length]);
 
-  // When run finishes, stop live mode
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!running && isLive) setIsLive(false);
-  }, [running, isLive]);
-
-  // Reset on clear
-  useEffect(() => {
-    if (entries.length === 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCursor(0); setReplaying(false); setIsLive(false);
-      prevEntryLen.current = 0;
-    }
-  }, [entries.length]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (!running && isLive) setIsLive(false); }, [running, isLive]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (entries.length === 0) { setCursor(0); setReplaying(false); setIsLive(false); prevEntryLen.current = 0; } }, [entries.length]);
 
   // Auto-advance when replaying
   useEffect(() => {
@@ -116,7 +112,7 @@ export function AgentPanel({
     <div className="flex flex-col h-full bg-background">
       {showHeader && (
         <AgentPanelHeader
-          phases={PHASES} activePhase={activePhase}
+          phases={phases} activePhase={activePhase}
           entryCount={entries.length} replaying={replaying}
           cursor={cursor} atEnd={atEnd} speed={speed}
           isLive={isLive}

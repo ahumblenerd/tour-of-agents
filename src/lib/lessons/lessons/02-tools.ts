@@ -6,6 +6,7 @@ export const lesson02: LessonDefinition = {
   title: "Tools = Dict",
   subtitle: "The LLM picks a tool by name. You dispatch with tools[name](**args).",
   concepts: ["tools", "function calling", "JSON schema", "dispatch"],
+  phases: ["input", "tool", "output"],
   buildingOn: "Lesson 1's agent function",
   conceptDiagram: `flowchart LR
     user["User"] --> agent["Agent"]

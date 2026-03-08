@@ -6,6 +6,7 @@ export const lesson08: LessonDefinition = {
   title: "Self-Scheduling",
   subtitle: "The agent enqueues its own follow-up work. BFS over a task queue.",
   concepts: ["self-scheduling", "task queue", "BFS", "convergence", "budget"],
+  phases: ["input", "policy", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 7's policy gates",
   conceptDiagram: `flowchart TD
     queue["Task queue"] --> pop["Pop task"]

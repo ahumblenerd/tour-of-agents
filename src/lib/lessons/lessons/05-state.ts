@@ -6,6 +6,7 @@ export const lesson05: LessonDefinition = {
   title: "State = Dict",
   subtitle: "Track structured data alongside the messages array.",
   concepts: ["state", "structured tracking", "metadata", "observability"],
+  phases: ["input", "llm", "decide", "tool", "output"],
   buildingOn: "Lesson 4's conversation history",
   conceptDiagram: `flowchart TD
     loop["Agent Loop"] --> tool["Tool call"]
