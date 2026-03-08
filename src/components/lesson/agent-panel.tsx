@@ -49,8 +49,17 @@ export function AgentPanel({
     prevEntryLen.current = entries.length;
   }, [entries.length]);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { if (!running && isLive) setIsLive(false); }, [running, isLive]);
+  // Auto-replay when execution finishes
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (wasRunning.current && !running && entries.length > 1) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsLive(false);
+      setCursor(0);
+      setReplaying(true);
+    }
+    wasRunning.current = !!running;
+  }, [running, entries.length]);
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (entries.length === 0) { setCursor(0); setReplaying(false); setIsLive(false); prevEntryLen.current = 0; } }, [entries.length]);
 
