@@ -1,4 +1,3 @@
-import { DiagramType } from "@/lib/trace/trace-to-mermaid";
 import { GraphDefinition } from "@/lib/graph/types";
 
 export interface InputConfig {
@@ -32,12 +31,6 @@ export interface LlmConfig {
   mockResponses: { match: string; response: MockResponse }[];
 }
 
-export interface PhaseConfig {
-  id: string;
-  label: string;
-  icon: string;
-}
-
 export interface LessonDefinition {
   slug: string;
   number: number;
@@ -47,12 +40,6 @@ export interface LessonDefinition {
   steps: LessonStep[];
   fullCode: string;
   llmConfig?: LlmConfig;
-  diagramType: DiagramType;
-  buildingOn: string;
-  conceptDiagram: string;
-  graph?: GraphDefinition;
+  graph: GraphDefinition;
   frameworkName: string;
-  promptForClaude: string;
-  /** Which agent phases to show in the debugger pipeline. Defaults to all. */
-  phases?: PhaseConfig[];
 }

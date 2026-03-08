@@ -7,13 +7,6 @@ export const lesson07: LessonDefinition = {
   title: "Policy = Guardrails",
   subtitle: "Gates before the LLM and after it. The agent obeys rules.",
   concepts: ["policy", "guardrails", "input gate", "output gate", "safety"],
-  phases: [
-    { id: "input", label: "User input", icon: "⟩" },
-    { id: "policy", label: "Input gate", icon: "◇" },
-    { id: "llm", label: "L3 loop", icon: "⟡" },
-    { id: "output", label: "Output gate", icon: "◆" },
-  ],
-  buildingOn: "Lesson 6's memory injection",
   graph: {
     nodes: [
       { id: "input", label: "User input", icon: "⟩", phase: "input" },
@@ -33,17 +26,8 @@ export const lesson07: LessonDefinition = {
       { id: "ogate-redact", source: "ogate", target: "redact", label: "block" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    input["User input"] --> igate{"Input gate"}
-    igate -->|pass| llm["L3 loop"]
-    igate -->|block| reject["Rejected"]
-    llm --> ogate{"Output gate"}
-    ogate -->|pass| user["User gets answer"]
-    ogate -->|block| redact["Redacted"]`,
   frameworkName:
     "Guardrails AI, NeMo Guardrails, LangChain output parsers — rules checked before and after the LLM.",
-  promptForClaude:
-    "Add input and output policy gates around the agent loop.",
   llmConfig: {
     systemPrompt: "You have tools. Be concise. Follow instructions.",
     tools: [
@@ -172,5 +156,4 @@ The LLM costs zero tokens on blocked requests. That's the input gate's real valu
     },
   ],
   fullCode: lesson07FullCode,
-  diagramType: "sequence",
 };

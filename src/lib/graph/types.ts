@@ -19,3 +19,5 @@ export interface GraphDefinition {
   edges: GraphEdge[];
   direction?: "LR" | "TB";
 }
+
+export type NodeState = "idle" | "active" | "visited";

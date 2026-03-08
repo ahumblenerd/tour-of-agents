@@ -7,12 +7,6 @@ export const lesson06: LessonDefinition = {
   title: "Memory Across Runs",
   subtitle: "Conversation dies per session. Memory survives forever.",
   concepts: ["memory", "persistence", "long-term", "retrieval"],
-  phases: [
-    { id: "input", label: "Run", icon: "⟩" },
-    { id: "llm", label: "LLM + memory", icon: "⟡" },
-    { id: "output", label: "Answer", icon: "◆" },
-  ],
-  buildingOn: "Lesson 5's state tracking",
   graph: {
     nodes: [
       { id: "run1", label: "Run 1: save fact", icon: "⟩", phase: "input" },
@@ -26,14 +20,8 @@ export const lesson06: LessonDefinition = {
       { id: "run2-answer", source: "run2", target: "answer" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    run1["Run 1: save fact"] -->|remember| mem["Memory dict"]
-    mem -->|inject into prompt| run2["Run 2: recall fact"]
-    run2 --> answer["Correct answer"]`,
   frameworkName:
     "Mem0, Zep, LangChain ConversationSummaryMemory — long-term storage outside the conversation.",
-  promptForClaude:
-    "Add memory that persists across agent calls by injecting it into the system prompt.",
   llmConfig: {
     systemPrompt: "You have tools and memory. Be concise.",
     tools: [
@@ -134,5 +122,4 @@ print(f"Memory: {memory}")`,
     },
   ],
   fullCode: lesson06FullCode,
-  diagramType: "sequence",
 };

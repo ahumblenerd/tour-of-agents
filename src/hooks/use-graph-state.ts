@@ -5,8 +5,6 @@ import type { TraceEvent } from "@/lib/trace/types";
 import { layoutGraph } from "@/lib/graph/layout";
 import { eventToPhase } from "@/components/lesson/agent-phases";
 
-type NodeState = "idle" | "active" | "visited";
-
 /** Build adjacency: for each node, which nodes can it reach? */
 function buildAdj(graph: GraphDefinition) {
   const adj = new Map<string, string[]>();
@@ -17,16 +15,17 @@ function buildAdj(graph: GraphDefinition) {
   return adj;
 }
 
-/** Walk the graph sequentially: each trace event activates the next reachable node. */
+/** Walk the graph sequentially based on trace events up to cursor. */
 function buildTraversal(
   graph: GraphDefinition, traceEvents: TraceEvent[], upTo: number,
 ): { visited: string[]; activeId: string } {
   const adj = buildAdj(graph);
   const phaseToNodes = new Map<string, string[]>();
   for (const n of graph.nodes) {
-    if (!n.phase) continue;
-    if (!phaseToNodes.has(n.phase)) phaseToNodes.set(n.phase, []);
-    phaseToNodes.get(n.phase)!.push(n.id);
+    if (n.phase) {
+      if (!phaseToNodes.has(n.phase)) phaseToNodes.set(n.phase, []);
+      phaseToNodes.get(n.phase)!.push(n.id);
+    }
   }
 
   const visited: string[] = [];
@@ -36,7 +35,6 @@ function buildTraversal(
     const phase = eventToPhase(traceEvents[i].type);
     if (!phase) continue;
     const candidates = phaseToNodes.get(phase) ?? [];
-    // Prefer a candidate reachable from current, else any candidate
     const reachable = adj.get(current) ?? [];
     const next = candidates.find((c) => reachable.includes(c))
       ?? candidates.find((c) => c === current)
@@ -45,7 +43,10 @@ function buildTraversal(
       if (!visited.includes(current)) visited.push(current);
       current = next;
     }
-    if (!visited.includes(current)) visited.push(current);
+  }
+  // current is the active node — add all prior stops but NOT current
+  if (!visited.includes(current)) {
+    // current is fresh (not yet in visited) — that's correct for "active"
   }
 
   return { visited, activeId: current };
@@ -73,32 +74,26 @@ export function useGraphState(
 
     const visitedSet = new Set(visited);
 
-    // Node states
-    const nodeStates = new Map<string, NodeState>();
-    for (const n of graph.nodes) {
-      if (highlightNodes?.includes(n.id)) {
-        nodeStates.set(n.id, "active");
-      } else if (n.id === activeId) {
-        nodeStates.set(n.id, "active");
-      } else if (visitedSet.has(n.id)) {
-        nodeStates.set(n.id, "visited");
-      } else {
-        nodeStates.set(n.id, "idle");
-      }
-    }
+    // Node states — active takes priority
+    const getState = (id: string) => {
+      if (highlightNodes?.includes(id)) return "active" as const;
+      if (id === activeId) return "active" as const;
+      if (visitedSet.has(id)) return "visited" as const;
+      return "idle" as const;
+    };
 
-    // Edge: traversed if both endpoints visited, active if source is prev visited & target is active
     const nodes = layout.nodes.map((n) => ({
       ...n,
-      data: { ...n.data, state: nodeStates.get(n.id) ?? "idle" },
+      data: { ...n.data, state: getState(n.id) },
     }));
 
+    // Edge: active if leading into the active node from a visited/active node
+    const reachable = new Set([...visited, activeId]);
     const edges = layout.edges.map((e) => {
-      const srcState = nodeStates.get(e.source) ?? "idle";
-      const tgtState = nodeStates.get(e.target) ?? "idle";
-      const isTraversed = srcState !== "idle" && tgtState !== "idle";
-      const isActive = (srcState === "active" || srcState === "visited")
-        && tgtState === "active";
+      const srcIn = reachable.has(e.source);
+      const tgtIn = reachable.has(e.target);
+      const isTraversed = srcIn && tgtIn;
+      const isActive = srcIn && e.target === activeId;
       return { ...e, data: { traversed: isTraversed, active: isActive } };
     });
 

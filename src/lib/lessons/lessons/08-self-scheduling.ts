@@ -7,13 +7,6 @@ export const lesson08: LessonDefinition = {
   title: "Self-Scheduling",
   subtitle: "The agent enqueues its own follow-up work. BFS over a task queue.",
   concepts: ["self-scheduling", "task queue", "BFS", "convergence", "budget"],
-  phases: [
-    { id: "input", label: "Task queue", icon: "⟩" },
-    { id: "llm", label: "Agent loop", icon: "⟡" },
-    { id: "tool", label: "Enqueue followup", icon: "⚙" },
-    { id: "output", label: "All done", icon: "◆" },
-  ],
-  buildingOn: "Lesson 7's policy gates",
   graph: {
     nodes: [
       { id: "queue", label: "Task queue", icon: "⟩", phase: "input" },
@@ -33,18 +26,8 @@ export const lesson08: LessonDefinition = {
       { id: "check-done", source: "check", target: "done", label: "yes" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    queue["Task queue"] --> pop["Pop task"]
-    pop --> agent["Agent loop"]
-    agent -->|schedule| enqueue["Enqueue followup"]
-    enqueue --> queue
-    agent -->|done| check{"Queue empty?"}
-    check -->|no| pop
-    check -->|yes| done["All done"]`,
   frameworkName:
     "CrewAI task delegation, AutoGen nested chats — BFS over a dynamic work queue.",
-  promptForClaude:
-    "Build an agent that processes a task queue where the LLM can enqueue follow-up work.",
   llmConfig: {
     systemPrompt: "You have tools. When given a research task, use schedule_followup to add next steps.",
     tools: [
@@ -161,5 +144,4 @@ for r in results:
     },
   ],
   fullCode: lesson08FullCode,
-  diagramType: "sequence",
 };

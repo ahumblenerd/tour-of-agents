@@ -8,33 +8,9 @@ export const lesson09: LessonDefinition = {
   title: "The Whole Thing",
   subtitle: "All 8 concepts composed in ~60 lines. This is a framework.",
   concepts: ["complete agent", "integration", "no framework"],
-  phases: [
-    { id: "input", label: "User input", icon: "⟩" },
-    { id: "policy", label: "Input policy", icon: "◇" },
-    { id: "llm", label: "LLM + memory", icon: "⟡" },
-    { id: "decide", label: "tool_calls?", icon: "?" },
-    { id: "tool", label: "Tools + state", icon: "⚙" },
-    { id: "output", label: "Done", icon: "◆" },
-  ],
-  buildingOn: "Everything from Lessons 1-8",
   graph: lesson09Graph,
-  conceptDiagram: `flowchart LR
-    input["User input"] --> igate{"Input policy"}
-    igate -->|block| reject["Rejected"]
-    igate -->|pass| loop["Agent loop"]
-    loop --> llm["LLM + memory"]
-    llm --> tc{"tool_calls?"}
-    tc -->|yes| dispatch["Tools + state"]
-    dispatch --> loop
-    tc -->|no| ogate{"Output policy"}
-    ogate -->|block| redact["Redacted"]
-    ogate -->|pass| queue{"More tasks?"}
-    queue -->|yes| input
-    queue -->|no| done["Done"]`,
   frameworkName:
     "LangChain, CrewAI, AutoGen: thousands of lines. You need 60.",
-  promptForClaude:
-    "Build the complete agent: tools, loop, conversation, state, memory, policy, scheduling.",
   llmConfig: {
     systemPrompt: "You are a general-purpose agent with tools and memory.",
     tools: [
@@ -191,5 +167,4 @@ print(f"State: {state}")`,
     },
   ],
   fullCode: lesson09FullCode,
-  diagramType: "sequence",
 };

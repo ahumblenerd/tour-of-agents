@@ -30,9 +30,7 @@ describe("lesson registry", () => {
       expect(lesson.steps.length).toBeGreaterThan(0);
       expect(lesson.fullCode).toBeTruthy();
       expect(lesson.concepts.length).toBeGreaterThan(0);
-      expect(lesson.conceptDiagram).toBeTruthy();
       expect(lesson.frameworkName).toBeTruthy();
-      expect(lesson.promptForClaude).toBeTruthy();
     }
   });
 
@@ -103,24 +101,6 @@ describe("lesson registry", () => {
         expect(nodeIds.has(edge.source)).toBe(true);
         expect(nodeIds.has(edge.target)).toBe(true);
       }
-    }
-  });
-
-  it("every lesson has phases with id, label, and icon", () => {
-    for (const lesson of allLessons) {
-      expect(lesson.phases).toBeDefined();
-      expect(lesson.phases!.length).toBeGreaterThan(0);
-      for (const phase of lesson.phases!) {
-        expect(phase.id).toBeTruthy();
-        expect(phase.label).toBeTruthy();
-        expect(phase.icon).toBeTruthy();
-      }
-    }
-  });
-
-  it("all diagrams use flowchart LR", () => {
-    for (const lesson of allLessons) {
-      expect(lesson.conceptDiagram).toMatch(/^flowchart LR/);
     }
   });
 

@@ -7,14 +7,6 @@ export const lesson03: LessonDefinition = {
   title: "The Agent Loop",
   subtitle: "LLM calls a tool, gets the result, decides again. This IS AgentExecutor.",
   concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
-  phases: [
-    { id: "input", label: "Build messages", icon: "⟩" },
-    { id: "llm", label: "Ask LLM", icon: "⟡" },
-    { id: "decide", label: "tool_calls?", icon: "?" },
-    { id: "tool", label: "Execute tool", icon: "⚙" },
-    { id: "output", label: "Return answer", icon: "◆" },
-  ],
-  buildingOn: "Lesson 2's tool dispatch",
   graph: {
     nodes: [
       { id: "start", label: "Build messages", icon: "⟩", phase: "input" },
@@ -31,16 +23,8 @@ export const lesson03: LessonDefinition = {
       { id: "exec-llm", source: "exec", target: "llm" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    start["Build messages"] --> llm["Ask LLM"]
-    llm --> check{"tool_calls?"}
-    check -->|no| done["Return answer"]
-    check -->|yes| exec["Execute tool"]
-    exec --> llm`,
   frameworkName:
     "LangChain AgentExecutor, OpenAI Agents SDK, AutoGen — a while loop over messages.",
-  promptForClaude:
-    "Build the real agent loop: LLM decides tool or done, results fed back via messages.",
   llmConfig: {
     systemPrompt: "Use tools to answer. Be concise.",
     tools: [
@@ -144,5 +128,4 @@ Watch the diagram: each turn cycles through the loop. The messages array grows w
     },
   ],
   fullCode: lesson03FullCode,
-  diagramType: "sequence",
 };

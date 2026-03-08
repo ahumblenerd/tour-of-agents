@@ -1,14 +1,4 @@
 import { TraceEvent } from "@/lib/trace/types";
-import { PhaseConfig } from "@/lib/lessons/types";
-
-export const PHASES: PhaseConfig[] = [
-  { id: "input", label: "Input", icon: "⟩" },
-  { id: "policy", label: "Policy", icon: "◇" },
-  { id: "llm", label: "LLM", icon: "⟡" },
-  { id: "decide", label: "Decide", icon: "?" },
-  { id: "tool", label: "Tool", icon: "⚙" },
-  { id: "output", label: "Output", icon: "◆" },
-];
 
 export function eventToPhase(type: TraceEvent["type"]): string {
   switch (type) {

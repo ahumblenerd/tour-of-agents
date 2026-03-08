@@ -7,12 +7,6 @@ export const lesson04: LessonDefinition = {
   title: "Conversation = Messages Array",
   subtitle: "The messages array persists across calls. That's how agents remember within a session.",
   concepts: ["conversation history", "multi-turn", "context window", "ChatGPT pattern"],
-  phases: [
-    { id: "input", label: "Conversation list", icon: "⟩" },
-    { id: "llm", label: "Agent call", icon: "⟡" },
-    { id: "output", label: "Correct answer", icon: "◆" },
-  ],
-  buildingOn: "Lesson 3's agent loop",
   graph: {
     nodes: [
       { id: "conv", label: "Conversation list", icon: "⟩", phase: "input" },
@@ -30,16 +24,8 @@ export const lesson04: LessonDefinition = {
       { id: "grow2-answer", source: "grow2", target: "answer" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    conv["Conversation list"] --> call1["Agent call 1"]
-    call1 --> grow1["List grows"]
-    grow1 --> call2["Agent call 2"]
-    call2 --> grow2["Sees full history"]
-    grow2 --> answer["Correct answer"]`,
   frameworkName:
     "ChatGPT, Claude, every chat agent — the messages array IS the conversation.",
-  promptForClaude:
-    "Make the messages array persist across calls so the agent remembers previous turns.",
   llmConfig: {
     systemPrompt: "You have tools. Use them when needed. Be concise.",
     tools: [
@@ -142,5 +128,4 @@ print(f"({len(conversation)} messages in history)")`,
     },
   ],
   fullCode: lesson04FullCode,
-  diagramType: "sequence",
 };

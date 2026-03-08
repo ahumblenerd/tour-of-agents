@@ -7,13 +7,6 @@ export const lesson02: LessonDefinition = {
   title: "Tools = Dict",
   subtitle: "The LLM picks a tool by name. You dispatch with tools[name](**args).",
   concepts: ["tools", "function calling", "JSON schema", "dispatch"],
-  phases: [
-    { id: "input", label: "User", icon: "⟩" },
-    { id: "llm", label: "LLM + tools", icon: "⟡" },
-    { id: "tool", label: "Dispatch tool", icon: "⚙" },
-    { id: "output", label: "Result", icon: "◆" },
-  ],
-  buildingOn: "Lesson 1's agent function",
   graph: {
     nodes: [
       { id: "user", label: "User", icon: "⟩", phase: "input" },
@@ -33,17 +26,8 @@ export const lesson02: LessonDefinition = {
       { id: "tc-text", source: "tc", target: "text", label: "no" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    user["User"] --> agent["Agent"]
-    agent --> llm["LLM + tools"]
-    llm --> tc{"tool_calls?"}
-    tc -->|yes| dispatch["Dispatch tool"]
-    dispatch --> result["Result"]
-    tc -->|no| text["Text response"]`,
   frameworkName:
     "LangChain's @tool, CrewAI's tool registration — it's tools[name](**args).",
-  promptForClaude:
-    "Build an agent with a tools dict and LLM function calling.",
   llmConfig: {
     systemPrompt: "You have tools: add(a,b) and upper(text). Use them.",
     tools: [
@@ -146,5 +130,4 @@ Try *"add 10 and 5"* — the LLM returns a tool call, you execute it. Try *"what
     },
   ],
   fullCode: lesson02FullCode,
-  diagramType: "sequence",
 };

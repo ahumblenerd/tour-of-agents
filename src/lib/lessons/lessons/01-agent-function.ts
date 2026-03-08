@@ -7,12 +7,6 @@ export const lesson01: LessonDefinition = {
   title: "The Agent Function",
   subtitle: "An agent is a function that calls an LLM. That's it.",
   concepts: ["agent", "function", "HTTP POST", "system prompt", "messages"],
-  phases: [
-    { id: "input", label: "Your message", icon: "⟩" },
-    { id: "llm", label: "POST /completions", icon: "⟡" },
-    { id: "output", label: "Response", icon: "◆" },
-  ],
-  buildingOn: "",
   graph: {
     nodes: [
       { id: "input", label: "Your message", icon: "⟩", phase: "input" },
@@ -26,14 +20,8 @@ export const lesson01: LessonDefinition = {
       { id: "api-out", source: "api", target: "out" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    input["Your message"] --> fn["agent()"]
-    fn --> api["POST /chat/completions"]
-    api --> out["Response"]`,
   frameworkName:
     "LangChain's AgentExecutor, CrewAI's Agent, AutoGen's ConversableAgent — wrappers around one function.",
-  promptForClaude:
-    "Build a function that POSTs to an LLM API and returns the response.",
   llmConfig: {
     systemPrompt: "You are a concise expert. Answer in 1-2 sentences max.",
     mockResponses: [],
@@ -103,5 +91,4 @@ Send anything. Watch the diagram above — your message flows through \`agent()\
     },
   ],
   fullCode: lesson01FullCode,
-  diagramType: "sequence",
 };

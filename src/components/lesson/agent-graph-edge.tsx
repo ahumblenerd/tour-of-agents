@@ -14,10 +14,8 @@ interface EdgeData {
 }
 
 export function AgentGraphEdge({
-  id,
-  sourceX, sourceY, targetX, targetY,
-  sourcePosition, targetPosition,
-  label, data,
+  id, sourceX, sourceY, targetX, targetY,
+  sourcePosition, targetPosition, label, data,
 }: EdgeProps) {
   const { traversed, active } = (data ?? {}) as EdgeData;
   const [edgePath, labelX, labelY] = getSmoothStepPath({
@@ -26,19 +24,19 @@ export function AgentGraphEdge({
     borderRadius: 8,
   });
 
-  const stroke = active ? "#fff" : traversed ? "#777" : "#333";
-  const strokeWidth = active ? 2.5 : 1.5;
+  const stroke = active ? "#ddd" : traversed ? "#555" : "#2a2a2a";
+  const width = active ? 1.5 : 1;
 
   return (
     <>
       <BaseEdge
         id={id}
         path={edgePath}
-        style={{ stroke, strokeWidth, transition: "stroke 0.3s, stroke-width 0.3s" }}
+        style={{ stroke, strokeWidth: width, transition: "stroke 0.3s, stroke-width 0.3s" }}
       />
       {traversed && (
-        <circle r="3" fill={active ? "#fff" : "#888"}>
-          <animateMotion dur={active ? "1s" : "2s"} repeatCount="indefinite" path={edgePath} />
+        <circle r="2" fill={active ? "#fff" : "#777"}>
+          <animateMotion dur={active ? "0.8s" : "2s"} repeatCount="indefinite" path={edgePath} />
         </circle>
       )}
       {label && (
@@ -49,7 +47,7 @@ export function AgentGraphEdge({
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
               pointerEvents: "none",
             }}
-            className="text-[10px] text-[#888] bg-[#111]/80 px-1.5 py-0.5 rounded"
+            className="text-[9px] text-[#666] bg-[#111]/80 px-1 py-0.5 rounded"
           >
             {label}
           </div>

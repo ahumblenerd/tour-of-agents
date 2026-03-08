@@ -7,12 +7,6 @@ export const lesson05: LessonDefinition = {
   title: "State = Dict",
   subtitle: "Track structured data alongside the messages array.",
   concepts: ["state", "structured tracking", "metadata", "observability"],
-  phases: [
-    { id: "input", label: "Agent loop", icon: "⟩" },
-    { id: "tool", label: "Track in state", icon: "⚙" },
-    { id: "output", label: "Answer + state", icon: "◆" },
-  ],
-  buildingOn: "Lesson 4's conversation history",
   graph: {
     nodes: [
       { id: "loop", label: "Agent loop", icon: "⟩", phase: "input" },
@@ -27,15 +21,8 @@ export const lesson05: LessonDefinition = {
       { id: "loop-done", source: "loop", target: "done" },
     ],
   },
-  conceptDiagram: `flowchart LR
-    loop["Agent Loop"] --> tool["Tool call"]
-    tool --> track["Track in state dict"]
-    track --> loop
-    loop --> done["Return answer + state"]`,
   frameworkName:
     "LangGraph state channels, Redux store — structured data alongside the conversation.",
-  promptForClaude:
-    "Add a state dict that tracks tool calls and results alongside the agent loop.",
   llmConfig: {
     systemPrompt: "You have tools. Use them. Be concise.",
     tools: [
@@ -133,5 +120,4 @@ print(f"Turns: {result['turns']}")`,
     },
   ],
   fullCode: lesson05FullCode,
-  diagramType: "sequence",
 };
