@@ -15,9 +15,7 @@ export function LessonNav({ lesson }: LessonNavProps) {
   const prev = getPreviousLesson(lesson);
   const next = getNextLesson(lesson);
   const total = getLessonCount();
-  const [completedCount, setCompletedCount] = useState(
-    () => getProgress().completed.length
-  );
+  const [completedCount, setCompletedCount] = useState(0);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

@@ -51,7 +51,7 @@ export function layoutGraph(
     source: edge.source,
     target: edge.target,
     label: edge.label,
-    type: "smoothstep",
+    type: "animated",
     data: { traversed: false, active: false },
   }));
 

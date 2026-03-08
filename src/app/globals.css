@@ -269,3 +269,27 @@
 .dark .shiki span {
   color: var(--shiki-dark) !important;
 }
+
+/* React Flow overrides */
+.agent-graph-wrapper .react-flow__background {
+  background: var(--background);
+}
+.agent-graph-wrapper .react-flow__handle {
+  width: 6px;
+  height: 6px;
+  opacity: 0.3;
+}
+.agent-graph-wrapper .react-flow__edge-textbg {
+  fill: var(--background);
+}
+.agent-graph-wrapper .react-flow__edge-text {
+  fill: #999;
+}
+.agent-graph-wrapper .react-flow__controls button {
+  background: var(--muted);
+  border-color: var(--border);
+  fill: var(--foreground);
+}
+.agent-graph-wrapper .react-flow__controls button:hover {
+  background: var(--accent);
+}

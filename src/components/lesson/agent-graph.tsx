@@ -6,7 +6,7 @@ import {
   Background,
   Controls,
   type NodeTypes,
-  type DefaultEdgeOptions,
+  type EdgeTypes,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { GraphDefinition } from "@/lib/graph/types";
@@ -14,6 +14,7 @@ import type { TraceEvent } from "@/lib/trace/types";
 import { useGraphState } from "@/hooks/use-graph-state";
 import { AgentGraphNode } from "./agent-graph-node";
 import { AgentGraphDecision } from "./agent-graph-decision";
+import { AgentGraphEdge } from "./agent-graph-edge";
 
 interface AgentGraphProps {
   graph?: GraphDefinition;
@@ -27,9 +28,8 @@ const nodeTypes: NodeTypes = {
   decision: AgentGraphDecision,
 };
 
-const defaultEdgeOptions: DefaultEdgeOptions = {
-  style: { stroke: "hsl(var(--border))", strokeWidth: 1.5 },
-  type: "smoothstep",
+const edgeTypes: EdgeTypes = {
+  animated: AgentGraphEdge,
 };
 
 const proOptions = { hideAttribution: true };
@@ -51,12 +51,12 @@ export function AgentGraph({
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full agent-graph-wrapper">
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
-        defaultEdgeOptions={defaultEdgeOptions}
+        edgeTypes={edgeTypes}
         onInit={onInit}
         fitView
         proOptions={proOptions}
@@ -67,8 +67,9 @@ export function AgentGraph({
         zoomOnDoubleClick={false}
         minZoom={0.3}
         maxZoom={1.5}
+        colorMode="dark"
       >
-        <Background gap={20} size={1} className="opacity-30" />
+        <Background gap={20} size={1} className="opacity-20" />
         <Controls
           showInteractive={false}
           className="!bg-muted/80 !border-border !rounded-lg !shadow-sm"
