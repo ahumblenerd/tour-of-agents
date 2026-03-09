@@ -31,8 +31,11 @@ function fireConfetti() {
   });
 }
 
-const SHARE_URL = "https://tinyagents.dev";
-const SHARE_TEXT = `Just completed A Tour of Agents — built an AI agent framework in ~60 lines of Python. No LangChain needed.\n\n${SHARE_URL}`;
+function shareUrl(source: string) {
+  return `https://tinyagents.dev?utm_source=${source}&utm_medium=social&utm_campaign=course_share`;
+}
+
+const SHARE_BODY = "Just completed A Tour of Agents — built an AI agent framework in ~60 lines of Python. No LangChain needed.";
 
 export function CourseComplete() {
   const [show, setShow] = useState(false);
@@ -49,8 +52,9 @@ export function CourseComplete() {
 
   if (!show || dismissed) return null;
 
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(SHARE_TEXT)}`;
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SHARE_URL)}&summary=${encodeURIComponent(SHARE_TEXT)}`;
+  const twitterText = `${SHARE_BODY}\n\n${shareUrl("twitter")}`;
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl("linkedin"))}`;
 
   return (
     <div className="relative border-t bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10">
@@ -84,7 +88,7 @@ export function CourseComplete() {
             size="sm"
             variant="ghost"
             onClick={() => {
-              navigator.clipboard.writeText(SHARE_TEXT);
+              navigator.clipboard.writeText(`${SHARE_BODY}\n\n${shareUrl("clipboard")}`);
               trackShareClicked("copy");
             }}
           >

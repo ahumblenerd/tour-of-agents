@@ -2,7 +2,7 @@
 
 An interactive browser-based course that teaches how AI agent systems work by building one from scratch in plain Python -- no framework, no backend.
 
-**[tinyagents.dev](https://tinyagents.dev)**
+**[tinyagents.dev](https://tinyagents.dev?utm_source=github&utm_medium=readme&utm_campaign=repo)**
 
 ![A Tour of Agents](public/og-image.png)
 
@@ -76,7 +76,7 @@ Pre-commit hook enforces: max 200 lines per `.ts`/`.tsx` file, TypeScript type-c
 
 ## Links
 
-- **Live site:** [tinyagents.dev](https://tinyagents.dev)
+- **Live site:** [tinyagents.dev](https://tinyagents.dev?utm_source=github&utm_medium=readme&utm_campaign=repo)
 - **Source code:** [github.com/ahumblenerd/tour-of-agents](https://github.com/ahumblenerd/tour-of-agents)
 
 ## License
