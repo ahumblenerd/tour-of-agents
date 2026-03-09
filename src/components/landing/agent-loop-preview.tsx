@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatedFlow } from "./animated-flow";
+
 const AGENT_CODE = `while True:
     response = llm(messages, tools)
 
@@ -8,8 +10,6 @@ const AGENT_CODE = `while True:
         messages.append(result)
     else:
         break`;
-
-const FLOW_STEPS = ["User", "LLM", "Tool", "Result", "LLM"] as const;
 
 export function AgentLoopPreview() {
   return (
@@ -21,18 +21,12 @@ export function AgentLoopPreview() {
         <div className="bg-muted/50 border rounded-lg p-4 font-mono text-sm leading-relaxed overflow-x-auto">
           <pre className="text-foreground">{AGENT_CODE}</pre>
         </div>
-        <div className="flex items-center justify-center gap-0 mt-6 text-xs text-muted-foreground overflow-x-auto">
-          {FLOW_STEPS.map((step, i) => (
-            <div key={i} className="flex items-center gap-0 shrink-0">
-              <span className="px-3 py-1.5 rounded border bg-background font-medium text-foreground">
-                {step}
-              </span>
-              {i < FLOW_STEPS.length - 1 && (
-                <span className="px-1 text-muted-foreground">&rarr;</span>
-              )}
-            </div>
-          ))}
+        <div className="mt-6">
+          <AnimatedFlow />
         </div>
+        <p className="text-xs text-muted-foreground text-center mt-3">
+          Watch the loop run. This is what every agent framework does.
+        </p>
       </div>
     </section>
   );
