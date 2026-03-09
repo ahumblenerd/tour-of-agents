@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
 import { hasAnyKey } from "@/lib/settings/api-keys";
+import { trackGitHubClicked } from "@/lib/analytics/posthog";
 
 export function SiteHeader() {
   const [showSettings, setShowSettings] = useState(() => !hasAnyKey());
@@ -22,6 +23,7 @@ export function SiteHeader() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-muted"
             title="View source on GitHub"
+            onClick={() => trackGitHubClicked()}
           >
             <GitHubIcon />
             <span className="hidden sm:inline">Source</span>

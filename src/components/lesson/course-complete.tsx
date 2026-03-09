@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { trackCourseCompleted, trackShareClicked } from "@/lib/analytics/posthog";
 
 function fireConfetti() {
   import("canvas-confetti").then((mod) => {
@@ -39,6 +40,7 @@ export function CourseComplete() {
     const timer = setTimeout(() => {
       setShow(true);
       fireConfetti();
+      trackCourseCompleted();
     }, 500);
     return () => clearTimeout(timer);
   }, []);
@@ -60,12 +62,12 @@ export function CourseComplete() {
         </p>
         <div className="flex items-center justify-center gap-2 pt-1">
           <Button size="sm" asChild>
-            <a href={twitterUrl} target="_blank" rel="noopener noreferrer">
+            <a href={twitterUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackShareClicked("twitter")}>
               Share on X
             </a>
           </Button>
           <Button size="sm" variant="outline" asChild>
-            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackShareClicked("linkedin")}>
               Share on LinkedIn
             </a>
           </Button>
@@ -74,6 +76,7 @@ export function CourseComplete() {
             variant="ghost"
             onClick={() => {
               navigator.clipboard.writeText(SHARE_TEXT);
+              trackShareClicked("copy");
             }}
           >
             Copy

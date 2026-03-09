@@ -25,6 +25,7 @@
     "lucide-react": "^0.577.0",
     "mermaid": "^11.12.3",
     "next": "16.1.6",
+    "posthog-js": "^1.359.1",
     "pyodide": "^0.29.3",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",

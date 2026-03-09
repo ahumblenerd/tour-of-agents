@@ -26,6 +26,7 @@ import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
 import { getNextLesson } from "@/lib/lessons/registry";
 import { markVisited, markCompleted } from "@/lib/settings/progress";
+import { trackLessonStarted, trackCodeExecuted, trackLessonCompleted } from "@/lib/analytics/posthog";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -37,7 +38,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     markVisited(lesson.slug);
-  }, [lesson.slug]);
+    trackLessonStarted(lesson.number);
+  }, [lesson.slug, lesson.number]);
   const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
   const monitor = useMonitor();
@@ -66,9 +68,11 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         );
       }
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
+      trackCodeExecuted(lesson.number);
       markCompleted(lesson.slug);
+      trackLessonCompleted(lesson.number);
     },
-    [lesson.steps, lesson.slug]
+    [lesson.steps, lesson.slug, lesson.number]
   );
 
   const lastCodeStepId = useMemo(() => {
@@ -90,8 +94,10 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
       monitorRef.current.addFromTrace(result.traceEvents, hasStart ? undefined : "Full code");
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
     }
+    trackCodeExecuted(lesson.number);
     markCompleted(lesson.slug);
-  }, [lesson.fullCode, lesson.slug]);
+    trackLessonCompleted(lesson.number);
+  }, [lesson.fullCode, lesson.slug, lesson.number]);
 
   const handleClear = useCallback(() => {
     monitor.clear(); playback.reset();
