@@ -1,0 +1,34 @@
+# A Tour of Agents
+
+> Interactive browser-based course teaching how AI agent systems work. 9 lessons, 60 lines of Python, no framework required.
+
+## What This Site Is
+
+An educational course that progressively builds a complete AI agent from scratch in plain Python. Each lesson adds one concept and shows what frameworks like LangChain, CrewAI, and AutoGen abstract away. Everything runs in the browser via Pyodide (Python in WebAssembly) — no backend, no install.
+
+## Lessons
+
+1. Agent = Function: An agent is a function that POSTs to an LLM API
+2. Tools = Dict: The LLM picks a tool by name, you dispatch with tools[name](**args)
+3. The Agent Loop: Call tool, see result, decide again — the core while-loop (AgentExecutor)
+4. Conversation: The messages array persists across calls (ConversationBufferMemory)
+5. State = Dict: Track structured data alongside the conversation (LangGraph state channels)
+6. Memory: Persist information across runs using a dict injected into the system prompt
+7. Policy: Input/output gates — guardrails checked before and after the LLM
+8. Self-Scheduling: The agent enqueues its own follow-up work (BFS over a task queue)
+9. The Whole Thing: All concepts combined in ~60 lines of Python
+
+## Key Technical Details
+
+- Python runs client-side via Pyodide (WebAssembly)
+- LLM calls use the OpenAI-compatible chat completions API format
+- Trace events emitted via print("__TRACE__:...") from Python, parsed in TypeScript
+- Interactive debugger with play/pause/step controls and turn-aware replay
+- Works with mock LLM responses (no API key) or real providers (Groq, OpenAI, Anthropic via OpenRouter)
+- API keys stored in browser localStorage only, never sent to any server
+
+## Links
+
+- Site: https://tinyagents.dev
+- Source: https://github.com/ahumblenerd/tour-of-agents
+- Stack: Next.js (static export), Pyodide, React Flow, Tailwind CSS, shadcn/ui
