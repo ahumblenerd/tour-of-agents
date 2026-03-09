@@ -26,7 +26,7 @@ import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
 import { getNextLesson } from "@/lib/lessons/registry";
 import { markVisited, markCompleted } from "@/lib/settings/progress";
-import { trackLessonStarted, trackCodeExecuted, trackLessonCompleted } from "@/lib/analytics/posthog";
+import { trackLessonStarted, trackCodeExecuted, trackCodeError, trackLessonCompleted } from "@/lib/analytics/posthog";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -68,9 +68,13 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         );
       }
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
-      trackCodeExecuted(lesson.number);
-      markCompleted(lesson.slug);
-      trackLessonCompleted(lesson.number);
+      if (result.error) {
+        trackCodeError(lesson.number, result.error.includes("Syntax") ? "syntax" : "runtime");
+      } else {
+        trackCodeExecuted(lesson.number);
+        markCompleted(lesson.slug);
+        trackLessonCompleted(lesson.number);
+      }
     },
     [lesson.steps, lesson.slug, lesson.number]
   );
@@ -93,10 +97,14 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
       const hasStart = result.traceEvents.some((e) => e.type === "agent_start");
       monitorRef.current.addFromTrace(result.traceEvents, hasStart ? undefined : "Full code");
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
+      if (result.error) {
+        trackCodeError(lesson.number, result.error.includes("Syntax") ? "syntax" : "runtime");
+      } else {
+        trackCodeExecuted(lesson.number);
+        markCompleted(lesson.slug);
+        trackLessonCompleted(lesson.number);
+      }
     }
-    trackCodeExecuted(lesson.number);
-    markCompleted(lesson.slug);
-    trackLessonCompleted(lesson.number);
   }, [lesson.fullCode, lesson.slug, lesson.number]);
 
   const handleClear = useCallback(() => {
