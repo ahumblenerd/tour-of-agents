@@ -10,6 +10,7 @@ import {
   getModel,
   setModel,
   testConnection,
+  hasAnyKey,
   PROVIDER_CONFIGS,
   type LlmProvider,
 } from "@/lib/settings/api-keys";
@@ -33,6 +34,7 @@ export function ProviderPicker() {
     const stored = getApiKeys();
     setKeys({ groq: stored.groq || "", openai: stored.openai || "", anthropic: stored.anthropic || "" });
     setMounted(true);
+    if (!hasAnyKey()) setOpen(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 

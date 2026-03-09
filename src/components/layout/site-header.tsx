@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
-import { hasAnyKey } from "@/lib/settings/api-keys";
 import { trackGitHubClicked } from "@/lib/analytics/posthog";
 
 export function SiteHeader() {
-  const [showSettings, setShowSettings] = useState(() => !hasAnyKey());
+  const [showSettings, setShowSettings] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

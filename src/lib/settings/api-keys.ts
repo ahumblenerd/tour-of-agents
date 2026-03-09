@@ -16,7 +16,7 @@ export const PROVIDER_CONFIGS: Record<LlmProvider, ProviderConfig> = {
     label: "Groq",
     hint: "Free — console.groq.com",
     baseUrl: "https://api.groq.com/openai/v1",
-    defaultModel: "llama-3.3-70b-versatile",
+    defaultModel: "openai/gpt-oss-120b",
   },
   openai: {
     label: "OpenAI",
