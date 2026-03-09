@@ -14,13 +14,17 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://tour-of-agents-production.up.railway.app";
+const SITE_URL = "https://tinyagents.dev";
 
 export const metadata: Metadata = {
   title: "A Tour of Agents",
   description:
     "Interactive course: build an AI agent from scratch in 60 lines of Python. 9 lessons, no framework, runs in your browser.",
   metadataBase: new URL(SITE_URL),
+  keywords: [
+    "AI agents", "LLM", "Python", "LangChain", "CrewAI", "AutoGen",
+    "tool calling", "function calling", "agent loop", "interactive course",
+  ],
   openGraph: {
     title: "A Tour of Agents",
     description:
@@ -37,6 +41,8 @@ export const metadata: Metadata = {
       "9 lessons. 60 lines of Python. No framework required.",
     images: ["/og-image.png"],
   },
+  alternates: { canonical: SITE_URL },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
