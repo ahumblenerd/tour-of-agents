@@ -6,7 +6,7 @@ export const lesson09: LessonDefinition = {
   slug: "the-whole-thing",
   number: 9,
   title: "The Whole Thing",
-  subtitle: "All 8 concepts composed in ~60 lines. This is a framework.",
+  subtitle: "Everything ChatGPT and Claude do — composed in ~60 lines.",
   concepts: ["complete agent", "integration", "no framework"],
   graph: lesson09Graph,
   frameworkName:

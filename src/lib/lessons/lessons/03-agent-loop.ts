@@ -5,7 +5,7 @@ export const lesson03: LessonDefinition = {
   slug: "agent-loop",
   number: 3,
   title: "The Agent Loop",
-  subtitle: "LLM calls a tool, gets the result, decides again. This IS AgentExecutor.",
+  subtitle: "Claude searching files, then reading, then searching again. That's this loop.",
   concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
   graph: {
     direction: "TB",

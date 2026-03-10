@@ -5,7 +5,7 @@ export const lesson07: LessonDefinition = {
   slug: "policy",
   number: 7,
   title: "Policy = Guardrails",
-  subtitle: "Gates before the LLM and after it. The agent obeys rules.",
+  subtitle: "Why ChatGPT refuses harmful requests. Two gates, a few lines each.",
   concepts: ["policy", "guardrails", "input gate", "output gate", "safety"],
   graph: {
     nodes: [

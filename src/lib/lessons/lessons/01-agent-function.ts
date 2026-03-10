@@ -5,7 +5,7 @@ export const lesson01: LessonDefinition = {
   slug: "agent-function",
   number: 1,
   title: "The Agent Function",
-  subtitle: "An agent is a function that calls an LLM. That's it.",
+  subtitle: "Every ChatGPT message is one HTTP POST. That's all an agent is.",
   concepts: ["agent", "function", "HTTP POST", "system prompt", "messages"],
   graph: {
     nodes: [

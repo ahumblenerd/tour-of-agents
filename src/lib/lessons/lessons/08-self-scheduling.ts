@@ -5,7 +5,7 @@ export const lesson08: LessonDefinition = {
   slug: "self-scheduling",
   number: 8,
   title: "Self-Scheduling",
-  subtitle: "The agent enqueues its own follow-up work. BFS over a task queue.",
+  subtitle: "ChatGPT deep research spawns sub-tasks on its own. A queue + a budget.",
   concepts: ["self-scheduling", "task queue", "BFS", "convergence", "budget"],
   graph: {
     direction: "TB",

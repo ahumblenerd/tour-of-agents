@@ -5,7 +5,7 @@ export const lesson04: LessonDefinition = {
   slug: "conversation",
   number: 4,
   title: "Conversation = Messages Array",
-  subtitle: "The messages array persists across calls. That's how agents remember within a session.",
+  subtitle: "Why ChatGPT remembers your last message — and why \"New Chat\" forgets.",
   concepts: ["conversation history", "multi-turn", "context window", "ChatGPT pattern"],
   graph: {
     nodes: [

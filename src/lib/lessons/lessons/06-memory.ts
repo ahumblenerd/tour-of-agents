@@ -5,7 +5,7 @@ export const lesson06: LessonDefinition = {
   slug: "memory",
   number: 6,
   title: "Memory Across Runs",
-  subtitle: "Conversation dies per session. Memory survives forever.",
+  subtitle: "ChatGPT Memory knows your name across chats. Here's how.",
   concepts: ["memory", "persistence", "long-term", "retrieval"],
   graph: {
     nodes: [

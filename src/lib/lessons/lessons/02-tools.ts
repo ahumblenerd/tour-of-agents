@@ -5,7 +5,7 @@ export const lesson02: LessonDefinition = {
   slug: "tools",
   number: 2,
   title: "Tools = Dict",
-  subtitle: "The LLM picks a tool by name. You dispatch with tools[name](**args).",
+  subtitle: "When ChatGPT says \"Used browser\" — this is what's happening.",
   concepts: ["tools", "function calling", "JSON schema", "dispatch"],
   graph: {
     nodes: [
