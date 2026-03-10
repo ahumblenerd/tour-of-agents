@@ -9,29 +9,24 @@ interface TourStep {
   position: "top" | "bottom" | "left" | "right";
 }
 
+// Only targets that are always present in the DOM — no conditional elements
 const STEPS: TourStep[] = [
   {
     target: "prose-column",
     title: "Lesson Content",
-    body: "Read the lesson here. Each step has inline code you can run directly.",
-    position: "right",
-  },
-  {
-    target: "run-button",
-    title: "Run Code",
-    body: "Click to execute the Python code in your browser via Pyodide. No backend needed.",
+    body: "Read the lesson here. Each step builds on the last, with inline code you can run directly.",
     position: "right",
   },
   {
     target: "agent-graph",
     title: "Agent Graph",
-    body: "See how the agent's components connect. Nodes light up as the agent runs.",
+    body: "See how the agent's components connect. Nodes light up as you run code.",
     position: "bottom",
   },
   {
     target: "playback-controls",
     title: "Playback Controls",
-    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance. Use Turn arrows to jump between conversation turns.",
+    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance.",
     position: "top",
   },
   {
@@ -64,25 +59,14 @@ export function TourGuide() {
     }
   }, []);
 
-  // Find and measure target element
+  // Measure the target element for the current step
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (!active) { setRect(null); return; }
-    // Find next step with a visible target (skip missing ones)
-    let nextValid = step;
-    while (nextValid < STEPS.length) {
-      const el = document.querySelector(`[data-tour="${STEPS[nextValid].target}"]`);
-      if (el) {
-        if (nextValid !== step) { setStep(nextValid); return; }
-        const r = el.getBoundingClientRect();
-        setRect(r);
-        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        return;
-      }
-      nextValid++;
-    }
-    // No remaining steps have visible targets — finish
-    finish();
+    if (!active) { setRect(null); return; } // eslint-disable-line react-hooks/set-state-in-effect
+    const el = document.querySelector(`[data-tour="${STEPS[step].target}"]`);
+    if (!el) { finish(); return; }
+    const r = el.getBoundingClientRect();
+    setRect(r);
+    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [step, active, finish]);
 
   const next = () => step < STEPS.length - 1 ? setStep(step + 1) : finish();
@@ -96,7 +80,6 @@ export function TourGuide() {
 
   return (
     <div className="fixed inset-0 z-[100]" onClick={finish}>
-      {/* Backdrop with cutout */}
       <svg className="absolute inset-0 w-full h-full">
         <defs>
           <mask id="tour-mask">
@@ -111,7 +94,6 @@ export function TourGuide() {
         <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#tour-mask)" />
       </svg>
 
-      {/* Spotlight ring */}
       <div
         className="absolute border-2 border-primary rounded-lg pointer-events-none animate-pulse"
         style={{
@@ -120,7 +102,6 @@ export function TourGuide() {
         }}
       />
 
-      {/* Tooltip */}
       <div
         className="absolute bg-popover text-popover-foreground border rounded-lg shadow-lg p-4 max-w-xs z-[101]"
         style={tooltip}
