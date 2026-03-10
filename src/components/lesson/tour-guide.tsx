@@ -23,27 +23,15 @@ const STEPS: TourStep[] = [
     position: "right",
   },
   {
-    target: "architecture-tab",
-    title: "Architecture Diagram",
-    body: "See how the agent's components connect. This updates per lesson.",
-    position: "bottom",
-  },
-  {
-    target: "agent-tab",
-    title: "Agent Panel",
-    body: "Watch the agent run live. Every LLM call, tool use, and decision appears here.",
-    position: "bottom",
-  },
-  {
-    target: "phase-pipeline",
-    title: "Phase Pipeline",
-    body: "Tracks the agent's current stage: Input, Policy, LLM, Decide, Tool, Output.",
+    target: "agent-graph",
+    title: "Agent Graph",
+    body: "See how the agent's components connect. Nodes light up as the agent runs.",
     position: "bottom",
   },
   {
     target: "playback-controls",
     title: "Playback Controls",
-    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance. When you send multiple messages, use the Turn arrows to jump between conversation turns. Speed is remembered across lessons.",
+    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance. Use Turn arrows to jump between conversation turns.",
     position: "top",
   },
   {

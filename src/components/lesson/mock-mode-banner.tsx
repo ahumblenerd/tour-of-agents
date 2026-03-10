@@ -8,11 +8,14 @@ function checkMock() {
 }
 
 export function MockModeBanner() {
-  const [isMock, setIsMock] = useState(() => checkMock());
+  // Start with true to match server (getProvider returns tinyagents on server)
+  const [isMock, setIsMock] = useState(true);
 
   const refresh = useCallback(() => setIsMock(checkMock()), []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    refresh(); // sync on mount — server defaults to true, client corrects immediately
     window.addEventListener("storage", refresh);
     const id = setInterval(refresh, 2000);
     return () => { window.removeEventListener("storage", refresh); clearInterval(id); };

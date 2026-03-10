@@ -20,7 +20,6 @@ import { InputBar } from "./input-bar";
 import { FullCodeBlock } from "./full-code-block";
 import { LessonNav } from "./lesson-nav";
 import { LessonSelector } from "./lesson-selector";
-import { ProviderPicker } from "./provider-picker";
 import { CourseComplete } from "./course-complete";
 import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
@@ -121,7 +120,6 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         <div className="flex items-center gap-2 ml-auto">
           {lesson.llmConfig && <Badge variant="outline" className="text-[10px]">LLM</Badge>}
           <MockModeBanner />
-          <ProviderPicker />
           <TourButton />
         </div>
       </div>
