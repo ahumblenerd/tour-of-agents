@@ -17,14 +17,19 @@ export function AgentGraphNode({ data }: NodeProps) {
   const { label, icon, state, vertical } = data as AgentNodeData;
   const src = vertical ? Position.Bottom : Position.Right;
   const tgt = vertical ? Position.Top : Position.Left;
+  // Back-edge handles route around the side to avoid overlap
+  const backSrc = vertical ? Position.Right : Position.Top;
+  const backTgt = vertical ? Position.Right : Position.Top;
   return (
     <div className={`px-3 py-2 rounded-lg border transition-all duration-300 text-center min-w-[80px] max-w-[180px] ${NODE_STYLES[state]}`}>
       <Handle type="target" position={tgt} className={HANDLE_CLASS} />
+      <Handle type="target" id="back-target" position={backTgt} className={HANDLE_CLASS} />
       <div className="flex items-center justify-center gap-1.5">
         {icon && <span className="text-xs opacity-60">{icon}</span>}
         <span className="text-[11px] font-medium leading-tight">{label}</span>
       </div>
       <Handle type="source" position={src} className={HANDLE_CLASS} />
+      <Handle type="source" id="back-source" position={backSrc} className={HANDLE_CLASS} />
     </div>
   );
 }

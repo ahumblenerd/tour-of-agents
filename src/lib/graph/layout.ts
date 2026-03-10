@@ -14,8 +14,8 @@ export function layoutGraph(
   const isVertical = (graph.direction ?? "LR") === "TB";
   g.setGraph({
     rankdir: graph.direction ?? "LR",
-    nodesep: isVertical ? 50 : 40,
-    ranksep: isVertical ? 50 : 60,
+    nodesep: isVertical ? 80 : 40,
+    ranksep: isVertical ? 60 : 60,
     marginx: 20,
     marginy: 20,
   });
@@ -47,14 +47,25 @@ export function layoutGraph(
     };
   });
 
-  const edges: Edge[] = graph.edges.map((edge) => ({
-    id: edge.id,
-    source: edge.source,
-    target: edge.target,
-    label: edge.label,
-    type: "animated",
-    data: { traversed: false, active: false },
-  }));
+  // Detect back-edges (target is above/before source) for alternate routing
+  const edges: Edge[] = graph.edges.map((edge) => {
+    const srcPos = g.node(edge.source);
+    const tgtPos = g.node(edge.target);
+    const isBackEdge = isVertical
+      ? srcPos.y > tgtPos.y
+      : srcPos.x > tgtPos.x;
+
+    return {
+      id: edge.id,
+      source: edge.source,
+      target: edge.target,
+      sourceHandle: isBackEdge ? "back-source" : undefined,
+      targetHandle: isBackEdge ? "back-target" : undefined,
+      label: edge.label,
+      type: "animated",
+      data: { traversed: false, active: false, isBackEdge },
+    };
+  });
 
   return { nodes, edges };
 }
