@@ -11,7 +11,7 @@
   "homepage": "https://tinyagents.dev",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
     "start": "HOSTNAME=0.0.0.0 node .next/standalone/server.js",
     "lint": "eslint",
     "test": "vitest run --project=unit",
