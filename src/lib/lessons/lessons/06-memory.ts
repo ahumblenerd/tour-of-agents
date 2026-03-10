@@ -37,13 +37,13 @@ export const lesson06: LessonDefinition = {
       id: "intro",
       prose: `# Memory: Persist Across Runs
 
-L4's conversation resets when you reload the page. **Memory** survives across sessions.
+ChatGPT has "Memory" in settings — it remembers your name, your preferences, your job across conversations. Claude has a similar feature called Projects with custom instructions. How?
 
-The difference:
-- **Conversation** = the messages array (ephemeral, one session)
+L4's conversation resets when you start a new chat. **Memory** survives across sessions. The difference:
+- **Conversation** = the messages array (ephemeral, dies with the chat)
 - **Memory** = a separate store (persistent, survives forever)
 
-In production you'd use Redis, Postgres, or a vector store. Here: a dict injected into the system prompt. The interface is the same: **load before the loop, save during it.**
+In production you'd use Redis, Postgres, or a vector store. Here: a dict injected into the system prompt. Same interface ChatGPT uses: **load before the loop, save during it.**
 
 > **Key insight:** \`remember\` is just a tool. The LLM calls it like \`add\`. The side effect is: a value enters the memory dict.`,
     },

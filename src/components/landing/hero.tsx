@@ -51,6 +51,7 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
           </span>
           <span>Runs in your browser via Pyodide</span>
           <span>No signup required</span>
+          <span className="text-emerald-400 font-medium">No API key needed</span>
         </div>
       </div>
     </section>

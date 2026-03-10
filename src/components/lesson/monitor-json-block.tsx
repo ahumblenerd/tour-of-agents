@@ -14,7 +14,7 @@ export function MonitorJsonBlock({ label, data }: MonitorJsonBlockProps) {
     <div className="font-mono text-xs px-3 py-0.5 ml-5">
       <button
         onClick={() => setOpen(!open)}
-        className="text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1"
+        className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
       >
         <span className="text-[10px]">{open ? "▾" : "▸"}</span>
         <span>{label}</span>

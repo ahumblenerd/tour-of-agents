@@ -44,11 +44,11 @@ export const lesson08: LessonDefinition = {
       id: "intro",
       prose: `# Self-Scheduling: The Agent Decides What's Next
 
-So far, **you** decide what the agent works on. A truly agentic system decides for itself.
+You've seen this in Claude: ask it to "refactor this module" and it decides on its own to read related files, check tests, update imports — tasks you never explicitly asked for. Or ChatGPT's deep research mode: you ask one question and it spawns multiple research threads.
 
-The trick: \`schedule_followup\` is just a tool. The LLM calls it like \`add\`. The side effect: a new task enters the queue. The outer loop processes tasks until the queue drains — or the budget runs out.
+So far, **you** decide what the agent works on. A truly agentic system decides for itself. The trick: \`schedule_followup\` is just a tool. The LLM calls it like \`add\`. The side effect: a new task enters the queue. The outer loop processes tasks until the queue drains — or the budget runs out.
 
-> **Framework parallel:** CrewAI calls this "delegation." AutoGen calls it "nested chats." Both are BFS over a dynamic queue where the LLM decides what goes in. The budget cap (\`max_tasks\`) is the difference between a useful agent and a billing incident.`,
+> **Framework parallel:** CrewAI calls this "delegation." AutoGen calls it "nested chats." The budget cap (\`max_tasks\`) is the difference between a useful agent and a billing incident.`,
     },
     {
       id: "setup",

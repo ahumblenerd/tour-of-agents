@@ -283,7 +283,7 @@
   fill: var(--background);
 }
 .agent-graph-wrapper .react-flow__edge-text {
-  fill: #999;
+  fill: var(--muted-foreground);
 }
 .agent-graph-wrapper .react-flow__controls button {
   background: var(--muted);

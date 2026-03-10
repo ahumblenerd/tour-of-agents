@@ -43,7 +43,7 @@ export const lesson02: LessonDefinition = {
       id: "intro",
       prose: `# Tools = Dict
 
-An LLM can't run code. But it can say *"call \`add\` with \`a=10, b=5\`"* — a structured request. You execute it.
+You've seen this in ChatGPT: you ask "what's the weather?" and it calls a weather tool. Or in Claude: you ask it to search the web and it runs a search. The LLM can't run code — but it can say *"call \`add\` with \`a=10, b=5\`"* — a structured request. Your code executes it.
 
 > **Framework parallel:** LangChain's \`@tool\` decorator, CrewAI's tool registration — they build this dict for you. Here you'll see what's inside.`,
     },
@@ -63,7 +63,7 @@ A dict of callables. Lambda, function, class method — anything that takes argu
       highlightNodes: ["llm", "tc"],
       prose: `## Step 2: Describe them for the LLM
 
-The LLM needs JSON Schema descriptions to know what tools exist and what arguments they accept. This is the wire format OpenAI and Groq expect in the \`tools\` field.`,
+The LLM needs JSON Schema descriptions to know what tools exist and what arguments they accept. When ChatGPT shows that little plugin icon before calling a tool — this JSON schema is how it knew the tool existed and what to pass. This is the wire format OpenAI and Groq expect in the \`tools\` field.`,
       code: `TOOL_DEFS = [
     {"type": "function", "function": {
         "name": "add", "description": "Add two numbers",
@@ -103,7 +103,7 @@ Same HTTP POST as L1, but now \`tools\` goes in the request body. When the LLM w
       highlightNodes: ["dispatch", "result"],
       prose: `## Step 4: Dispatch
 
-One line does the work: \`tools[name](**args)\`. Same pattern as an Express router or Redux reducer — lookup by key, call with payload.`,
+One line does the work: \`tools[name](**args)\`. When you see ChatGPT say "Used browser" or Claude say "Running search" — this is what's happening behind the scenes. Lookup by key, call with payload. Same pattern as an Express router or Redux reducer.`,
       code: `async def agent(task):
     trace("agent_start", f"Task: {task}")
     d = await ask_llm(task)

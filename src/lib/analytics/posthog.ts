@@ -49,3 +49,15 @@ export function trackGitHubClicked() {
 export function trackShareClicked(method: string) {
   track("share_clicked", { method });
 }
+
+export function trackJobsViewed() {
+  track("jobs_viewed");
+}
+
+export function trackJobsInterestClicked(source: string) {
+  track("jobs_interest_clicked", { source });
+}
+
+export function trackProviderSelected(provider: string) {
+  track("provider_selected", { provider });
+}

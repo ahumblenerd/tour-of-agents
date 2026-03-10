@@ -43,12 +43,14 @@ export const lesson07: LessonDefinition = {
       id: "intro",
       prose: `# Policy = Guardrails
 
+You've seen this: ask ChatGPT to help with something harmful and it refuses. Ask Claude to generate malware and it declines. That's not the LLM being "smart" — it's **policy**. Rules checked before and after the LLM runs.
+
 The L3 loop trusts the user and the LLM completely. Production agents can't afford that. **Policy** adds two gates:
 
 - **Input gate**: blocks dangerous requests *before* they reach the LLM (saves money, prevents harm)
 - **Output gate**: redacts or rejects the LLM's response *before* the user sees it
 
-> **Framework parallel:** Guardrails AI and NeMo Guardrails implement exactly these two gates. The rules are more sophisticated (LLM-based classification, regex patterns, embedding similarity), but the architecture is identical.`,
+> **Framework parallel:** Guardrails AI and NeMo Guardrails implement exactly these two gates. OpenAI's moderation endpoint is an input gate. The architecture is identical.`,
     },
     {
       id: "setup",
@@ -80,7 +82,7 @@ async def ask_llm(messages):
 
 Each gate is a list of functions. A function returns \`True\` to pass, or a string explaining why it blocked. \`check_gate\` runs all rules and short-circuits on the first failure.
 
-Adding a rule = appending a lambda. Removing one = deleting it. No config files, no YAML.`,
+This is the same pattern behind ChatGPT's content filter and Claude's safety system — just without the complexity. Adding a rule = appending a lambda. Removing one = deleting it. No config files, no YAML.`,
       code: `INPUT_RULES = [
     lambda text: "delete" not in text.lower() or "Input blocked: no delete commands",
     lambda text: "drop" not in text.lower() or "Input blocked: no drop commands",

@@ -6,6 +6,7 @@ import {
   getSmoothStepPath,
   type EdgeProps,
 } from "@xyflow/react";
+import { GRAPH } from "@/lib/graph/colors";
 
 interface EdgeData {
   traversed?: boolean;
@@ -25,8 +26,10 @@ export function AgentGraphEdge({
     borderRadius: 8,
   });
 
-  const stroke = done ? "#10b981" : active ? "#ddd" : traversed ? "#555" : "#2a2a2a";
+  const E = GRAPH.edge;
+  const stroke = done ? E.done : active ? E.active : traversed ? E.traversed : E.idle;
   const width = (active || done) ? 1.5 : 1;
+  const dotFill = done ? GRAPH.dot.done : active ? GRAPH.dot.active : GRAPH.dot.idle;
 
   return (
     <>
@@ -36,7 +39,7 @@ export function AgentGraphEdge({
         style={{ stroke, strokeWidth: width, transition: "stroke 0.3s, stroke-width 0.3s" }}
       />
       {traversed && (
-        <circle r="2" fill={done ? "#10b981" : active ? "#fff" : "#777"}>
+        <circle r="2" fill={dotFill}>
           <animateMotion dur={active ? "0.8s" : "2s"} repeatCount="indefinite" path={edgePath} />
         </circle>
       )}
@@ -47,8 +50,10 @@ export function AgentGraphEdge({
               position: "absolute",
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
               pointerEvents: "none",
+              color: GRAPH.label.text,
+              backgroundColor: GRAPH.label.bg,
             }}
-            className="text-[9px] text-[#666] bg-[#111]/80 px-1 py-0.5 rounded"
+            className="text-[9px] px-1 py-0.5 rounded"
           >
             {label}
           </div>

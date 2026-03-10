@@ -43,11 +43,11 @@ export const lesson03: LessonDefinition = {
 
 **This is the most important lesson.** Everything after this builds on this loop.
 
-L2's agent made one tool call and stopped. Real agents **loop**: call a tool → see the result → decide what's next → repeat until done.
+You've seen this happen in Claude: you ask it to analyze a codebase, and it searches files, reads them, searches again, reads more — multiple steps before giving you an answer. Or ChatGPT with Code Interpreter: it writes code, runs it, sees an error, fixes it, runs again. That's this loop.
 
-The \`messages\` array grows each turn. The LLM sees what it asked for and what it got back. This is the entire runtime of LangChain's \`AgentExecutor\`.
+L2's agent made one tool call and stopped. Real agents **loop**: call a tool → see the result → decide what's next → repeat until done. The LLM decides when to stop. No \`tool_calls\` in the response = done.
 
-> **Key insight:** The LLM decides when to stop. No \`tool_calls\` in the response = done.`,
+This is the entire runtime of LangChain's \`AgentExecutor\`.`,
     },
     {
       id: "setup",
@@ -78,10 +78,10 @@ async def ask_llm(messages):
       highlightNodes: ["loop", "call", "check", "exec", "append"],
       prose: `## Step 2: The loop
 
-Three things happen each turn:
+When Claude runs a multi-step task — say, searching your codebase, then reading files, then writing code — each step is one iteration of this loop:
 
-1. **Call LLM** with the full messages array
-2. **No \`tool_calls\`?** Return the answer — the LLM is done
+1. **Call LLM** with the full messages array (everything so far)
+2. **No \`tool_calls\`?** Return the answer — the LLM is done thinking
 3. **Has \`tool_calls\`?** Execute each one, append results with \`tool_call_id\`, loop back
 
 The \`tool_call_id\` links each result to its request. This is the **tool calling protocol** — the wire format that makes multi-step work.`,

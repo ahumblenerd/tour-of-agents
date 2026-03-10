@@ -14,13 +14,14 @@ import {
   PROVIDER_CONFIGS,
   type LlmProvider,
 } from "@/lib/settings/api-keys";
+import { trackProviderSelected } from "@/lib/analytics/posthog";
 
-const PROVIDERS: LlmProvider[] = ["groq", "openai", "anthropic"];
+const PROVIDERS: LlmProvider[] = ["tinyagents", "groq", "openai", "anthropic"];
 
 export function ProviderPicker() {
   const [mounted, setMounted] = useState(false);
-  const [provider, setLocal] = useState<LlmProvider>("groq");
-  const [keys, setKeys] = useState({ groq: "", openai: "", anthropic: "" });
+  const [provider, setLocal] = useState<LlmProvider>("tinyagents");
+  const [keys, setKeys] = useState({ tinyagents: "", groq: "", openai: "", anthropic: "" });
   const [model, setLocalModel] = useState("");
   const [open, setOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -32,9 +33,9 @@ export function ProviderPicker() {
     setLocal(getProvider());
     setLocalModel(getModel());
     const stored = getApiKeys();
-    setKeys({ groq: stored.groq || "", openai: stored.openai || "", anthropic: stored.anthropic || "" });
+    setKeys({ tinyagents: "", groq: stored.groq || "", openai: stored.openai || "", anthropic: stored.anthropic || "" });
     setMounted(true);
-    if (!hasAnyKey()) setOpen(true);
+    if (!hasAnyKey() && getProvider() !== "tinyagents") setOpen(true);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
 
@@ -47,6 +48,7 @@ export function ProviderPicker() {
     setProvider(provider);
     setApiKeys(keys);
     setModel(model);
+    trackProviderSelected(provider);
     setOpen(false);
   };
 
@@ -66,7 +68,8 @@ export function ProviderPicker() {
   };
 
   const config = PROVIDER_CONFIGS[provider];
-  const hasKey = !!keys[provider];
+  const isFree = config.needsKey === false;
+  const hasKey = isFree || !!keys[provider];
 
   return (
     <div className="relative">
@@ -76,7 +79,7 @@ export function ProviderPicker() {
         className="text-xs h-7"
         onClick={() => setOpen(!open)}
       >
-        {mounted ? (hasKey ? config.label : "Set API Key") : "..."}
+        {mounted ? (isFree ? `${config.label} (Free)` : hasKey ? config.label : "Set API Key") : "..."}
       </Button>
       {open && (
         <div className="absolute right-0 top-full mt-1 z-50 w-80 rounded-md border bg-popover p-3 shadow-lg space-y-3">
@@ -94,30 +97,34 @@ export function ProviderPicker() {
             ))}
           </div>
           <p className="text-[10px] text-muted-foreground">{config.hint}</p>
-          <input
-            type="password"
-            placeholder={`${config.label} API key`}
-            value={keys[provider]}
-            onChange={(e) =>
-              setKeys((k) => ({ ...k, [provider]: e.target.value }))
-            }
-            className="w-full text-xs p-1.5 rounded border bg-background font-mono"
-          />
-          <input
-            type="text"
-            placeholder={config.defaultModel}
-            value={model}
-            onChange={(e) => setLocalModel(e.target.value)}
-            className="w-full text-xs p-1.5 rounded border bg-background font-mono"
-          />
-          <p className="text-[10px] text-muted-foreground">
-            Model: {model || config.defaultModel}
-          </p>
+          {!isFree && (
+            <>
+              <input
+                type="password"
+                placeholder={`${config.label} API key`}
+                value={keys[provider]}
+                onChange={(e) =>
+                  setKeys((k) => ({ ...k, [provider]: e.target.value }))
+                }
+                className="w-full text-xs p-1.5 rounded border bg-background font-mono"
+              />
+              <input
+                type="text"
+                placeholder={config.defaultModel}
+                value={model}
+                onChange={(e) => setLocalModel(e.target.value)}
+                className="w-full text-xs p-1.5 rounded border bg-background font-mono"
+              />
+              <p className="text-[10px] text-muted-foreground">
+                Model: {model || config.defaultModel}
+              </p>
+            </>
+          )}
           <div className="flex gap-2">
             <Button size="sm" className="flex-1 h-7 text-xs" onClick={handleSave}>
               Save
             </Button>
-            {hasKey && (
+            {!isFree && hasKey && (
               <Button
                 variant="outline"
                 size="sm"
@@ -128,7 +135,7 @@ export function ProviderPicker() {
                 {testing ? "Testing..." : "Test"}
               </Button>
             )}
-            {hasKey && (
+            {!isFree && hasKey && (
               <Button
                 variant="destructive"
                 size="sm"
@@ -163,7 +170,7 @@ function KeyStorageHelp({ show, onToggle }: { show: boolean; onToggle: () => voi
       {show && (
         <div className="mt-1.5 text-[10px] text-muted-foreground space-y-1 leading-relaxed">
           <p>Your API key is stored <strong>only in your browser&apos;s localStorage</strong>. It never leaves your machine.</p>
-          <p>API calls go directly from your browser to the provider (Groq, OpenAI, or OpenRouter). There is no backend server — this site is a static export.</p>
+          <p>For <strong>Tiny Agents</strong>, requests hit our mock endpoint on this server — no key needed. For other providers, API calls go directly from your browser to the provider.</p>
           <p>Use <strong>Clear key</strong> above to delete it instantly. You can also clear it from DevTools: Application &gt; Local Storage &gt; delete <code>tour-of-agents-api-keys</code>.</p>
         </div>
       )}

@@ -27,6 +27,7 @@ import { Badge } from "@/components/ui/badge";
 import { getNextLesson } from "@/lib/lessons/registry";
 import { markVisited, markCompleted } from "@/lib/settings/progress";
 import { trackLessonStarted, trackCodeExecuted, trackCodeError, trackLessonCompleted } from "@/lib/analytics/posthog";
+import { MockModeBanner } from "./mock-mode-banner";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -117,6 +118,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         <LessonSelector current={lesson} />
         <div className="flex items-center gap-2 ml-auto">
           {lesson.llmConfig && <Badge variant="outline" className="text-[10px]">LLM</Badge>}
+          <MockModeBanner />
           <ProviderPicker />
           <TourButton />
         </div>

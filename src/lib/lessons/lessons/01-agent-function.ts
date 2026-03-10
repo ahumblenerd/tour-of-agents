@@ -31,6 +31,8 @@ export const lesson01: LessonDefinition = {
       id: "intro",
       prose: `# An Agent is a Function
 
+Every time you send a message in ChatGPT or Claude, here's what actually happens: your browser sends an HTTP POST to an API, and a response comes back. That's it. The fancy UI, the streaming text, the typing indicator — all cosmetics around one function call.
+
 Strip away LangChain's \`AgentExecutor\`, CrewAI's \`Agent\`, AutoGen's \`ConversableAgent\`. At the bottom of every one: **a function that sends an HTTP POST and returns the response.**
 
 That's what you'll build now.`,
@@ -40,9 +42,9 @@ That's what you'll build now.`,
       highlightNodes: ["fn", "api"],
       prose: `## Step 1: POST to the LLM
 
-This is the raw call every SDK wraps. Two things to notice:
+This is the raw call every SDK wraps — and exactly what happens when you hit Enter in ChatGPT. Two things to notice:
 
-1. **\`messages\`** is an array — \`system\` sets behavior, \`user\` sends input
+1. **\`messages\`** is an array — \`system\` sets behavior (like ChatGPT's "Custom Instructions"), \`user\` sends your input
 2. The response lives at \`choices[0].message.content\`
 
 Everything else is HTTP boilerplate.`,
@@ -69,7 +71,7 @@ async def ask_llm(message):
       highlightNodes: ["fn"],
       prose: `## Step 2: Wrap it
 
-The agent is the thinnest possible wrapper. String in, string out. Change the system prompt → different behavior from the same input. That's all "prompt engineering" is.`,
+The agent is the thinnest possible wrapper. String in, string out. Change the system prompt → different behavior from the same input. This is why ChatGPT and Claude behave differently — different system prompts. That's all "prompt engineering" is.`,
       code: `async def agent(message):
     trace("agent_start", f"Input: {message}")
     response = await ask_llm(message)

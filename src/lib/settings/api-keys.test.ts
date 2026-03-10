@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getApiKeys, setApiKeys, hasAnyKey } from "./api-keys";
+import { getApiKeys, setApiKeys, hasAnyKey, setProvider } from "./api-keys";
 
 describe("api-keys", () => {
   const store: Record<string, string> = {};
@@ -36,7 +36,12 @@ describe("api-keys", () => {
     expect(keys.anthropic).toBe("sk-a");
   });
 
-  it("hasAnyKey returns false when empty", () => {
+  it("hasAnyKey returns true when tinyagents (default)", () => {
+    expect(hasAnyKey()).toBe(true);
+  });
+
+  it("hasAnyKey returns false when non-free provider with no key", () => {
+    setProvider("groq");
     expect(hasAnyKey()).toBe(false);
   });
 

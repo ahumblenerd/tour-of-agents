@@ -12,7 +12,7 @@ const roleConfig: Record<
     label: "user",
   },
   agent: {
-    color: "text-green-400",
+    color: "text-emerald-400",
     icon: "◆",
     label: "agent",
   },
@@ -27,7 +27,7 @@ const roleConfig: Record<
     label: "llm",
   },
   system: {
-    color: "text-zinc-500",
+    color: "text-muted-foreground",
     icon: "●",
     label: "sys",
   },

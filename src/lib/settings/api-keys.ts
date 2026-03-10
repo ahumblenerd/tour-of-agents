@@ -2,16 +2,24 @@ const STORAGE_KEY = "tour-of-agents-api-keys";
 const PROVIDER_KEY = "tour-of-agents-provider";
 const MODEL_KEY = "tour-of-agents-model";
 
-export type LlmProvider = "groq" | "openai" | "anthropic";
+export type LlmProvider = "tinyagents" | "groq" | "openai" | "anthropic";
 
 export interface ProviderConfig {
   label: string;
   hint: string;
   baseUrl: string;
   defaultModel: string;
+  needsKey?: boolean;
 }
 
 export const PROVIDER_CONFIGS: Record<LlmProvider, ProviderConfig> = {
+  tinyagents: {
+    label: "Tiny Agents",
+    hint: "Free — no API key needed. Mock responses for all lessons.",
+    baseUrl: "/api",
+    defaultModel: "tiny-mock-v1",
+    needsKey: false,
+  },
   groq: {
     label: "Groq",
     hint: "Free — console.groq.com",
@@ -33,6 +41,7 @@ export const PROVIDER_CONFIGS: Record<LlmProvider, ProviderConfig> = {
 };
 
 export interface ApiKeys {
+  tinyagents?: string;
   groq?: string;
   openai?: string;
   anthropic?: string;
@@ -53,13 +62,14 @@ export function setApiKeys(keys: ApiKeys): void {
 }
 
 export function hasAnyKey(): boolean {
+  if (getProvider() === "tinyagents") return true;
   const keys = getApiKeys();
   return !!(keys.groq || keys.openai || keys.anthropic);
 }
 
 export function getProvider(): LlmProvider {
-  if (typeof window === "undefined") return "groq";
-  return (localStorage.getItem(PROVIDER_KEY) as LlmProvider) || "groq";
+  if (typeof window === "undefined") return "tinyagents";
+  return (localStorage.getItem(PROVIDER_KEY) as LlmProvider) || "tinyagents";
 }
 
 export function setProvider(provider: LlmProvider): void {
@@ -68,7 +78,7 @@ export function setProvider(provider: LlmProvider): void {
 
 export function getModel(): string {
   if (typeof window === "undefined")
-    return PROVIDER_CONFIGS.groq.defaultModel;
+    return PROVIDER_CONFIGS.tinyagents.defaultModel;
   const stored = localStorage.getItem(MODEL_KEY);
   if (stored) return stored;
   return PROVIDER_CONFIGS[getProvider()].defaultModel;
@@ -79,8 +89,9 @@ export function setModel(model: string): void {
 }
 
 export function getActiveKey(): string | undefined {
-  const keys = getApiKeys();
   const provider = getProvider();
+  if (provider === "tinyagents") return "tiny-free";
+  const keys = getApiKeys();
   if (provider === "groq") return keys.groq;
   if (provider === "anthropic") return keys.anthropic;
   return keys.openai;

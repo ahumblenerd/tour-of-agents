@@ -30,22 +30,22 @@ export const lesson09: LessonDefinition = {
       id: "intro",
       prose: `# The Whole Thing
 
-Nine lessons. Each added one concept:
+Nine lessons. Each concept maps to something you've used in ChatGPT or Claude:
 
-| Lesson | Concept | What it added |
-|--------|---------|--------------|
-| 1 | Agent function | HTTP POST to an LLM |
-| 2 | Tools | Dict of callables + JSON Schema |
-| 3 | **The Loop** | Messages array + tool_call_id protocol |
-| 4 | Conversation | Messages persist across calls |
-| 5 | State | Structured tracking alongside the loop |
-| 6 | Memory | Persistent store injected into system prompt |
-| 7 | Policy | Input + output gates |
-| 8 | Self-scheduling | Task queue with budget cap |
+| Lesson | Concept | You've seen it as... |
+|--------|---------|---------------------|
+| 1 | Agent function | Hitting Enter in any chat UI |
+| 2 | Tools | "Used browser", "Ran code", plugin icons |
+| 3 | **The Loop** | Multi-step tool use (search → read → search again) |
+| 4 | Conversation | Chat history within a session |
+| 5 | State | "Analyzed 5 files", progress indicators |
+| 6 | Memory | ChatGPT Memory, Claude Projects |
+| 7 | Policy | Content refusals, safety filters |
+| 8 | Self-scheduling | Deep research mode, autonomous sub-tasks |
 
 Now they compose into a complete agent framework. ~60 lines. No imports beyond \`json\` and \`pyfetch\`.
 
-> **Framework parallel:** This is the same architecture as LangChain's AgentExecutor + memory + guardrails + task queue. The difference: you can read every line.`,
+> This is the same architecture as LangChain's AgentExecutor + memory + guardrails + task queue. The difference: you can read every line.`,
     },
     {
       id: "tools-memory",

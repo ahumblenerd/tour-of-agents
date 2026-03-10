@@ -14,8 +14,9 @@ import {
   type LlmProvider,
   type ApiKeys,
 } from "@/lib/settings/api-keys";
+import { trackProviderSelected } from "@/lib/analytics/posthog";
 
-const PROVIDERS: LlmProvider[] = ["groq", "openai", "anthropic"];
+const PROVIDERS: LlmProvider[] = ["tinyagents", "groq", "openai", "anthropic"];
 
 function ApiKeyForm({ onClose }: { onClose: () => void }) {
   const [provider, setLocal] = useState<LlmProvider>(() => getProvider());
@@ -28,12 +29,14 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
   };
 
   const config = PROVIDER_CONFIGS[provider];
+  const isFree = config.needsKey === false;
   const currentKey = keys[provider] || "";
 
   const save = () => {
     setProvider(provider);
     setApiKeys(keys);
     setModel(model || config.defaultModel);
+    trackProviderSelected(provider);
     onClose();
   };
 
@@ -42,7 +45,7 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
   };
 
   const revokeAll = () => {
-    setKeys({ groq: "", openai: "", anthropic: "" });
+    setKeys({ tinyagents: "", groq: "", openai: "", anthropic: "" });
   };
 
   return (
@@ -58,12 +61,23 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
               className="flex-1 text-xs gap-1"
               onClick={() => handleProviderSwitch(p)}
             >
-              {hasKey && <span className="text-green-400">●</span>}
+              {hasKey && <span className="text-emerald-400">●</span>}
               {PROVIDER_CONFIGS[p].label}
             </Button>
           );
         })}
       </div>
+
+      <p className="text-xs text-muted-foreground">{config.hint}</p>
+
+      {isFree && (
+        <div className="rounded-md bg-emerald-500/10 border border-emerald-500/20 p-3">
+          <p className="text-xs text-emerald-400">
+            No setup needed. Run every lesson instantly with mock responses.
+            Switch to a real provider anytime for live LLM answers.
+          </p>
+        </div>
+      )}
 
       {provider === "groq" && !currentKey && (
         <div className="rounded-md bg-blue-500/10 border border-blue-500/20 p-3 space-y-2">
@@ -88,47 +102,49 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
         </div>
       )}
 
-      <p className="text-xs text-muted-foreground">{config.hint}</p>
-
-      <div>
-        <label className="text-sm font-medium mb-1 block">
-          {config.label} API Key
-        </label>
-        <div className="flex gap-2">
-          <input
-            type="password"
-            placeholder={`Enter your ${config.label} key`}
-            value={currentKey}
-            onChange={(e) => setKeys({ ...keys, [provider]: e.target.value })}
-            className="flex-1 text-sm p-2 rounded-md border bg-background font-mono"
-          />
-          {currentKey && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs text-red-400 hover:text-red-300 shrink-0"
-              onClick={revokeKey}
-            >
-              Revoke
-            </Button>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium mb-1 block">Model</label>
-        <input
-          type="text"
-          placeholder={config.defaultModel}
-          value={model}
-          onChange={(e) => setLocalModel(e.target.value)}
-          className="w-full text-sm p-2 rounded-md border bg-background font-mono"
-        />
-      </div>
+      {!isFree && (
+        <>
+          <div>
+            <label className="text-sm font-medium mb-1 block">
+              {config.label} API Key
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="password"
+                placeholder={`Enter your ${config.label} key`}
+                value={currentKey}
+                onChange={(e) => setKeys({ ...keys, [provider]: e.target.value })}
+                className="flex-1 text-sm p-2 rounded-md border bg-background font-mono"
+              />
+              {currentKey && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-xs text-red-400 hover:text-red-300 shrink-0"
+                  onClick={revokeKey}
+                >
+                  Revoke
+                </Button>
+              )}
+            </div>
+          </div>
+          <div>
+            <label className="text-sm font-medium mb-1 block">Model</label>
+            <input
+              type="text"
+              placeholder={config.defaultModel}
+              value={model}
+              onChange={(e) => setLocalModel(e.target.value)}
+              className="w-full text-sm p-2 rounded-md border bg-background font-mono"
+            />
+          </div>
+        </>
+      )}
 
       <p className="text-[11px] text-muted-foreground bg-muted rounded-md p-2">
-        Keys are stored in your browser only and sent directly to the
-        provider. Never touches our servers.
+        {isFree
+          ? "Tiny Agents uses mock responses from our server. No API key needed."
+          : "Keys are stored in your browser only and sent directly to the provider. Never touches our servers."}
       </p>
 
       <div className="flex items-center justify-between">
@@ -162,7 +178,7 @@ export function ApiKeyDialog({
         <DialogHeader>
           <DialogTitle>Set up your LLM provider</DialogTitle>
           <DialogDescription>
-            Pick a provider and paste your API key. Groq is free and fast.
+            Pick a provider. Tiny Agents works instantly — no key needed.
           </DialogDescription>
         </DialogHeader>
         {open && <ApiKeyForm onClose={() => onOpenChange(false)} />}

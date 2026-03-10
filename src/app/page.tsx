@@ -6,6 +6,7 @@ import { getProgress, type CourseProgress } from "@/lib/settings/progress";
 import { Hero } from "@/components/landing/hero";
 import { AgentLoopPreview } from "@/components/landing/agent-loop-preview";
 import { LearningPath } from "@/components/landing/learning-path";
+import { JobsSection } from "@/components/landing/jobs-section";
 
 export default function HomePage() {
   const [progress, setProgress] = useState<CourseProgress>({ visited: [], completed: [] });
@@ -25,6 +26,7 @@ export default function HomePage() {
       />
       <AgentLoopPreview />
       <LearningPath progress={progress} />
+      <JobsSection />
     </div>
   );
 }

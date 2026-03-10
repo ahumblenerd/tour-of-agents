@@ -1,13 +1,34 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
-import { trackGitHubClicked } from "@/lib/analytics/posthog";
+import { trackGitHubClicked, trackJobsInterestClicked } from "@/lib/analytics/posthog";
+import { getProvider, PROVIDER_CONFIGS } from "@/lib/settings/api-keys";
+
+function getProviderLabel() {
+  const cfg = PROVIDER_CONFIGS[getProvider()];
+  return cfg.needsKey === false ? `${cfg.label} (Free)` : cfg.label;
+}
+
+let labelVersion = 0;
+function subscribeLabelChange(cb: () => void) {
+  const orig = labelVersion;
+  const id = setInterval(() => { if (labelVersion !== orig) cb(); }, 100);
+  return () => clearInterval(id);
+}
 
 export function SiteHeader() {
   const [showSettings, setShowSettings] = useState(false);
+  const providerLabel = useSyncExternalStore(
+    subscribeLabelChange,
+    getProviderLabel,
+    () => "...",
+  );
+
+  // Bump version when settings dialog closes so label re-reads
+  useEffect(() => { if (!showSettings) labelVersion++; }, [showSettings]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -16,6 +37,17 @@ export function SiteHeader() {
           <span className="text-primary">A Tour of Agents</span>
         </Link>
         <div className="ml-auto flex items-center gap-2">
+          <Link
+            href="/jobs"
+            onClick={() => trackJobsInterestClicked("header")}
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-400/90 hover:text-amber-300 transition-colors px-2 py-1 rounded-md hover:bg-amber-400/10"
+          >
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-400" />
+            </span>
+            Jobs
+          </Link>
           <a
             href="https://github.com/ahumblenerd/tour-of-agents"
             target="_blank"
@@ -28,7 +60,7 @@ export function SiteHeader() {
             <span className="hidden sm:inline">Source</span>
           </a>
           <Button variant="outline" size="sm" onClick={() => setShowSettings(true)}>
-            API Keys
+            {providerLabel}
           </Button>
           <ThemeToggle />
         </div>

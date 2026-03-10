@@ -41,9 +41,9 @@ export const lesson04: LessonDefinition = {
       id: "intro",
       prose: `# Conversation = Messages Array
 
-In L3, each \`agent()\` call started fresh — the messages array was created inside the function. **Move it outside**, and now every call sees the full history.
+Open ChatGPT or Claude, send a message, then send another. The second message knows about the first. How? The app sends **every previous message** along with your new one. There's no magic memory — it's literally an array that grows.
 
-This is how ChatGPT works. This is what LangChain calls \`ConversationBufferMemory\`. It's a list that doesn't get cleared.`,
+In L3, each \`agent()\` call started fresh. **Move the messages array outside**, and now every call sees the full history. That's it. That's what LangChain calls \`ConversationBufferMemory\`. It's a list that doesn't get cleared.`,
     },
     {
       id: "setup",
@@ -74,7 +74,9 @@ async def ask_llm(messages):
       highlightNodes: ["conv"],
       prose: `## Step 2: The conversation array
 
-One change from L3: the messages array lives **outside** the function. It's initialized once with a system prompt and never cleared.`,
+One change from L3: the messages array lives **outside** the function. It's initialized once with a system prompt and never cleared.
+
+This is why ChatGPT and Claude can reference your earlier messages — and why starting a "New Chat" forgets everything. New chat = new empty array.`,
       code: `conversation = [
     {"role": "system", "content": "You have tools: add(a,b) and upper(text). Use them when needed. Be concise."},
 ]`,

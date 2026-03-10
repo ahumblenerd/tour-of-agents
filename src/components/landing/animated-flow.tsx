@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { NODE_STYLES, GRAPH } from "@/lib/graph/colors";
 
 const STEPS = [
   { id: "user", label: "User" },
@@ -11,7 +12,6 @@ const STEPS = [
   { id: "done", label: "Done" },
 ] as const;
 
-// Each frame: which node is active, which edges are traversed
 const FRAMES = [
   { active: 0, edges: [] },
   { active: 1, edges: [0] },
@@ -23,13 +23,6 @@ const FRAMES = [
 
 type NodeState = "idle" | "active" | "visited" | "done";
 
-const NODE_STYLES: Record<NodeState, string> = {
-  idle: "border-[#333] text-[#666] bg-[#161616]",
-  active: "border-white bg-[#1e1e1e] text-white shadow-[0_0_16px_rgba(255,255,255,0.12)] scale-105",
-  visited: "border-[#555] bg-[#1a1a1a] text-[#aaa]",
-  done: "border-emerald-500/60 bg-emerald-950/40 text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)]",
-};
-
 function getNodeState(index: number, activeIndex: number): NodeState {
   if (index === activeIndex) return activeIndex === STEPS.length - 1 ? "done" : "active";
   if (index < activeIndex) return "visited";
@@ -37,10 +30,19 @@ function getNodeState(index: number, activeIndex: number): NodeState {
 }
 
 function getEdgeColor(edgeIndex: number, traversedEdges: readonly number[], activeIndex: number) {
+  const E = GRAPH.edge;
   const arr = traversedEdges as number[];
-  if (!arr.includes(edgeIndex)) return "#2a2a2a";
-  if (edgeIndex === arr[arr.length - 1]) return activeIndex === STEPS.length - 1 ? "#10b981" : "#ddd";
-  return "#555";
+  if (!arr.includes(edgeIndex)) return E.idle;
+  if (edgeIndex === arr[arr.length - 1]) return activeIndex === STEPS.length - 1 ? E.done : E.active;
+  return E.traversed;
+}
+
+function getDotFill(edgeIndex: number, traversedEdges: readonly number[], activeIndex: number) {
+  const D = GRAPH.dot;
+  if (edgeIndex === (traversedEdges as number[])[traversedEdges.length - 1]) {
+    return activeIndex === STEPS.length - 1 ? D.done : D.active;
+  }
+  return D.idle;
 }
 
 export function AnimatedFlow() {
@@ -81,7 +83,7 @@ export function AnimatedFlow() {
                   style={{ transition: "fill 0.3s" }}
                 />
                 {edges.includes(i) && (
-                  <circle r="1.5" fill={i === edges[edges.length - 1] ? (active === STEPS.length - 1 ? "#10b981" : "#fff") : "#777"}>
+                  <circle r="1.5" fill={getDotFill(i, edges, active)}>
                     <animateMotion dur="0.8s" repeatCount="indefinite" path="M2,6 L22,6" />
                   </circle>
                 )}

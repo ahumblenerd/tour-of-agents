@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npx serve out -l tcp://0.0.0.0:${PORT:-3000}",
+    "start": "HOSTNAME=0.0.0.0 node .next/standalone/server.js",
     "lint": "eslint",
     "test": "vitest run --project=unit",
     "test:watch": "vitest --project=unit",
@@ -30,7 +30,6 @@
     "clsx": "^2.1.1",
     "dagre": "^0.8.5",
     "lucide-react": "^0.577.0",
-    "mermaid": "^11.12.3",
     "next": "16.1.6",
     "posthog-js": "^1.359.1",
     "pyodide": "^0.29.3",

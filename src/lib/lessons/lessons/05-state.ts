@@ -39,9 +39,9 @@ export const lesson05: LessonDefinition = {
       id: "intro",
       prose: `# State = Dict
 
-The messages array is the **raw tape** — every message the LLM sent and received. But you often need structured answers: *which tools ran? how many turns? what were the results?*
+You know how Claude shows "Searched 5 files" or ChatGPT shows "Analyzed data" with a little summary? That's not from the messages — it's **state** tracked alongside the conversation.
 
-That's **state** — a dict updated inside the loop, returned alongside the answer.
+The messages array is the **raw tape**. But you often need structured answers: *which tools ran? how many turns? what were the results?* That's **state** — a dict updated inside the loop, returned alongside the answer.
 
 > **Framework parallel:** LangGraph calls these "state channels" with typed reducers. Strip the abstraction: it's a dict updated in a loop.`,
     },
