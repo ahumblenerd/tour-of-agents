@@ -100,17 +100,17 @@ function JobCard({
 function InterestDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Register your interest</DialogTitle>
         </DialogHeader>
         <iframe
           src={`https://tally.so/embed/${TALLY_FORM_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`}
           width="100%"
-          height="500"
+          height="600"
           frameBorder="0"
           title="Register interest"
-          className="rounded-lg min-h-[500px]"
+          className="rounded-lg min-h-[600px]"
           onLoad={() => trackJobsInterestClicked("form_loaded")}
         />
       </DialogContent>
