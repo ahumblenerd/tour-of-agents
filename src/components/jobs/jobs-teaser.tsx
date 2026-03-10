@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import Link from "next/link";
 import { trackJobsViewed, trackJobsInterestClicked } from "@/lib/analytics/posthog";
 
-const TALLY_FORM_ID = "ODPd4a";
+const TALLY_URL = "https://tally.so/r/ODPd4a";
 
 const MOCK_JOBS = [
   {
@@ -97,36 +96,15 @@ function JobCard({
   );
 }
 
-function InterestDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Register your interest</DialogTitle>
-        </DialogHeader>
-        <iframe
-          src={`https://tally.so/embed/${TALLY_FORM_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`}
-          width="100%"
-          height="600"
-          frameBorder="0"
-          title="Register interest"
-          className="rounded-lg min-h-[600px]"
-          onLoad={() => trackJobsInterestClicked("form_loaded")}
-        />
-      </DialogContent>
-    </Dialog>
-  );
+function openTallyForm(source: string) {
+  trackJobsInterestClicked(source);
+  window.open(TALLY_URL, "_blank", "noopener,noreferrer");
 }
 
 export function JobsTeaser() {
-  const [showForm, setShowForm] = useState(false);
-
   useEffect(() => { trackJobsViewed(); }, []);
 
-  const handleInterest = () => {
-    trackJobsInterestClicked("job_card");
-    setShowForm(true);
-  };
+  const handleInterest = () => openTallyForm("job_card");
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
@@ -158,16 +136,11 @@ export function JobsTeaser() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => {
-            trackJobsInterestClicked("bottom_cta");
-            setShowForm(true);
-          }}
+          onClick={() => openTallyForm("bottom_cta")}
         >
           Register interest
         </Button>
       </div>
-
-      <InterestDialog open={showForm} onOpenChange={setShowForm} />
     </div>
   );
 }
