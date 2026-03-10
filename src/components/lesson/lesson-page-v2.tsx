@@ -148,7 +148,9 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
                   turns={turns}
                 />
               </div>
-              <PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />
+              <div data-tour="playback-area">
+                <PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />
+              </div>
               <div className="flex-1 overflow-hidden">
                 <TraceLog
                   entries={monitor.entries}

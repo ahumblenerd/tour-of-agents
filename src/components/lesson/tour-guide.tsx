@@ -24,9 +24,9 @@ const STEPS: TourStep[] = [
     position: "bottom",
   },
   {
-    target: "playback-controls",
+    target: "playback-area",
     title: "Playback Controls",
-    body: "Step through the agent's trace one event at a time, or hit Play to auto-advance.",
+    body: "After running code, step through the agent's trace or hit Play to auto-advance.",
     position: "top",
   },
   {
