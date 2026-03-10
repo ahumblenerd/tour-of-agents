@@ -79,16 +79,16 @@ function GitHubIcon() {
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(true);
-
-  useEffect(() => {
-    document.documentElement.classList.add("dark");
-  }, []);
+  const [dark, setDark] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return localStorage.getItem("theme") !== "light";
+  });
 
   const toggle = () => {
     const next = !dark;
     setDark(next);
     document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
   };
 
   return (
