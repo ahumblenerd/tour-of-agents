@@ -84,7 +84,7 @@ When Claude runs a multi-step task — say, searching your codebase, then readin
 2. **No \`tool_calls\`?** Return the answer — the LLM is done thinking
 3. **Has \`tool_calls\`?** Execute each one, append results with \`tool_call_id\`, loop back
 
-The \`tool_call_id\` links each result to its request. This is the **tool calling protocol** — the wire format that makes multi-step work.`,
+The \`tool_call_id\` links each result to its request — without it, when the LLM asks for two tools at once, there's no way to tell which result belongs to which call. This is the **tool calling protocol** — the wire format that makes multi-step work.`,
       code: `async def agent(task, max_turns=5):
     messages = [
         {"role": "system", "content": "Use tools to answer. Be concise."},

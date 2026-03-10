@@ -102,10 +102,12 @@ function matchToolCall(text: string, toolNames: string[]): MockResult | null {
 
   // "schedule_followup" — self-scheduling lesson
   if (toolNames.includes("schedule_followup") && !lower.includes("add") && !lower.includes("upper")) {
+    // Avoid infinite "Research: Research: ..." prefix growth
+    const taskText = text.trim().replace(/^(Research:\s*)+/i, "").trim() || text.trim();
     return {
       type: "tool_call",
       name: "schedule_followup",
-      arguments: { task: `Research: ${text.trim()}` },
+      arguments: { task: `Research: ${taskText}` },
     };
   }
 

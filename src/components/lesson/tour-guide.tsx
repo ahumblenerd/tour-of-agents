@@ -61,6 +61,11 @@ export function TourGuide() {
   const [rect, setRect] = useState<DOMRect | null>(null);
   const active = step >= 0 && step < STEPS.length;
 
+  const finish = useCallback(() => {
+    setStep(-1);
+    localStorage.setItem(STORAGE_KEY, "true");
+  }, []);
+
   // Auto-show on first visit
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -75,17 +80,22 @@ export function TourGuide() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!active) { setRect(null); return; }
-    const el = document.querySelector(`[data-tour="${STEPS[step].target}"]`);
-    if (!el) { setStep((s) => s + 1); return; } // skip missing targets
-    const r = el.getBoundingClientRect();
-    setRect(r);
-    el.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  }, [step, active]);
-
-  const finish = useCallback(() => {
-    setStep(-1);
-    localStorage.setItem(STORAGE_KEY, "true");
-  }, []);
+    // Find next step with a visible target (skip missing ones)
+    let nextValid = step;
+    while (nextValid < STEPS.length) {
+      const el = document.querySelector(`[data-tour="${STEPS[nextValid].target}"]`);
+      if (el) {
+        if (nextValid !== step) { setStep(nextValid); return; }
+        const r = el.getBoundingClientRect();
+        setRect(r);
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        return;
+      }
+      nextValid++;
+    }
+    // No remaining steps have visible targets — finish
+    finish();
+  }, [step, active, finish]);
 
   const next = () => step < STEPS.length - 1 ? setStep(step + 1) : finish();
   const prev = () => step > 0 && setStep(step - 1);

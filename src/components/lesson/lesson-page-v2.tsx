@@ -28,6 +28,7 @@ import { getNextLesson } from "@/lib/lessons/registry";
 import { markVisited, markCompleted } from "@/lib/settings/progress";
 import { trackLessonStarted, trackCodeExecuted, trackCodeError, trackLessonCompleted } from "@/lib/analytics/posthog";
 import { MockModeBanner } from "./mock-mode-banner";
+import { useLessonKeys } from "@/hooks/use-lesson-keys";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -41,6 +42,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     markVisited(lesson.slug);
     trackLessonStarted(lesson.number);
   }, [lesson.slug, lesson.number]);
+  useLessonKeys(lesson);
   const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
   const monitor = useMonitor();

@@ -79,10 +79,13 @@ function GitHubIcon() {
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(() => {
-    if (typeof window === "undefined") return true;
-    return localStorage.getItem("theme") !== "light";
-  });
+  // Start with true (matches server-rendered "dark" class) to avoid hydration mismatch
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDark(document.documentElement.classList.contains("dark"));
+  }, []);
 
   const toggle = () => {
     const next = !dark;

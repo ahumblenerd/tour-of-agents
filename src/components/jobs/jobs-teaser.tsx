@@ -107,10 +107,10 @@ function InterestDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (
         <iframe
           src={`https://tally.so/embed/${TALLY_FORM_ID}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`}
           width="100%"
-          height="400"
+          height="500"
           frameBorder="0"
           title="Register interest"
-          className="rounded-lg"
+          className="rounded-lg min-h-[500px]"
           onLoad={() => trackJobsInterestClicked("form_loaded")}
         />
       </DialogContent>

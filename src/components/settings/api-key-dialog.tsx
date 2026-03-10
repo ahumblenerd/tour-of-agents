@@ -11,12 +11,13 @@ import {
   getModel,
   setModel,
   PROVIDER_CONFIGS,
+  GROQ_MODELS,
   type LlmProvider,
   type ApiKeys,
 } from "@/lib/settings/api-keys";
 import { trackProviderSelected } from "@/lib/analytics/posthog";
 
-const PROVIDERS: LlmProvider[] = ["tinyagents", "groq", "openai", "anthropic"];
+const PROVIDERS: LlmProvider[] = ["tinyagents", "groq"];
 
 function ApiKeyForm({ onClose }: { onClose: () => void }) {
   const [provider, setLocal] = useState<LlmProvider>(() => getProvider());
@@ -45,7 +46,7 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
   };
 
   const revokeAll = () => {
-    setKeys({ tinyagents: "", groq: "", openai: "", anthropic: "" });
+    setKeys({ tinyagents: "", groq: "" });
   };
 
   return (
@@ -54,14 +55,9 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
         {PROVIDERS.map((p) => {
           const hasKey = !!(keys[p]);
           return (
-            <Button
-              key={p}
-              variant={provider === p ? "default" : "outline"}
-              size="sm"
-              className="flex-1 text-xs gap-1"
-              onClick={() => handleProviderSwitch(p)}
-            >
-              {hasKey && <span className="text-emerald-400">●</span>}
+            <Button key={p} variant={provider === p ? "default" : "outline"} size="sm"
+              className="flex-1 text-xs gap-1" onClick={() => handleProviderSwitch(p)}>
+              {hasKey && <span className="text-emerald-400">&#x25cf;</span>}
               {PROVIDER_CONFIGS[p].label}
             </Button>
           );
@@ -74,69 +70,45 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
         <div className="rounded-md bg-emerald-500/10 border border-emerald-500/20 p-3">
           <p className="text-xs text-emerald-400">
             No setup needed. Run every lesson instantly with mock responses.
-            Switch to a real provider anytime for live LLM answers.
+            Switch to Groq anytime for live LLM answers.
           </p>
         </div>
       )}
 
       {provider === "groq" && !currentKey && (
         <div className="rounded-md bg-blue-500/10 border border-blue-500/20 p-3 space-y-2">
-          <p className="text-xs font-medium text-blue-400">
-            Groq is free and fast — perfect for this course
-          </p>
+          <p className="text-xs font-medium text-blue-400">Groq is free and fast — perfect for this course</p>
           <p className="text-[11px] text-muted-foreground">
             1. Go to{" "}
-            <a
-              href="https://console.groq.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 underline"
-            >
-              console.groq.com
-            </a>{" "}
-            and sign up (free)
+            <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer"
+              className="text-blue-400 underline">console.groq.com</a>{" "}and sign up (free)
           </p>
-          <p className="text-[11px] text-muted-foreground">
-            2. Create an API key and paste it below
-          </p>
+          <p className="text-[11px] text-muted-foreground">2. Create an API key and paste it below</p>
         </div>
       )}
 
       {!isFree && (
         <>
           <div>
-            <label className="text-sm font-medium mb-1 block">
-              {config.label} API Key
-            </label>
+            <label className="text-sm font-medium mb-1 block">{config.label} API Key</label>
             <div className="flex gap-2">
-              <input
-                type="password"
-                placeholder={`Enter your ${config.label} key`}
-                value={currentKey}
-                onChange={(e) => setKeys({ ...keys, [provider]: e.target.value })}
-                className="flex-1 text-sm p-2 rounded-md border bg-background font-mono"
-              />
+              <input type="password" placeholder={`Enter your ${config.label} key`}
+                value={currentKey} onChange={(e) => setKeys({ ...keys, [provider]: e.target.value })}
+                className="flex-1 text-sm p-2 rounded-md border bg-background font-mono" />
               {currentKey && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-red-400 hover:text-red-300 shrink-0"
-                  onClick={revokeKey}
-                >
-                  Revoke
-                </Button>
+                <Button variant="ghost" size="sm" className="text-xs text-red-400 hover:text-red-300 shrink-0"
+                  onClick={revokeKey}>Revoke</Button>
               )}
             </div>
           </div>
           <div>
             <label className="text-sm font-medium mb-1 block">Model</label>
-            <input
-              type="text"
-              placeholder={config.defaultModel}
-              value={model}
-              onChange={(e) => setLocalModel(e.target.value)}
-              className="w-full text-sm p-2 rounded-md border bg-background font-mono"
-            />
+            <select value={model || config.defaultModel} onChange={(e) => setLocalModel(e.target.value)}
+              className="w-full text-sm p-2 rounded-md border bg-background font-mono appearance-none cursor-pointer">
+              {GROQ_MODELS.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
           </div>
         </>
       )}
@@ -144,16 +116,11 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
       <p className="text-[11px] text-muted-foreground bg-muted rounded-md p-2">
         {isFree
           ? "Tiny Agents uses mock responses from our server. No API key needed."
-          : "Keys are stored in your browser only and sent directly to the provider. Never touches our servers."}
+          : "Keys are stored in your browser only and sent directly to Groq. Never touches our servers."}
       </p>
 
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-xs text-muted-foreground"
-          onClick={revokeAll}
-        >
+        <Button variant="ghost" size="sm" className="text-xs text-muted-foreground" onClick={revokeAll}>
           Revoke all keys
         </Button>
         <div className="flex gap-2">
@@ -166,11 +133,9 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
 }
 
 export function ApiKeyDialog({
-  open,
-  onOpenChange,
+  open, onOpenChange,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean; onOpenChange: (open: boolean) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

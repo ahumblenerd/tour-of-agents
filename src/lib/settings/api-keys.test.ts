@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getApiKeys, setApiKeys, hasAnyKey, setProvider } from "./api-keys";
+import { getApiKeys, setApiKeys, hasAnyKey, setProvider, getProvider } from "./api-keys";
 
 describe("api-keys", () => {
   const store: Record<string, string> = {};
@@ -23,17 +23,9 @@ describe("api-keys", () => {
   });
 
   it("stores and retrieves keys", () => {
-    setApiKeys({ openai: "sk-test-123" });
+    setApiKeys({ groq: "gsk-test-123" });
     const keys = getApiKeys();
-    expect(keys.openai).toBe("sk-test-123");
-    expect(keys.anthropic).toBeUndefined();
-  });
-
-  it("stores both keys", () => {
-    setApiKeys({ openai: "sk-o", anthropic: "sk-a" });
-    const keys = getApiKeys();
-    expect(keys.openai).toBe("sk-o");
-    expect(keys.anthropic).toBe("sk-a");
+    expect(keys.groq).toBe("gsk-test-123");
   });
 
   it("hasAnyKey returns true when tinyagents (default)", () => {
@@ -45,19 +37,24 @@ describe("api-keys", () => {
     expect(hasAnyKey()).toBe(false);
   });
 
-  it("hasAnyKey returns true with openai key", () => {
-    setApiKeys({ openai: "sk-test" });
-    expect(hasAnyKey()).toBe(true);
-  });
-
-  it("hasAnyKey returns true with anthropic key", () => {
-    setApiKeys({ anthropic: "sk-ant-test" });
+  it("hasAnyKey returns true with groq key", () => {
+    setApiKeys({ groq: "gsk-test" });
     expect(hasAnyKey()).toBe(true);
   });
 
   it("overwrites previous keys", () => {
-    setApiKeys({ openai: "old" });
-    setApiKeys({ openai: "new" });
-    expect(getApiKeys().openai).toBe("new");
+    setApiKeys({ groq: "old" });
+    setApiKeys({ groq: "new" });
+    expect(getApiKeys().groq).toBe("new");
+  });
+
+  it("migrates old openai provider to tinyagents", () => {
+    store["tour-of-agents-provider"] = "openai";
+    expect(getProvider()).toBe("tinyagents");
+  });
+
+  it("migrates anthropic provider to tinyagents", () => {
+    store["tour-of-agents-provider"] = "anthropic";
+    expect(getProvider()).toBe("tinyagents");
   });
 });

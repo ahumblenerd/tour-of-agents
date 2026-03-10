@@ -13,9 +13,14 @@ export default function HomePage() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setProgress(getProgress()); }, []);
 
-  const nextLesson = allLessons.find(
+  // Resume from last visited lesson, or find next uncompleted one
+  const lastVisited = progress.lastSlug
+    ? allLessons.find((l) => l.slug === progress.lastSlug)
+    : null;
+  const nextUncompleted = allLessons.find(
     (l) => !progress.completed.includes(l.slug)
-  ) || allLessons[0];
+  );
+  const nextLesson = lastVisited || nextUncompleted || allLessons[0];
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)]">

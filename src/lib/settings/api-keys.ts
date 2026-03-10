@@ -2,15 +2,22 @@ const STORAGE_KEY = "tour-of-agents-api-keys";
 const PROVIDER_KEY = "tour-of-agents-provider";
 const MODEL_KEY = "tour-of-agents-model";
 
-export type LlmProvider = "tinyagents" | "groq" | "openai" | "anthropic";
+export type LlmProvider = "tinyagents" | "groq";
 
 export interface ProviderConfig {
   label: string;
   hint: string;
   baseUrl: string;
   defaultModel: string;
+  models?: string[];
   needsKey?: boolean;
 }
+
+export const GROQ_MODELS = [
+  "openai/gpt-oss-120b",
+  "openai/gpt-oss-20b",
+  "qwen/qwen3-32b",
+] as const;
 
 export const PROVIDER_CONFIGS: Record<LlmProvider, ProviderConfig> = {
   tinyagents: {
@@ -22,29 +29,16 @@ export const PROVIDER_CONFIGS: Record<LlmProvider, ProviderConfig> = {
   },
   groq: {
     label: "Groq",
-    hint: "Free — console.groq.com",
+    hint: "Free tier — fast inference on open models",
     baseUrl: "https://api.groq.com/openai/v1",
     defaultModel: "openai/gpt-oss-120b",
-  },
-  openai: {
-    label: "OpenAI",
-    hint: "api.openai.com",
-    baseUrl: "https://api.openai.com/v1",
-    defaultModel: "gpt-oss-120b",
-  },
-  anthropic: {
-    label: "Anthropic",
-    hint: "Not OpenAI-compatible — use via OpenRouter",
-    baseUrl: "https://openrouter.ai/api/v1",
-    defaultModel: "anthropic/claude-sonnet-4-6",
+    models: [...GROQ_MODELS],
   },
 };
 
 export interface ApiKeys {
   tinyagents?: string;
   groq?: string;
-  openai?: string;
-  anthropic?: string;
 }
 
 export function getApiKeys(): ApiKeys {
@@ -64,12 +58,16 @@ export function setApiKeys(keys: ApiKeys): void {
 export function hasAnyKey(): boolean {
   if (getProvider() === "tinyagents") return true;
   const keys = getApiKeys();
-  return !!(keys.groq || keys.openai || keys.anthropic);
+  return !!keys.groq;
 }
 
 export function getProvider(): LlmProvider {
   if (typeof window === "undefined") return "tinyagents";
-  return (localStorage.getItem(PROVIDER_KEY) as LlmProvider) || "tinyagents";
+  const stored = localStorage.getItem(PROVIDER_KEY);
+  // Migrate old providers to tinyagents
+  if (stored === "openai" || stored === "anthropic") return "tinyagents";
+  if (stored === "tinyagents" || stored === "groq") return stored;
+  return "tinyagents";
 }
 
 export function setProvider(provider: LlmProvider): void {
@@ -91,10 +89,7 @@ export function setModel(model: string): void {
 export function getActiveKey(): string | undefined {
   const provider = getProvider();
   if (provider === "tinyagents") return "tiny-free";
-  const keys = getApiKeys();
-  if (provider === "groq") return keys.groq;
-  if (provider === "anthropic") return keys.anthropic;
-  return keys.openai;
+  return getApiKeys().groq;
 }
 
 export function getLlmConfig() {

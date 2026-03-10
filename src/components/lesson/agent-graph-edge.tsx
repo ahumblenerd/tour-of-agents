@@ -6,7 +6,8 @@ import {
   getSmoothStepPath,
   type EdgeProps,
 } from "@xyflow/react";
-import { GRAPH } from "@/lib/graph/colors";
+import { GRAPH, resolveColor } from "@/lib/graph/colors";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 
 interface EdgeData {
   traversed?: boolean;
@@ -19,6 +20,7 @@ export function AgentGraphEdge({
   id, sourceX, sourceY, targetX, targetY,
   sourcePosition, targetPosition, label, data,
 }: EdgeProps) {
+  const isDark = useDarkMode();
   const { traversed, active, done } = (data ?? {}) as EdgeData;
   const [edgePath, labelX, labelY] = getSmoothStepPath({
     sourceX, sourceY, targetX, targetY,
@@ -27,9 +29,10 @@ export function AgentGraphEdge({
   });
 
   const E = GRAPH.edge;
-  const stroke = done ? E.done : active ? E.active : traversed ? E.traversed : E.idle;
+  const stroke = done ? resolveColor(E.done, isDark) : active ? resolveColor(E.active, isDark) : traversed ? resolveColor(E.traversed, isDark) : resolveColor(E.idle, isDark);
   const width = (active || done) ? 1.5 : 1;
-  const dotFill = done ? GRAPH.dot.done : active ? GRAPH.dot.active : GRAPH.dot.idle;
+  const D = GRAPH.dot;
+  const dotFill = done ? resolveColor(D.done, isDark) : active ? resolveColor(D.active, isDark) : resolveColor(D.idle, isDark);
 
   return (
     <>
@@ -50,8 +53,8 @@ export function AgentGraphEdge({
               position: "absolute",
               transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
               pointerEvents: "none",
-              color: GRAPH.label.text,
-              backgroundColor: GRAPH.label.bg,
+              color: resolveColor(GRAPH.label.text, isDark),
+              backgroundColor: resolveColor(GRAPH.label.bg, isDark),
             }}
             className="text-[9px] px-1 py-0.5 rounded"
           >

@@ -13,6 +13,7 @@ import type { GraphDefinition } from "@/lib/graph/types";
 import type { MonitorEntry } from "@/hooks/use-monitor";
 import type { Turn } from "@/hooks/use-turns";
 import { useGraphState } from "@/hooks/use-graph-state";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 import { AgentGraphNode } from "./agent-graph-node";
 import { AgentGraphDecision } from "./agent-graph-decision";
 import { AgentGraphEdge } from "./agent-graph-edge";
@@ -39,6 +40,7 @@ const proOptions = { hideAttribution: true };
 export function AgentGraph({
   graph, entries, cursor, turns, highlightNodes,
 }: AgentGraphProps) {
+  const isDark = useDarkMode();
   const { nodes, edges } = useGraphState(graph, entries, cursor, turns, highlightNodes);
   const onInit = useCallback((instance: { fitView: () => void }) => {
     setTimeout(() => instance.fitView(), 50);
@@ -69,7 +71,7 @@ export function AgentGraph({
         zoomOnDoubleClick={false}
         minZoom={0.3}
         maxZoom={1.5}
-        colorMode="dark"
+        colorMode={isDark ? "dark" : "light"}
       >
         <Background gap={20} size={1} className="opacity-20" />
         <Controls

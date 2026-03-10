@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { NODE_STYLES, GRAPH } from "@/lib/graph/colors";
+import { NODE_STYLES, GRAPH, resolveColor } from "@/lib/graph/colors";
+import { useDarkMode } from "@/hooks/use-dark-mode";
 
 const STEPS = [
   { id: "user", label: "User" },
@@ -29,24 +30,26 @@ function getNodeState(index: number, activeIndex: number): NodeState {
   return "idle";
 }
 
-function getEdgeColor(edgeIndex: number, traversedEdges: readonly number[], activeIndex: number) {
+function getEdgeColor(edgeIndex: number, traversedEdges: number[], activeIndex: number, isDark: boolean) {
   const E = GRAPH.edge;
-  const arr = traversedEdges as number[];
-  if (!arr.includes(edgeIndex)) return E.idle;
-  if (edgeIndex === arr[arr.length - 1]) return activeIndex === STEPS.length - 1 ? E.done : E.active;
-  return E.traversed;
+  if (!traversedEdges.includes(edgeIndex)) return resolveColor(E.idle, isDark);
+  if (edgeIndex === traversedEdges[traversedEdges.length - 1]) {
+    return resolveColor(activeIndex === STEPS.length - 1 ? E.done : E.active, isDark);
+  }
+  return resolveColor(E.traversed, isDark);
 }
 
-function getDotFill(edgeIndex: number, traversedEdges: readonly number[], activeIndex: number) {
+function getDotFill(edgeIndex: number, traversedEdges: number[], activeIndex: number, isDark: boolean) {
   const D = GRAPH.dot;
-  if (edgeIndex === (traversedEdges as number[])[traversedEdges.length - 1]) {
-    return activeIndex === STEPS.length - 1 ? D.done : D.active;
+  if (edgeIndex === traversedEdges[traversedEdges.length - 1]) {
+    return resolveColor(activeIndex === STEPS.length - 1 ? D.done : D.active, isDark);
   }
-  return D.idle;
+  return resolveColor(D.idle, isDark);
 }
 
 export function AnimatedFlow() {
   const [frame, setFrame] = useState(0);
+  const isDark = useDarkMode();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -73,17 +76,17 @@ export function AnimatedFlow() {
               <svg width="28" height="12" className="shrink-0">
                 <line
                   x1="2" y1="6" x2="22" y2="6"
-                  stroke={getEdgeColor(i, edges, active)}
+                  stroke={getEdgeColor(i, edges, active, isDark)}
                   strokeWidth={edges.includes(i) ? 1.5 : 1}
                   style={{ transition: "stroke 0.3s" }}
                 />
                 <polygon
                   points="22,3 28,6 22,9"
-                  fill={getEdgeColor(i, edges, active)}
+                  fill={getEdgeColor(i, edges, active, isDark)}
                   style={{ transition: "fill 0.3s" }}
                 />
                 {edges.includes(i) && (
-                  <circle r="1.5" fill={getDotFill(i, edges, active)}>
+                  <circle r="1.5" fill={getDotFill(i, edges, active, isDark)}>
                     <animateMotion dur="0.8s" repeatCount="indefinite" path="M2,6 L22,6" />
                   </circle>
                 )}
