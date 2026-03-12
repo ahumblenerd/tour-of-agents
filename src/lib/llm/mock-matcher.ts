@@ -96,48 +96,57 @@ function countPendingTools(messages: Message[]): number {
   return calls - results;
 }
 
-/** Try to match user message to a tool call. */
+/** Try to match user message to a tool call, picking the earliest match in the text. */
 function matchToolCall(text: string, toolNames: string[]): MockResult | null {
   const lower = text.toLowerCase();
+  const ok = (name: string) => toolNames.includes(name) || toolNames.length === 0;
+
+  type Candidate = { index: number; result: MockResult };
+  const candidates: Candidate[] = [];
 
   // "add N and M"
   const addMatch = lower.match(/add\s+(\d+)\s+and\s+(\d+)/);
-  if (addMatch && (toolNames.includes("add") || toolNames.length === 0)) {
-    return { type: "tool_call", name: "add", arguments: { a: Number(addMatch[1]), b: Number(addMatch[2]) } };
+  if (addMatch && ok("add")) {
+    candidates.push({ index: addMatch.index!, result:
+      { type: "tool_call", name: "add", arguments: { a: Number(addMatch[1]), b: Number(addMatch[2]) } } });
   }
 
   // "uppercase X"
   const upperMatch = lower.match(/uppercase\s+(.+?)(?:\s+then\s+|$)/);
-  if (upperMatch && (toolNames.includes("upper") || toolNames.length === 0)) {
-    return { type: "tool_call", name: "upper", arguments: { text: upperMatch[1].trim() } };
+  if (upperMatch && ok("upper")) {
+    candidates.push({ index: upperMatch.index!, result:
+      { type: "tool_call", name: "upper", arguments: { text: upperMatch[1].trim() } } });
   }
 
-  // "remember key=value" or "my name is X"
+  // "remember key=value"
   const rememberKV = lower.match(/remember\s+(\w+)\s*=\s*(.+?)(?:\s+then\s+|$)/);
-  if (rememberKV && (toolNames.includes("remember") || toolNames.length === 0)) {
-    return { type: "tool_call", name: "remember", arguments: { key: rememberKV[1], value: rememberKV[2].trim() } };
+  if (rememberKV && ok("remember")) {
+    candidates.push({ index: rememberKV.index!, result:
+      { type: "tool_call", name: "remember", arguments: { key: rememberKV[1], value: rememberKV[2].trim() } } });
   }
+  // "my name is X"
   const nameMatch = lower.match(/my name is (\w+)/);
-  if (nameMatch && (toolNames.includes("remember") || toolNames.length === 0)) {
-    return { type: "tool_call", name: "remember", arguments: { key: "name", value: nameMatch[1] } };
+  if (nameMatch && ok("remember")) {
+    candidates.push({ index: nameMatch.index!, result:
+      { type: "tool_call", name: "remember", arguments: { key: "name", value: nameMatch[1] } } });
   }
+  // "remember I like X"
   const rememberLike = lower.match(/remember i like (\w+)/);
-  if (rememberLike && (toolNames.includes("remember") || toolNames.length === 0)) {
-    return { type: "tool_call", name: "remember", arguments: { key: "preference", value: rememberLike[1] } };
+  if (rememberLike && ok("remember")) {
+    candidates.push({ index: rememberLike.index!, result:
+      { type: "tool_call", name: "remember", arguments: { key: "preference", value: rememberLike[1] } } });
   }
 
   // "schedule_followup" — self-scheduling lesson
   if (toolNames.includes("schedule_followup") && !lower.includes("add") && !lower.includes("upper")) {
-    // Avoid infinite "Research: Research: ..." prefix growth
     const taskText = text.trim().replace(/^(Research:\s*)+/i, "").trim() || text.trim();
-    return {
-      type: "tool_call",
-      name: "schedule_followup",
-      arguments: { task: `Research: ${taskText}` },
-    };
+    candidates.push({ index: 0, result:
+      { type: "tool_call", name: "schedule_followup", arguments: { task: `Research: ${taskText}` } } });
   }
 
-  return null;
+  if (candidates.length === 0) return null;
+  candidates.sort((a, b) => a.index - b.index);
+  return candidates[0].result;
 }
 
 /** Text-only responses for questions without tools. */
