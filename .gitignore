@@ -45,3 +45,9 @@ storybook-static
 
 # local GTM plans
 /gtm/
+
+# generated videos
+*.mp4
+*.webm
+*.mov
+*.avi

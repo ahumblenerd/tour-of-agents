@@ -77,11 +77,14 @@ function ApiKeyForm({ onClose }: { onClose: () => void }) {
 
       {provider === "groq" && !currentKey && (
         <div className="rounded-md bg-blue-500/10 border border-blue-500/20 p-3 space-y-2">
-          <p className="text-xs font-medium text-blue-400">Groq is free and fast — perfect for this course</p>
+          <p className="text-xs font-medium text-blue-400">Groq is 100% free — no credit card needed</p>
+          <p className="text-[11px] text-muted-foreground">
+            The Groq API is completely free to use. Just sign up and grab a key:
+          </p>
           <p className="text-[11px] text-muted-foreground">
             1. Go to{" "}
             <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer"
-              className="text-blue-400 underline">console.groq.com</a>{" "}and sign up (free)
+              className="text-blue-400 underline">console.groq.com</a>{" "}→ sign up (free, no card)
           </p>
           <p className="text-[11px] text-muted-foreground">2. Create an API key and paste it below</p>
         </div>
