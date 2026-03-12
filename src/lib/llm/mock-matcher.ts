@@ -25,7 +25,7 @@ export function matchResponse(messages: Message[], toolNames: string[]): MockRes
     const toolMatch = matchToolCall(userMsg, toolNames);
     if (toolMatch) return toolMatch;
   }
-  return matchTextResponse(userMsg || "hello");
+  return matchTextResponse(userMsg || "hello", messages);
 }
 
 function findLastUserMessage(messages: Message[]): string | null {
@@ -49,6 +49,9 @@ function summarizeToolResult(result: string, messages: Message[]): MockResult {
   if (pendingTools > 0) {
     return matchToolCall(findLastUserMessage(messages) || "", []) ?? { type: "text", content: result };
   }
+  // Check if the user message has a "then ..." clause with more work to do
+  const nextTask = matchNextTask(messages);
+  if (nextTask) return nextTask;
   // Check if result looks like a number (from add tool)
   if (/^\d+(\.\d+)?$/.test(result.trim())) {
     return { type: "text", content: `The result is ${result.trim()}.` };
@@ -58,6 +61,29 @@ function summarizeToolResult(result: string, messages: Message[]): MockResult {
     return { type: "text", content: `Here it is: ${result.trim()}` };
   }
   return { type: "text", content: result.trim() || "Done." };
+}
+
+/** Check if user message has a "then X" clause whose tool hasn't been called yet. */
+function matchNextTask(messages: Message[]): MockResult | null {
+  const userMsg = findLastUserMessage(messages);
+  if (!userMsg) return null;
+  const thenMatch = userMsg.toLowerCase().match(/then\s+(.+)$/);
+  if (!thenMatch) return null;
+  const remainder = thenMatch[1];
+  // Collect tool names already called in this conversation
+  const calledTools = new Set<string>();
+  for (const m of messages) {
+    if (m.role === "assistant" && m.tool_calls) {
+      for (const tc of m.tool_calls as Array<{ function?: { name: string } }>) {
+        if (tc.function?.name) calledTools.add(tc.function.name);
+      }
+    }
+  }
+  const candidate = matchToolCall(remainder, []);
+  if (candidate && candidate.type === "tool_call" && !calledTools.has(candidate.name)) {
+    return candidate;
+  }
+  return null;
 }
 
 function countPendingTools(messages: Message[]): number {
@@ -115,7 +141,7 @@ function matchToolCall(text: string, toolNames: string[]): MockResult | null {
 }
 
 /** Text-only responses for questions without tools. */
-function matchTextResponse(text: string): MockResult {
+function matchTextResponse(text: string, messages: Message[] = []): MockResult {
   const lower = text.toLowerCase();
 
   if (lower.includes("what is an ai agent"))
@@ -124,8 +150,11 @@ function matchTextResponse(text: string): MockResult {
     return { type: "text", content: "Python is a high-level, interpreted programming language known for its readable syntax and vast ecosystem." };
   if (lower.includes("joke"))
     return { type: "text", content: "Why do programmers prefer dark mode? Because light attracts bugs." };
-  if (lower.includes("what is my name"))
-    return { type: "text", content: "Your name is stored in memory. Let me check — Alice." };
+  if (lower.includes("what is my name")) {
+    const name = extractMemoryValue("name", messages);
+    if (name) return { type: "text", content: `Your name is ${name}.` };
+    return { type: "text", content: "I don't have your name in memory yet. Try asking me to remember it first." };
+  }
   if (lower.includes("what did i just ask"))
     return { type: "text", content: "You asked me to add 3 and 4." };
   if (lower.includes("what is python"))
@@ -134,4 +163,18 @@ function matchTextResponse(text: string): MockResult {
     return { type: "text", content: "I can't help with destructive operations. Try asking me to add numbers or uppercase text instead." };
 
   return { type: "text", content: `That's a great question about "${text.slice(0, 40)}". In short: agents are just functions that call LLMs in a loop.` };
+}
+
+/** Extract a value from the Memory JSON in the system prompt. */
+function extractMemoryValue(key: string, messages: Message[]): string | null {
+  const sysMsg = messages.find((m) => m.role === "system");
+  if (!sysMsg?.content) return null;
+  const memMatch = sysMsg.content.match(/Memory:\s*(\{[^}]*\})/);
+  if (!memMatch) return null;
+  try {
+    const mem = JSON.parse(memMatch[1]) as Record<string, string>;
+    return mem[key] ?? null;
+  } catch {
+    return null;
+  }
 }
