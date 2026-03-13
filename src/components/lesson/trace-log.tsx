@@ -19,9 +19,14 @@ interface TraceLogProps {
 export function TraceLog({
   entries, cursor, isLive, running, turns, activeTurnIndex, onGoToTurn,
 }: TraceLogProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    // Scroll within the trace container only — not the page
+    const container = containerRef.current;
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    }
   }, [cursor]);
 
   const visibleEntries = isLive ? entries : entries.slice(0, cursor + 1);
@@ -47,7 +52,7 @@ export function TraceLog({
   }
 
   return (
-    <div className="overflow-auto h-full py-1">
+    <div ref={containerRef} className="overflow-auto h-full py-1">
       {visibleEntries.map((entry, i) => {
         const isCurrent = !isLive && i === cursor;
         const turnIdx = entryTurnMap.get(i) ?? 0;
