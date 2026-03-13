@@ -15,7 +15,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <PyodideProvider>
       <SiteHeader />
       {children}
-      <Toaster position="bottom-right" duration={2500} />
+      <Toaster position="top-right" duration={2500} />
     </PyodideProvider>
   );
 }
