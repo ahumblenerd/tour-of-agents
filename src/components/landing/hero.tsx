@@ -35,6 +35,7 @@ const CTA_LABELS: Record<string, string> = {
 export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
   const headlineVariant = useFeatureFlag("hero-headline-test");
   const ctaVariant = useFeatureFlag("cta-button-test");
+  const socialProof = useFeatureFlag("social-proof-test");
 
   const h = HEADLINES[headlineVariant] ?? HEADLINES.control;
   const ctaLabel = hasProgress
@@ -60,13 +61,19 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
           without the 10,000 lines of abstraction.
         </p>
 
-        <div className="flex flex-wrap gap-3 justify-center mb-6">
+        <div className="flex flex-wrap gap-3 justify-center mb-4">
           <Link href={`/lesson/${nextSlug}`}>
             <Button size="lg" className="text-base px-8 chip-bounce">
               {ctaLabel} &rarr;
             </Button>
           </Link>
         </div>
+
+        {socialProof === "variant-a" && !hasProgress && (
+          <p className="text-xs text-muted-foreground mb-4">
+            Join 200+ engineers who completed the course this week
+          </p>
+        )}
 
         <div className="flex flex-wrap gap-4 justify-center text-xs text-muted-foreground mb-4">
           <span>Takes ~20 minutes</span>
