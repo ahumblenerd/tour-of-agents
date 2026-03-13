@@ -28,6 +28,7 @@ import { markVisited, markCompleted } from "@/lib/settings/progress";
 import { trackLessonStarted, trackCodeExecuted, trackCodeError, trackLessonCompleted } from "@/lib/analytics/posthog";
 import { MockModeBanner } from "./mock-mode-banner";
 import { useLessonKeys } from "@/hooks/use-lesson-keys";
+import { useLessonToast } from "@/hooks/use-lesson-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileLessonLayout } from "./mobile-lesson-layout";
 
@@ -44,6 +45,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     trackLessonStarted(lesson.number);
   }, [lesson.slug, lesson.number]);
   useLessonKeys(lesson);
+  const { onSuccess: onLessonSuccess } = useLessonToast(lesson.number);
   const mobile = useIsMobile();
   const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
@@ -79,23 +81,11 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         trackCodeExecuted(lesson.number);
         markCompleted(lesson.slug);
         trackLessonCompleted(lesson.number);
+        onLessonSuccess();
       }
     },
-    [lesson.steps, lesson.slug, lesson.number]
+    [lesson.steps, lesson.slug, lesson.number, onLessonSuccess]
   );
-
-  const firstCodeStepId = useMemo(() => {
-    return lesson.steps.find((s) => s.code && !s.inputConfig)?.id ?? null;
-  }, [lesson.steps]);
-
-  // Auto-run first code step once Pyodide is ready
-  const autoRanRef = useRef(false);
-  useEffect(() => {
-    if (!pyLoading && firstCodeStepId && !autoRanRef.current && !runner.running) {
-      autoRanRef.current = true;
-      handleRunStep(firstCodeStepId);
-    }
-  }, [pyLoading, firstCodeStepId, runner.running, handleRunStep]);
 
   const lastCodeStepId = useMemo(() => {
     for (let i = lesson.steps.length - 1; i >= 0; i--) {
@@ -121,9 +111,10 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         trackCodeExecuted(lesson.number);
         markCompleted(lesson.slug);
         trackLessonCompleted(lesson.number);
+        onLessonSuccess();
       }
     }
-  }, [lesson.fullCode, lesson.slug, lesson.number]);
+  }, [lesson.fullCode, lesson.slug, lesson.number, onLessonSuccess]);
 
   const handleClear = useCallback(() => {
     monitor.clear(); playback.reset();

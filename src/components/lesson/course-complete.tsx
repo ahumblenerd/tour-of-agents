@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { trackCourseCompleted, trackShareClicked } from "@/lib/analytics/posthog";
+import { playTriumph } from "@/lib/audio/sounds";
 
 function fireConfetti() {
   import("canvas-confetti").then((mod) => {
@@ -45,6 +46,7 @@ export function CourseComplete() {
     const timer = setTimeout(() => {
       setShow(true);
       fireConfetti();
+      playTriumph();
       trackCourseCompleted();
     }, 500);
     return () => clearTimeout(timer);
