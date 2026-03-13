@@ -16,7 +16,7 @@ export function useLessonToast(lessonNumber: number) {
       shown.current = true;
       const msg = LESSON_TOAST[lessonNumber];
       if (msg && lessonNumber < 9) {
-        toast.success(msg, { className: "text-sm font-medium" });
+        toast.success(msg);
       }
       playSuccess();
     }
