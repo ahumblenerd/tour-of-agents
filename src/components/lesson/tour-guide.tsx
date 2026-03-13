@@ -7,6 +7,7 @@ interface TourStep {
   title: string;
   body: string;
   position: "top" | "bottom" | "left" | "right";
+  triggerOnFinish?: boolean; // click the first button inside the target
 }
 
 // Only targets that are always present in the DOM — no conditional elements
@@ -30,10 +31,11 @@ const STEPS: TourStep[] = [
     position: "top",
   },
   {
-    target: "full-code",
-    title: "Full Code",
-    body: "The complete lesson code in one block. Run it all at once to see the full agent.",
+    target: "sample-chips",
+    title: "Try it now!",
+    body: "Click any of these to send it to the agent. Watch the graph light up as it runs.",
     position: "top",
+    triggerOnFinish: true,
   },
 ];
 
@@ -44,9 +46,13 @@ export function TourGuide() {
   const [rect, setRect] = useState<DOMRect | null>(null);
   const active = step >= 0 && step < STEPS.length;
 
-  const finish = useCallback(() => {
+  const finish = useCallback((triggerTarget?: string) => {
     setStep(-1);
     localStorage.setItem(STORAGE_KEY, "true");
+    if (triggerTarget) {
+      const el = document.querySelector(`[data-tour="${triggerTarget}"] button`);
+      if (el instanceof HTMLElement) setTimeout(() => el.click(), 100);
+    }
   }, []);
 
   // Auto-show on first visit
@@ -69,7 +75,11 @@ export function TourGuide() {
     el.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [step, active, finish]);
 
-  const next = () => step < STEPS.length - 1 ? setStep(step + 1) : finish();
+  const next = () => {
+    if (step < STEPS.length - 1) { setStep(step + 1); return; }
+    const s = STEPS[step];
+    finish(s.triggerOnFinish ? s.target : undefined);
+  };
   const prev = () => step > 0 && setStep(step - 1);
 
   if (!active || !rect) return null;
@@ -79,7 +89,7 @@ export function TourGuide() {
   const tooltip = getTooltipStyle(rect, s.position);
 
   return (
-    <div className="fixed inset-0 z-[100]" onClick={finish}>
+    <div className="fixed inset-0 z-[100]" onClick={() => finish()}>
       <svg className="absolute inset-0 w-full h-full">
         <defs>
           <mask id="tour-mask">
@@ -120,13 +130,13 @@ export function TourGuide() {
             </button>
           )}
           <div className="flex-1" />
-          <button onClick={finish}
+          <button onClick={() => finish()}
             className="text-xs text-muted-foreground hover:text-foreground">
             Skip
           </button>
           <button onClick={next}
             className="px-3 py-1 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
-            {step === STEPS.length - 1 ? "Done" : "Next"}
+            {step < STEPS.length - 1 ? "Next" : STEPS[step].triggerOnFinish ? "Try it!" : "Done"}
           </button>
         </div>
       </div>

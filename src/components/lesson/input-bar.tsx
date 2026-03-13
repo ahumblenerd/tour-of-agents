@@ -31,11 +31,18 @@ export function InputBar({
   return (
     <div className="space-y-2 px-3 py-2 border-t bg-muted/20 shrink-0">
       {samples && (
-        <div className="flex gap-1.5 flex-wrap">
-          {samples.map((s) => (
+        <div className="flex items-center gap-1.5 flex-wrap" data-tour="sample-chips">
+          {entryCount === 0 && !running && (
+            <span className="text-[11px] text-foreground font-semibold tracking-wide mr-0.5">TRY ME</span>
+          )}
+          {samples.map((s, i) => (
             <button key={s} onClick={() => handleSend(s)}
               disabled={running || disabled}
-              className="px-2.5 py-1 text-[11px] rounded-full border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5 transition-colors disabled:opacity-50 font-mono"
+              className={`px-2.5 py-1 text-[11px] rounded-full border transition-colors disabled:opacity-50 font-mono ${
+                entryCount === 0 && !running && i === 0
+                  ? "border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 chip-bounce"
+                  : "border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 hover:bg-primary/5"
+              }`}
             >{s}</button>
           ))}
         </div>
