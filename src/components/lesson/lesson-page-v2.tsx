@@ -28,6 +28,8 @@ import { markVisited, markCompleted } from "@/lib/settings/progress";
 import { trackLessonStarted, trackCodeExecuted, trackCodeError, trackLessonCompleted } from "@/lib/analytics/posthog";
 import { MockModeBanner } from "./mock-mode-banner";
 import { useLessonKeys } from "@/hooks/use-lesson-keys";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { MobileLessonLayout } from "./mobile-lesson-layout";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -42,6 +44,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     trackLessonStarted(lesson.number);
   }, [lesson.slug, lesson.number]);
   useLessonKeys(lesson);
+  const mobile = useIsMobile();
   const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
   const monitor = useMonitor();
@@ -124,64 +127,48 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         </div>
       </div>
 
-      {mounted ? (
+      {mounted ? (mobile ? (
+        <MobileLessonLayout
+          prose={<ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
+            runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />}
+          graph={<AgentGraph graph={lesson.graph} entries={monitor.entries} cursor={playback.cursor} turns={turns} />}
+          playback={<PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />}
+          traceLog={<TraceLog entries={monitor.entries} cursor={playback.cursor} isLive={playback.isLive}
+            running={runner.running} turns={turns} activeTurnIndex={playback.activeTurnIndex} onGoToTurn={playback.goToTurn} />}
+          inputBar={<InputBar inputConfig={inputStep?.inputConfig} onSend={handleSend} onClear={handleClear}
+            running={runner.running} disabled={pyLoading} replaying={playback.replaying} entryCount={monitor.entries.length} />}
+          fullCode={<FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
+            running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} />}
+        />
+      ) : (
         <ResizablePanelGroup id={`lesson-${lesson.slug}`} className="flex-1">
           <ResizablePanel id={`prose-${lesson.slug}`} defaultSize={50} minSize={30}>
             <div className="h-full overflow-auto" data-scroll-root="" data-tour="prose-column">
-              <ProseColumn
-                steps={lesson.steps}
-                stepResults={runner.stepResults}
-                runningStepId={runner.runningStepId}
-                disabled={pyLoading || runner.running}
-                onRunStep={handleRunStep}
-              />
+              <ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
+                runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel id={`monitor-${lesson.slug}`} defaultSize={50} minSize={25}>
             <div className="h-full flex flex-col">
               <div className="h-[45%] min-h-[150px] border-b" data-tour="agent-graph">
-                <AgentGraph
-                  graph={lesson.graph}
-                  entries={monitor.entries}
-                  cursor={playback.cursor}
-                  turns={turns}
-                />
+                <AgentGraph graph={lesson.graph} entries={monitor.entries} cursor={playback.cursor} turns={turns} />
               </div>
               <div data-tour="playback-area">
                 <PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />
               </div>
               <div className="flex-1 overflow-hidden">
-                <TraceLog
-                  entries={monitor.entries}
-                  cursor={playback.cursor}
-                  isLive={playback.isLive}
-                  running={runner.running}
-                  turns={turns}
-                  activeTurnIndex={playback.activeTurnIndex}
-                  onGoToTurn={playback.goToTurn}
-                />
+                <TraceLog entries={monitor.entries} cursor={playback.cursor} isLive={playback.isLive}
+                  running={runner.running} turns={turns} activeTurnIndex={playback.activeTurnIndex} onGoToTurn={playback.goToTurn} />
               </div>
-              <InputBar
-                inputConfig={inputStep?.inputConfig}
-                onSend={handleSend}
-                onClear={handleClear}
-                running={runner.running}
-                disabled={pyLoading}
-                replaying={playback.replaying}
-                entryCount={monitor.entries.length}
-              />
-              <div data-tour="full-code"><FullCodeBlock
-                code={lesson.fullCode}
-                onRun={handleRunAll}
-                running={runner.runningStepId === "__all__"}
-                disabled={pyLoading || runner.running}
-                result={runner.stepResults["__all__"]}
-              /></div>
+              <InputBar inputConfig={inputStep?.inputConfig} onSend={handleSend} onClear={handleClear}
+                running={runner.running} disabled={pyLoading} replaying={playback.replaying} entryCount={monitor.entries.length} />
+              <div data-tour="full-code"><FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
+                running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} /></div>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
-      ) : (
+      )) : (
         <div className="flex-1" />
       )}
 
