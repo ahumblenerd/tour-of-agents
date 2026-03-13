@@ -84,6 +84,19 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     [lesson.steps, lesson.slug, lesson.number]
   );
 
+  const firstCodeStepId = useMemo(() => {
+    return lesson.steps.find((s) => s.code && !s.inputConfig)?.id ?? null;
+  }, [lesson.steps]);
+
+  // Auto-run first code step once Pyodide is ready
+  const autoRanRef = useRef(false);
+  useEffect(() => {
+    if (!pyLoading && firstCodeStepId && !autoRanRef.current && !runner.running) {
+      autoRanRef.current = true;
+      handleRunStep(firstCodeStepId);
+    }
+  }, [pyLoading, firstCodeStepId, runner.running, handleRunStep]);
+
   const lastCodeStepId = useMemo(() => {
     for (let i = lesson.steps.length - 1; i >= 0; i--) {
       if (lesson.steps[i].code) return lesson.steps[i].id;
