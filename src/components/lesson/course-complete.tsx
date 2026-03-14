@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackCourseCompleted } from "@/lib/analytics/posthog";
 import { playTriumph } from "@/lib/audio/sounds";
 import { track } from "@/lib/analytics/posthog";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
 
 function fireConfetti() {
   import("canvas-confetti").then((mod) => {
@@ -36,37 +35,37 @@ function fireConfetti() {
   });
 }
 
-export function CourseComplete() {
-  const [phase, setPhase] = useState<"button" | "modal" | "hidden">("button");
-  const [name, setName] = useState("");
-  const router = useRouter();
-  const finishVariant = useFeatureFlag("finish-button-test");
-  const buttonLabel = finishVariant === "variant-a" ? "Get your certificate" : "Finish Course";
+/** Modal-only component. Call `trigger()` to open. */
+export function useCourseComplete() {
+  const [open, setOpen] = useState(false);
 
-  const handleFinish = () => {
-    setPhase("modal");
+  const trigger = useCallback(() => {
+    setOpen(true);
     fireConfetti();
     playTriumph();
     trackCourseCompleted();
-  };
+  }, []);
+
+  return { open, setOpen, trigger };
+}
+
+export function CourseCompleteModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+  const router = useRouter();
+
+  if (!open) return null;
 
   const handleGetCert = () => {
     if (!name.trim()) return;
     track("certificate_generated", { name: name.trim() });
     router.push(`/certificate?name=${encodeURIComponent(name.trim())}`);
   };
-
-  if (phase === "hidden") return null;
-
-  if (phase === "button") {
-    return (
-      <div className="border-t bg-muted/30 px-4 py-4 text-center">
-        <Button size="lg" onClick={handleFinish} className="text-base px-8">
-          {buttonLabel}
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
@@ -103,7 +102,7 @@ export function CourseComplete() {
         </div>
 
         <button
-          onClick={() => setPhase("hidden")}
+          onClick={onClose}
           className="text-xs text-muted-foreground hover:text-foreground"
         >
           Skip

@@ -9,9 +9,11 @@ import { getProgress } from "@/lib/settings/progress";
 
 interface LessonNavProps {
   lesson: LessonDefinition;
+  onFinish?: () => void;
+  canFinish?: boolean;
 }
 
-export function LessonNav({ lesson }: LessonNavProps) {
+export function LessonNav({ lesson, onFinish, canFinish }: LessonNavProps) {
   const prev = getPreviousLesson(lesson);
   const next = getNextLesson(lesson);
   const total = getLessonCount();
@@ -60,8 +62,14 @@ export function LessonNav({ lesson }: LessonNavProps) {
               <span aria-hidden>&rarr;</span>
             </Button>
           </Link>
+        ) : isLast && canFinish ? (
+          <Button variant="default" size="sm" className="text-xs gap-1" onClick={onFinish}>
+            Finish Course <span aria-hidden>&rarr;</span>
+          </Button>
         ) : isLast ? (
-          <span className="text-xs text-muted-foreground">Course complete</span>
+          <span className="text-xs text-muted-foreground">
+            {completedCount === total ? "Course complete" : `${lesson.number}. ${lesson.title}`}
+          </span>
         ) : (
           <div />
         )}

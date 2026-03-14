@@ -20,7 +20,7 @@ import { InputBar } from "./input-bar";
 import { FullCodeBlock } from "./full-code-block";
 import { LessonNav } from "./lesson-nav";
 import { LessonSelector } from "./lesson-selector";
-import { CourseComplete } from "./course-complete";
+import { useCourseComplete, CourseCompleteModal } from "./course-complete";
 import { TourGuide, TourButton } from "./tour-guide";
 import { Badge } from "@/components/ui/badge";
 import { getNextLesson } from "@/lib/lessons/registry";
@@ -46,6 +46,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   }, [lesson.slug, lesson.number]);
   useLessonKeys(lesson);
   const { onSuccess: onLessonSuccess } = useLessonToast(lesson.number);
+  const courseComplete = useCourseComplete();
+  const isLastLesson = !getNextLesson(lesson);
   const mobile = useIsMobile();
   const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
@@ -176,8 +178,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         <div className="flex-1" />
       )}
 
-      {!getNextLesson(lesson) && monitor.entries.length > 0 && <CourseComplete />}
-      <LessonNav lesson={lesson} />
+      <CourseCompleteModal open={courseComplete.open} onClose={() => courseComplete.setOpen(false)} />
+      <LessonNav lesson={lesson} onFinish={courseComplete.trigger} canFinish={isLastLesson && monitor.entries.length > 0} />
       <TourGuide />
     </div>
   );
