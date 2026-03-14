@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { trackCourseCompleted, trackShareClicked } from "@/lib/analytics/posthog";
+import { Input } from "@/components/ui/input";
+import { trackCourseCompleted } from "@/lib/analytics/posthog";
 import { playTriumph } from "@/lib/audio/sounds";
+import { track } from "@/lib/analytics/posthog";
 
 function fireConfetti() {
   import("canvas-confetti").then((mod) => {
@@ -32,15 +35,10 @@ function fireConfetti() {
   });
 }
 
-function shareUrl(source: string) {
-  return `https://tinyagents.dev?utm_source=${source}&utm_medium=social&utm_campaign=course_share`;
-}
-
-const SHARE_BODY = "Just completed A Tour of Agents — built an AI agent framework in ~60 lines of Python. No LangChain needed.";
-
 export function CourseComplete() {
   const [show, setShow] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [name, setName] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,51 +50,54 @@ export function CourseComplete() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!show || dismissed) return null;
+  if (!show) return null;
 
-  const twitterText = `${SHARE_BODY}\n\n${shareUrl("twitter")}`;
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`;
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl("linkedin"))}`;
+  const handleGetCert = () => {
+    if (!name.trim()) return;
+    track("certificate_generated", { name: name.trim() });
+    router.push(`/certificate?name=${encodeURIComponent(name.trim())}`);
+  };
 
   return (
-    <div className="relative border-t bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10">
-      <button
-        onClick={() => setDismissed(true)}
-        className="absolute top-2 right-3 text-muted-foreground hover:text-foreground text-lg leading-none"
-        title="Dismiss"
-      >
-        &times;
-      </button>
-      <div className="px-4 py-6 text-center space-y-3">
-        <p className="text-2xl font-extrabold tracking-tight">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+      <div className="max-w-md w-full mx-4 p-8 rounded-lg border bg-background shadow-2xl text-center space-y-4">
+        <p className="text-3xl font-extrabold tracking-tight">
           You built an agent framework.
         </p>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+        <p className="text-sm text-muted-foreground">
           9 lessons. ~60 lines. No magic. You now understand every piece of
-          LangChain, CrewAI, and AutoGen. Share the knowledge.
+          LangChain, CrewAI, and AutoGen.
         </p>
-        <div className="flex items-center justify-center gap-2 pt-1">
-          <Button size="sm" asChild>
-            <a href={twitterUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackShareClicked("twitter")}>
-              Share on X
-            </a>
-          </Button>
-          <Button size="sm" variant="outline" asChild>
-            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" onClick={() => trackShareClicked("linkedin")}>
-              Share on LinkedIn
-            </a>
-          </Button>
+
+        <div className="pt-2 space-y-3 text-left">
+          <div>
+            <label className="text-sm font-medium">
+              Your name (for the certificate)
+            </label>
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Jane Smith"
+              className="mt-1"
+              onKeyDown={(e) => e.key === "Enter" && handleGetCert()}
+            />
+          </div>
           <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => {
-              navigator.clipboard.writeText(`${SHARE_BODY}\n\n${shareUrl("clipboard")}`);
-              trackShareClicked("copy");
-            }}
+            onClick={handleGetCert}
+            disabled={!name.trim()}
+            className="w-full"
+            size="lg"
           >
-            Copy
+            Get your certificate
           </Button>
         </div>
+
+        <button
+          onClick={() => setShow(false)}
+          className="text-xs text-muted-foreground hover:text-foreground"
+        >
+          Skip
+        </button>
       </div>
     </div>
   );
