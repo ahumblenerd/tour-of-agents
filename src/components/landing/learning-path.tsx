@@ -18,9 +18,13 @@ export function LearningPath({ progress }: LearningPathProps) {
 
   return (
     <section className="max-w-2xl mx-auto px-6 py-12">
-      <h2 className="text-lg font-semibold mb-2 text-center">The Learning Path</h2>
-      <p className="text-sm text-muted-foreground text-center mb-6">
-        Each lesson adds one concept. ~60 lines total.
+      <h2 className="text-lg font-semibold mb-2 text-center">9 lessons. Each one builds on the last.</h2>
+      <p className="text-sm text-muted-foreground text-center mb-2">
+        Start anywhere. Every lesson runs live in your browser.
+      </p>
+      <p className="text-xs text-muted-foreground/70 text-center mb-6 max-w-md mx-auto">
+        From a single function call to a complete agent framework — learn tool calling,
+        conversation memory, state management, policy gates, and self-scheduling.
       </p>
 
       {completedCount > 0 && (

@@ -4,6 +4,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { MobileBanner } from "@/components/mobile-banner";
+import { CourseJsonLd } from "@/components/seo/course-json-ld";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,6 +62,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <CourseJsonLd />
         <Providers>
           {children}
           <MobileBanner />
