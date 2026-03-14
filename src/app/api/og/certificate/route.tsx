@@ -10,7 +10,8 @@ const LESSONS = [
 ];
 
 export async function GET(req: NextRequest) {
-  const name = (req.nextUrl.searchParams.get("name") || "Engineer").slice(0, 50);
+  const raw = (req.nextUrl.searchParams.get("name") || "Engineer").slice(0, 50);
+  const name = raw.replace(/\b\w/g, (c) => c.toUpperCase());
 
   return new ImageResponse(
     (

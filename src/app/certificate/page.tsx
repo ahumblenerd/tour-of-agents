@@ -9,7 +9,8 @@ export async function generateMetadata({
   searchParams: Promise<{ name?: string }>;
 }): Promise<Metadata> {
   const { name } = await searchParams;
-  const displayName = (name || "An engineer").slice(0, 50);
+  const raw = (name || "An engineer").slice(0, 50);
+  const displayName = raw.replace(/\b\w/g, (c) => c.toUpperCase());
   const title = `${displayName} completed A Tour of Agents`;
   const description =
     "9 lessons. 60 lines of Python. Built an AI agent framework from scratch — no LangChain, no abstractions.";
@@ -41,5 +42,6 @@ export default async function CertificateRoute({
   searchParams: Promise<{ name?: string }>;
 }) {
   const { name } = await searchParams;
-  return <CertificatePage name={(name || "Engineer").slice(0, 50)} />;
+  const n = (name || "Engineer").slice(0, 50).replace(/\b\w/g, (c) => c.toUpperCase());
+  return <CertificatePage name={n} />;
 }
