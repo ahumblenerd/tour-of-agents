@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trackCourseCompleted } from "@/lib/analytics/posthog";
 import { playTriumph } from "@/lib/audio/sounds";
 import { track } from "@/lib/analytics/posthog";
+import { useFeatureFlag } from "@/hooks/use-feature-flag";
 
 function fireConfetti() {
   import("canvas-confetti").then((mod) => {
@@ -36,27 +37,36 @@ function fireConfetti() {
 }
 
 export function CourseComplete() {
-  const [show, setShow] = useState(false);
+  const [phase, setPhase] = useState<"button" | "modal" | "hidden">("button");
   const [name, setName] = useState("");
   const router = useRouter();
+  const finishVariant = useFeatureFlag("finish-button-test");
+  const buttonLabel = finishVariant === "variant-a" ? "Get your certificate" : "Finish Course";
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShow(true);
-      fireConfetti();
-      playTriumph();
-      trackCourseCompleted();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!show) return null;
+  const handleFinish = () => {
+    setPhase("modal");
+    fireConfetti();
+    playTriumph();
+    trackCourseCompleted();
+  };
 
   const handleGetCert = () => {
     if (!name.trim()) return;
     track("certificate_generated", { name: name.trim() });
     router.push(`/certificate?name=${encodeURIComponent(name.trim())}`);
   };
+
+  if (phase === "hidden") return null;
+
+  if (phase === "button") {
+    return (
+      <div className="border-t bg-muted/30 px-4 py-4 text-center">
+        <Button size="lg" onClick={handleFinish} className="text-base px-8">
+          {buttonLabel}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
@@ -93,7 +103,7 @@ export function CourseComplete() {
         </div>
 
         <button
-          onClick={() => setShow(false)}
+          onClick={() => setPhase("hidden")}
           className="text-xs text-muted-foreground hover:text-foreground"
         >
           Skip

@@ -176,7 +176,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         <div className="flex-1" />
       )}
 
-      {!getNextLesson(lesson) && <CourseComplete />}
+      {!getNextLesson(lesson) && monitor.entries.length > 0 && <CourseComplete />}
       <LessonNav lesson={lesson} />
       <TourGuide />
     </div>
