@@ -1,11 +1,11 @@
 import { useRef, useCallback } from "react";
 import { toast } from "sonner";
-import { LESSON_TOAST, CODE_PRAISE } from "@/lib/lessons/praise";
+import { LESSON_TOAST, CODE_PRAISE, NEXT_LESSON_SLUG } from "@/lib/lessons/praise";
 import { playSuccess } from "@/lib/audio/sounds";
 
 /**
  * Shows a toast + plays a sound on first successful code run per lesson.
- * Returns the praise string for inline display.
+ * Toast is clickable — navigates to the next lesson.
  */
 export function useLessonToast(lessonNumber: number) {
   const shown = useRef(false);
@@ -15,8 +15,15 @@ export function useLessonToast(lessonNumber: number) {
     if (!shown.current) {
       shown.current = true;
       const msg = LESSON_TOAST[lessonNumber];
-      if (msg && lessonNumber < 9) {
-        toast.success(msg);
+      const nextSlug = NEXT_LESSON_SLUG[lessonNumber];
+      if (msg && lessonNumber < 9 && nextSlug) {
+        toast.success(msg, {
+          duration: 5000,
+          action: {
+            label: "Next lesson",
+            onClick: () => { window.location.href = `/lesson/${nextSlug}`; },
+          },
+        });
       }
       playSuccess();
     }

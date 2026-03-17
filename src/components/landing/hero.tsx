@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { trackGitHubClicked } from "@/lib/analytics/posthog";
-import { useFeatureFlag } from "@/hooks/use-feature-flag";
 import Link from "next/link";
 
 interface HeroProps {
@@ -11,36 +10,10 @@ interface HeroProps {
   nextTitle?: string;
 }
 
-const HEADLINES: Record<string, { line1: string; line2: string }> = {
-  control: {
-    line1: "You don\u2019t need LangChain.",
-    line2: "You need 60 lines of Python.",
-  },
-  "variant-a": {
-    line1: "Build an AI agent in 2 minutes.",
-    line2: "No install. No framework.",
-  },
-  "variant-b": {
-    line1: "Everyone\u2019s using LangChain.",
-    line2: "Here\u2019s what it actually does in 60 lines.",
-  },
-};
-
-const CTA_LABELS: Record<string, string> = {
-  control: "Start building",
-  "variant-a": "Try it free",
-  "variant-b": "Start Lesson 1",
-};
-
 export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
-  const headlineVariant = useFeatureFlag("hero-headline-test");
-  const ctaVariant = useFeatureFlag("cta-button-test");
-  const socialProof = useFeatureFlag("social-proof-test");
-
-  const h = HEADLINES[headlineVariant] ?? HEADLINES.control;
   const ctaLabel = hasProgress
     ? `Continue: ${nextTitle}`
-    : (CTA_LABELS[ctaVariant] ?? CTA_LABELS.control);
+    : "Try it free";
 
   return (
     <section className="border-b bg-muted/30">
@@ -49,9 +22,9 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
           Free &middot; No signup &middot; Runs in your browser
         </p>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-          {h.line1}
+          Build an AI agent in 2 minutes.
           <br />
-          <span className="text-muted-foreground">{h.line2}</span>
+          <span className="text-muted-foreground">No install. No framework.</span>
         </h1>
         <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-2">
           9 interactive lessons. Build a complete AI agent from scratch.
@@ -69,7 +42,7 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
           </Link>
         </div>
 
-        {socialProof === "variant-a" && !hasProgress && (
+        {!hasProgress && (
           <p className="text-xs text-muted-foreground mb-4">
             Join 200+ engineers who completed the course this week
           </p>

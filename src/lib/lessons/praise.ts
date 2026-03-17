@@ -18,13 +18,25 @@ export const CODE_PRAISE: Record<number, string> = {
 
 /** Shown as toast when lesson is completed (code runs successfully) */
 export const LESSON_TOAST: Record<number, string> = {
-  1: "Lesson 1 done. The foundation is set.",
-  2: "Lesson 2 done. Tools unlocked.",
-  3: "Lesson 3 done. You have the core loop. 6 to go.",
-  4: "Lesson 4 done. Halfway to a full framework.",
-  5: "Lesson 5 done. State management sorted.",
-  6: "Lesson 6 done. 3 lessons left.",
-  7: "Lesson 7 done. Almost there.",
-  8: "Lesson 8 done. One more to go.",
+  1: "Done. But this agent can't use tools yet →",
+  2: "Done. But what happens when the tool needs another tool? →",
+  3: "Done. Now it loops — but it forgets everything between turns →",
+  4: "Done. It remembers now — but state resets on reload →",
+  5: "Done. But this state disappears when you close the tab →",
+  6: "Done. Memory persists — but what if the agent goes rogue? →",
+  7: "Done. It's safe — but you still decide when it runs →",
+  8: "Done. One lesson left. The whole thing in 60 lines →",
   9: "All 9 lessons complete.",
+};
+
+/** Next lesson slugs for toast click-through */
+export const NEXT_LESSON_SLUG: Record<number, string> = {
+  1: "tools",
+  2: "agent-loop",
+  3: "conversation",
+  4: "state",
+  5: "memory",
+  6: "policy",
+  7: "self-scheduling",
+  8: "the-whole-thing",
 };
