@@ -1,4 +1,5 @@
 import posthog from "posthog-js";
+import { getProvider } from "@/lib/settings/api-keys";
 
 let initialized = false;
 
@@ -17,17 +18,22 @@ export function initPostHog() {
   initialized = true;
 }
 
+function getLlmProps() {
+  const provider = getProvider();
+  return { provider, is_mock: provider === "tinyagents" };
+}
+
 export function track(event: string, properties?: Record<string, unknown>) {
   if (!initialized) return;
   posthog.capture(event, properties);
 }
 
 export function trackLessonStarted(lesson: number) {
-  track("lesson_started", { lesson });
+  track("lesson_started", { lesson, ...getLlmProps() });
 }
 
 export function trackCodeExecuted(lesson: number) {
-  track("code_executed", { lesson });
+  track("code_executed", { lesson, ...getLlmProps() });
 }
 
 export function trackCodeError(lesson: number, errorType: string) {
@@ -35,11 +41,11 @@ export function trackCodeError(lesson: number, errorType: string) {
 }
 
 export function trackLessonCompleted(lesson: number) {
-  track("lesson_completed", { lesson });
+  track("lesson_completed", { lesson, ...getLlmProps() });
 }
 
 export function trackCourseCompleted() {
-  track("course_completed");
+  track("course_completed", { ...getLlmProps() });
 }
 
 export function trackGitHubClicked() {
@@ -60,4 +66,7 @@ export function trackJobsInterestClicked(source: string) {
 
 export function trackProviderSelected(provider: string) {
   track("provider_selected", { provider });
+  if (initialized) {
+    posthog.setPersonProperties({ llm_provider: provider });
+  }
 }
