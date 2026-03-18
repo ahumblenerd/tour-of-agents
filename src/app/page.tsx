@@ -16,7 +16,8 @@ export default function HomePage() {
     const nextLesson = progress.lastSlug
       ? allLessons.find((l) => l.slug === progress.lastSlug) ?? allLessons[0]
       : allLessons.find((l) => !progress.completed.includes(l.slug)) ?? allLessons[0];
-    router.replace(`/lesson/${nextLesson.slug}`);
+    const params = window.location.search;
+    router.replace(`/lesson/${nextLesson.slug}${params}`);
   }, [router]);
 
   return null;
