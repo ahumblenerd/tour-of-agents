@@ -9,7 +9,7 @@ import { getProvider, PROVIDER_CONFIGS } from "@/lib/settings/api-keys";
 
 function getProviderLabel() {
   const cfg = PROVIDER_CONFIGS[getProvider()];
-  return cfg.needsKey === false ? `${cfg.label} (Free)` : cfg.label;
+  return cfg.needsKey === false ? "⚡ Mock Mode" : `🔑 ${cfg.label}`;
 }
 
 let labelVersion = 0;
