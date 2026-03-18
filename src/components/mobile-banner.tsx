@@ -1,11 +1,19 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { X } from "lucide-react";
+import { X, Mail } from "lucide-react";
+import { track } from "@/lib/analytics/posthog";
 
 const DISMISSED_KEY = "mobile-banner-dismissed";
 const subscribe = () => () => {};
 const isMobile = () => window.innerWidth < 768;
+
+function getMailtoHref() {
+  const url = typeof window !== "undefined" ? window.location.href : "https://tinyagents.dev";
+  const subject = encodeURIComponent("Reminder: Finish this AI agents course");
+  const body = encodeURIComponent(`Open this on your laptop:\n\n${url}\n\nA small interactive course to get up to date on how AI agents work. ~30 min.`);
+  return `mailto:?subject=${subject}&body=${body}`;
+}
 
 export function MobileBanner() {
   const mobile = useSyncExternalStore(subscribe, isMobile, () => false);
@@ -29,9 +37,11 @@ export function MobileBanner() {
         <p className="text-sm font-medium text-blue-100">
           Works best on desktop
         </p>
-        <p className="text-xs text-blue-300/80 mt-0.5">
-          Bookmark this page and revisit on a larger screen for the full experience.
-        </p>
+        <a href={getMailtoHref()} onClick={() => track("mobile_email_self")}
+          className="mt-2 flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white active:bg-blue-700">
+          <Mail className="h-4 w-4" />
+          Email this to myself
+        </a>
       </div>
     </div>
   );
