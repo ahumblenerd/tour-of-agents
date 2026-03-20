@@ -34,12 +34,9 @@ export function InputBar({
   const samples = inputConfig.samples;
 
   return (
-    <div className="space-y-2 px-3 py-2 border-t bg-muted/20 shrink-0">
+    <div className="space-y-2 shrink-0">
       {samples && (
         <div className="flex items-center gap-1.5 flex-wrap" data-tour="sample-chips">
-          {entryCount === 0 && !running && (
-            <span className="text-[11px] text-foreground font-semibold tracking-wide mr-0.5">TRY ME</span>
-          )}
           {samples.map((s, i) => (
             <button key={s} onClick={() => handleSend(s)}
               disabled={running || disabled}
@@ -52,36 +49,39 @@ export function InputBar({
           ))}
         </div>
       )}
-      {isMock ? (
-        <>
-          <button type="button" onClick={() => setShowSettings(true)}
-            className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md border border-dashed border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors">
-            <Key className="h-3.5 w-3.5" />
-            Add a free Groq API key to ask custom questions
-          </button>
-          <ApiKeyDialog open={showSettings} onOpenChange={setShowSettings} />
-        </>
-      ) : (
-        <div className="flex gap-2">
-          <input type="text" placeholder={inputConfig.placeholder}
-            value={input} onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !disabled && !running && input.trim()) handleSend();
-            }}
-            disabled={running || disabled}
-            className="flex-1 text-sm px-3 py-1.5 rounded-md border bg-background font-mono"
-          />
-          <button type="button" onClick={() => handleSend()}
-            disabled={running || disabled || !input.trim()}
-            className="px-4 py-1.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-          >{running ? "Running..." : "Send"}</button>
-          {entryCount > 0 && (
-            <button type="button" onClick={onClear}
-              className="px-3 py-1.5 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-            >Clear</button>
-          )}
-        </div>
-      )}
+      {/* Desktop only: API key CTA or text input */}
+      <div className="hidden md:block">
+        {isMock ? (
+          <>
+            <button type="button" onClick={() => setShowSettings(true)}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md border border-dashed border-border/50 text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors">
+              <Key className="h-3.5 w-3.5" />
+              Add a free Groq API key to ask custom questions
+            </button>
+            <ApiKeyDialog open={showSettings} onOpenChange={setShowSettings} />
+          </>
+        ) : (
+          <div className="flex gap-2">
+            <input type="text" placeholder={inputConfig.placeholder}
+              value={input} onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !disabled && !running && input.trim()) handleSend();
+              }}
+              disabled={running || disabled}
+              className="flex-1 text-sm px-3 py-1.5 rounded-md border bg-background font-mono"
+            />
+            <button type="button" onClick={() => handleSend()}
+              disabled={running || disabled || !input.trim()}
+              className="px-4 py-1.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
+            >{running ? "Running..." : "Send"}</button>
+            {entryCount > 0 && (
+              <button type="button" onClick={onClear}
+                className="px-3 py-1.5 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >Clear</button>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
