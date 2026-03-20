@@ -38,11 +38,11 @@ export function MobileLessonLayout({
         </div>
       ) : (
         <div className="flex-1 flex flex-col min-h-0">
-          <div className="h-[30%] min-h-[120px] border-b" data-tour="agent-graph">
+          <div className="flex-[3] min-h-0 border-b" data-tour="agent-graph">
             {graph}
           </div>
           <div data-tour="playback-area">{playback}</div>
-          <div className="flex-1 overflow-hidden">{traceLog}</div>
+          <div className="flex-[2] min-h-0 overflow-hidden">{traceLog}</div>
           <div className="shrink-0 border-t bg-background">{inputBar}</div>
         </div>
       )}

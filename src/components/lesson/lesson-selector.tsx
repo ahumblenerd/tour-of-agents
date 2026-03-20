@@ -31,6 +31,9 @@ export function LessonSelector({ current }: LessonSelectorProps) {
         <Button variant="ghost" className="p-0 h-auto hover:bg-transparent">
           <h1 className="text-lg font-bold flex items-center gap-1.5">
             {current.number}. {current.title}
+            <span className={`text-[9px] px-1.5 py-0.5 rounded-full border font-normal ${DIFFICULTY_STYLES[current.difficulty]}`}>
+              {current.difficulty}
+            </span>
             <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
           </h1>
         </Button>

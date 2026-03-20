@@ -47,7 +47,11 @@ export function SiteHeader() {
             {providerLabel}
           </Button>
           <span className="hidden md:inline-flex"><ThemeToggle /></span>
-          {/* Mobile: overflow menu */}
+          {/* Mobile: compact mock badge + overflow */}
+          <button onClick={() => setShowSettings(true)}
+            className="md:hidden text-[10px] px-2 py-1 rounded-full border border-border/50 text-muted-foreground">
+            {providerLabel}
+          </button>
           <MobileOverflow onOpenSettings={() => setShowSettings(true)} />
         </div>
       </div>
