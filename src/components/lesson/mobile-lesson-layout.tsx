@@ -32,7 +32,7 @@ export function MobileLessonLayout({
     <div className="fixed inset-0 top-[var(--header-height)] flex flex-col">
       {/* Tab content — fills available space */}
       {tab === "learn" ? (
-        <div className="flex-1 overflow-y-auto" data-tour="prose-column">
+        <div className="flex-1 overflow-y-auto overscroll-contain touch-pan-y" data-tour="prose-column">
           {prose}
           <div data-tour="full-code">{fullCode}</div>
         </div>
