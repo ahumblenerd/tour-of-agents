@@ -37,6 +37,17 @@ Follow this TDD loop for ALL code changes. No exceptions.
 - Lesson content: split markdown into separate `content/` files if needed
 - One component per file, one hook per file
 
+## CSS & Styling Rules (MANDATORY)
+
+- **NEVER hardcode hex colors** -- use Tailwind theme tokens: `bg-muted`, `text-foreground`, `border-border`, `text-destructive` etc.
+- **NEVER use raw color values** like `text-red-400`, `bg-blue-950` -- use semantic tokens: `text-destructive`, `bg-primary`
+- **Use `--header-height` CSS variable** for header offset -- never hardcode `3.5rem` in layout calculations
+- **All `<input>` elements must have focus rings** -- use `focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring` or shadcn Input component
+- **Light/dark mode must both work** -- test both before shipping. Never use colors that only look correct in one mode
+- **Use flex ratios over hardcoded heights** -- `flex-[3]` not `h-[40%]` for responsive splits
+- **Mobile: use `scrollbar-none` + `flex-nowrap` + `overflow-x-auto`** for horizontal pill/chip scrolling
+- **Touch targets minimum 44x44px** on mobile interactive elements
+
 ## Pre-Commit Checks (automatic)
 
 The git pre-commit hook runs three checks in order:

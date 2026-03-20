@@ -29,7 +29,7 @@ export function MobileLessonLayout({
   const isLast = !next;
 
   return (
-    <div className="fixed inset-0 top-[3.5rem] flex flex-col">
+    <div className="fixed inset-0 top-[var(--header-height)] flex flex-col">
       {/* Tab content — fills available space */}
       {tab === "learn" ? (
         <div className="flex-1 overflow-y-auto" data-tour="prose-column">

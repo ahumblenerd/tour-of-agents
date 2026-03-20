@@ -64,7 +64,7 @@ export function FullCodeBlock({
           </div>
         )}
         {result?.error && (
-          <div className="border-t px-3 py-2 text-xs font-mono text-red-400 bg-red-950/10">
+          <div className="border-t px-3 py-2 text-xs font-mono text-destructive bg-destructive/10">
             {result.error}
           </div>
         )}

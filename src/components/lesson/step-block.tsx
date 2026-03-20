@@ -35,7 +35,7 @@ export function StepBlock({
         />
       )}
       {result?.error && (
-        <div className="text-xs text-red-400 font-mono mt-1 px-3 py-2 bg-red-950/20 rounded">
+        <div className="text-xs text-destructive font-mono mt-1 px-3 py-2 bg-destructive/10 rounded">
           {result.error}
         </div>
       )}

@@ -3,7 +3,6 @@ import { Geist } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { MobileBanner } from "@/components/mobile-banner";
 import { CourseJsonLd } from "@/components/seo/course-json-ld";
 
 const geistSans = Geist({
@@ -65,7 +64,6 @@ export default function RootLayout({
         <CourseJsonLd />
         <Providers>
           {children}
-          <MobileBanner />
         </Providers>
       </body>
     </html>

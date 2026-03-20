@@ -5,7 +5,12 @@ import type { NodeState } from "./types";
  * All values live here — components reference these constants.
  * ────────────────────────────────────────────────────────────── */
 
-/** Raw color values for SVG / inline styles (edges, dots, circles) */
+/**
+ * Raw color values for SVG / inline styles (edges, dots, circles).
+ * These are hardcoded hex values because SVG stroke/fill attributes
+ * and inline styles cannot use Tailwind utility classes. If the theme
+ * palette changes, update these values to match.
+ */
 export const GRAPH = {
   edge: {
     idle:      { dark: "#2a2a2a", light: "#d4d4d4" },
@@ -31,11 +36,11 @@ export function resolveColor(val: { dark: string; light: string }, isDark: boole
 
 /** Tailwind class strings for node states (dark + light) */
 export const NODE_STYLES: Record<NodeState, string> = {
-  idle:    "border-[#d4d4d4] text-[#888] bg-[#f5f5f5] dark:border-[#333] dark:text-[#666] dark:bg-[#161616]",
+  idle:    "border-border text-muted-foreground bg-muted",
   active:  "border-foreground bg-background text-foreground shadow-[0_0_16px_rgba(0,0,0,0.08)] dark:shadow-[0_0_16px_rgba(255,255,255,0.12)] scale-105",
-  visited: "border-[#ccc] bg-[#fafafa] text-[#777] dark:border-[#555] dark:bg-[#1a1a1a] dark:text-[#aaa]",
+  visited: "border-border bg-muted text-muted-foreground",
   done:    "border-emerald-500/60 bg-emerald-50/40 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 shadow-[0_0_12px_rgba(16,185,129,0.15)]",
 };
 
 /** Tailwind class for react-flow handles */
-export const HANDLE_CLASS = "!bg-[#bbb] dark:!bg-[#444] !w-1.5 !h-1.5";
+export const HANDLE_CLASS = "!bg-muted-foreground/40 !w-1.5 !h-1.5";

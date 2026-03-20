@@ -69,7 +69,7 @@ export function InputBar({
               if (e.key === "Enter" && !disabled && !running && input.trim()) handleSend();
             }}
             disabled={running || disabled}
-            className="flex-1 text-sm px-3 py-1.5 rounded-md border bg-background font-mono"
+            className="flex-1 text-sm px-3 py-1.5 rounded-md border bg-background font-mono focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           />
           <button type="button" onClick={() => handleSend()}
             disabled={running || disabled || !input.trim()}

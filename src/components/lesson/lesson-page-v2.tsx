@@ -135,7 +135,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   }, [monitor, playback]);
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] flex flex-col">
+    <div className="h-[calc(100vh-var(--header-height))] flex flex-col">
       {mounted ? (mobile ? (
         <MobileLessonLayout
           lesson={lesson}
