@@ -19,13 +19,23 @@ export function MobileLessonLayout({
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <div className="flex-1 overflow-auto pb-[120px]">
+      <div className="flex-1 overflow-auto pb-16">
         {/* Prose first — content is the main character */}
         <div data-tour="prose-column">
           {prose}
         </div>
 
-        {/* Full code inline after prose */}
+        {/* Pills + trace inline after prose */}
+        <div className="px-4 py-3 border-t bg-muted/20">
+          {inputBar}
+        </div>
+
+        {/* Trace output appears inline */}
+        <div className="min-h-[100px] max-h-[300px] overflow-auto border-t">
+          {traceLog}
+        </div>
+
+        {/* Full code inline */}
         <div data-tour="full-code">{fullCode}</div>
 
         {/* Agent monitor collapsed by default */}
@@ -34,7 +44,7 @@ export function MobileLessonLayout({
             onClick={() => setMonitorOpen(!monitorOpen)}
             className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            <span>{monitorOpen ? "Hide agent monitor" : "View agent monitor"}</span>
+            <span>{monitorOpen ? "Hide agent graph" : "View agent graph"}</span>
             {monitorOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
           {monitorOpen && (
@@ -43,15 +53,9 @@ export function MobileLessonLayout({
                 {graph}
               </div>
               <div data-tour="playback-area">{playback}</div>
-              <div className="h-[250px] overflow-hidden">{traceLog}</div>
             </div>
           )}
         </div>
-      </div>
-
-      {/* Sticky input bar at bottom */}
-      <div className="sticky bottom-0 z-10 border-t bg-background shadow-[0_-2px_8px_rgba(0,0,0,0.08)]">
-        {inputBar}
       </div>
     </div>
   );
