@@ -138,6 +138,9 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
       {mounted ? (mobile ? (
         <MobileLessonLayout
+          lesson={lesson}
+          onFinish={courseComplete.trigger}
+          canFinish={isLastLesson && monitor.entries.length > 0}
           prose={<ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
             runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />}
           graph={<AgentGraph graph={lesson.graph} entries={monitor.entries} cursor={playback.cursor} turns={turns} />}
@@ -182,7 +185,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
       )}
 
       <CourseCompleteModal open={courseComplete.open} onClose={() => courseComplete.setOpen(false)} />
-      <LessonNav lesson={lesson} onFinish={courseComplete.trigger} canFinish={isLastLesson && monitor.entries.length > 0} />
+      {!mobile && <LessonNav lesson={lesson} onFinish={courseComplete.trigger} canFinish={isLastLesson && monitor.entries.length > 0} />}
       <TourGuide />
     </div>
   );

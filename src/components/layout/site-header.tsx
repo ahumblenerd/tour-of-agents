@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useSyncExternalStore } from "react";
+import { MoreVertical } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
 import { trackGitHubClicked } from "@/lib/analytics/posthog";
 import { getProvider, PROVIDER_CONFIGS } from "@/lib/settings/api-keys";
@@ -31,7 +33,7 @@ export function SiteHeader() {
   useEffect(() => { if (!showSettings) labelVersion++; }, [showSettings]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
         {content ? content.lessonSelector : (
           <span className="flex items-center gap-2 font-bold text-lg cursor-default">
@@ -39,11 +41,14 @@ export function SiteHeader() {
           </span>
         )}
         <div className="ml-auto flex items-center gap-2">
-          <GitHubLink />
-          <Button variant="outline" size="sm" onClick={() => setShowSettings(true)}>
+          {/* Desktop: all actions visible */}
+          <span className="hidden md:inline-flex"><GitHubLink /></span>
+          <Button variant="outline" size="sm" className="hidden md:inline-flex" onClick={() => setShowSettings(true)}>
             {providerLabel}
           </Button>
-          <ThemeToggle />
+          <span className="hidden md:inline-flex"><ThemeToggle /></span>
+          {/* Mobile: overflow menu */}
+          <MobileOverflow onOpenSettings={() => setShowSettings(true)} />
         </div>
       </div>
       <ApiKeyDialog open={showSettings} onOpenChange={setShowSettings} />
@@ -89,5 +94,47 @@ function ThemeToggle() {
     <Button variant="ghost" size="sm" onClick={toggle}>
       {dark ? "Light" : "Dark"}
     </Button>
+  );
+}
+
+function MobileOverflow({ onOpenSettings }: { onOpenSettings: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDark(document.documentElement.classList.contains("dark"));
+  }, []);
+
+  const toggleTheme = () => {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" size="sm" className="md:hidden h-8 w-8 p-0">
+          <MoreVertical className="h-4 w-4" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-48 p-1">
+        <button onClick={() => { onOpenSettings(); setOpen(false); }}
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
+          LLM Settings
+        </button>
+        <a href="https://github.com/ahumblenerd/tour-of-agents" target="_blank" rel="noopener noreferrer"
+          onClick={() => { trackGitHubClicked(); setOpen(false); }}
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
+          <GitHubIcon /> Source Code
+        </a>
+        <button onClick={() => { toggleTheme(); setOpen(false); }}
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
+          {dark ? "Light Mode" : "Dark Mode"}
+        </button>
+      </PopoverContent>
+    </Popover>
   );
 }
