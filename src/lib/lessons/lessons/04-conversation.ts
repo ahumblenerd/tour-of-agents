@@ -6,6 +6,7 @@ export const lesson04: LessonDefinition = {
   number: 4,
   title: "Conversation = Messages Array",
   subtitle: "Why ChatGPT remembers your last message — and why \"New Chat\" forgets.",
+  difficulty: "intermediate",
   concepts: ["conversation history", "multi-turn", "context window", "ChatGPT pattern"],
   graph: {
     nodes: [

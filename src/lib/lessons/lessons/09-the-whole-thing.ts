@@ -7,6 +7,7 @@ export const lesson09: LessonDefinition = {
   number: 9,
   title: "The Whole Thing",
   subtitle: "Everything ChatGPT and Claude do — composed in ~60 lines.",
+  difficulty: "advanced",
   concepts: ["complete agent", "integration", "no framework"],
   graph: lesson09Graph,
   frameworkName:

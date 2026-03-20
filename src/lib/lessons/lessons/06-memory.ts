@@ -6,6 +6,7 @@ export const lesson06: LessonDefinition = {
   number: 6,
   title: "Memory Across Runs",
   subtitle: "ChatGPT Memory knows your name across chats. Here's how.",
+  difficulty: "intermediate",
   concepts: ["memory", "persistence", "long-term", "retrieval"],
   graph: {
     nodes: [

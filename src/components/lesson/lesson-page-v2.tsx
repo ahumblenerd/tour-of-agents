@@ -31,6 +31,7 @@ import { useLessonKeys } from "@/hooks/use-lesson-keys";
 import { useLessonToast } from "@/hooks/use-lesson-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileLessonLayout } from "./mobile-lesson-layout";
+import { useLessonHeader } from "@/components/layout/lesson-header-context";
 
 interface LessonPageV2Props {
   lesson: LessonDefinition;
@@ -44,6 +45,17 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     markVisited(lesson.slug);
     trackLessonStarted(lesson.number);
   }, [lesson.slug, lesson.number]);
+  const { setContent } = useLessonHeader();
+  useEffect(() => {
+    setContent({
+      lessonSelector: <LessonSelector current={lesson} />,
+      llmBadge: lesson.llmConfig ? <Badge variant="outline" className="text-[10px]">LLM</Badge> : null,
+      mockBanner: <MockModeBanner />,
+      tourButton: <TourButton />,
+    });
+    return () => setContent(null);
+  }, [lesson, setContent]);
+
   useLessonKeys(lesson);
   const { onSuccess: onLessonSuccess } = useLessonToast(lesson.number);
   const courseComplete = useCourseComplete();
@@ -124,15 +136,6 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
 
   return (
     <div className="h-[calc(100vh-3.5rem)] flex flex-col">
-      <div className="flex items-center gap-3 px-4 py-2 border-b bg-muted/30">
-        <LessonSelector current={lesson} />
-        <div className="flex items-center gap-2 ml-auto">
-          {lesson.llmConfig && <Badge variant="outline" className="text-[10px]">LLM</Badge>}
-          <MockModeBanner />
-          <TourButton />
-        </div>
-      </div>
-
       {mounted ? (mobile ? (
         <MobileLessonLayout
           prose={<ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
@@ -152,6 +155,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
             <div className="h-full overflow-auto" data-scroll-root="" data-tour="prose-column">
               <ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
                 runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />
+              <div data-tour="full-code"><FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
+                running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} /></div>
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
@@ -169,8 +174,6 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
               </div>
               <InputBar inputConfig={inputStep?.inputConfig} onSend={handleSend} onClear={handleClear}
                 running={runner.running} disabled={pyLoading} replaying={playback.replaying} entryCount={monitor.entries.length} />
-              <div data-tour="full-code"><FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
-                running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} /></div>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

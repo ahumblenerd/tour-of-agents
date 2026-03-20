@@ -31,11 +31,14 @@ export interface LlmConfig {
   mockResponses: { match: string; response: MockResponse }[];
 }
 
+export type LessonDifficulty = "beginner" | "intermediate" | "advanced";
+
 export interface LessonDefinition {
   slug: string;
   number: number;
   title: string;
   subtitle: string;
+  difficulty: LessonDifficulty;
   concepts: string[];
   steps: LessonStep[];
   fullCode: string;

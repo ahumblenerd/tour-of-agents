@@ -6,6 +6,7 @@ export const lesson02: LessonDefinition = {
   number: 2,
   title: "Tools = Dict",
   subtitle: "When ChatGPT says \"Used browser\" — this is what's happening.",
+  difficulty: "beginner",
   concepts: ["tools", "function calling", "JSON schema", "dispatch"],
   graph: {
     nodes: [

@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useSyncExternalStore } from "react";
-import Link from "next/link";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
 import { trackGitHubClicked } from "@/lib/analytics/posthog";
 import { getProvider, PROVIDER_CONFIGS } from "@/lib/settings/api-keys";
+import { useLessonHeader } from "./lesson-header-context";
 
 function getProviderLabel() {
   const cfg = PROVIDER_CONFIGS[getProvider()];
@@ -21,33 +21,25 @@ function subscribeLabelChange(cb: () => void) {
 
 export function SiteHeader() {
   const [showSettings, setShowSettings] = useState(false);
+  const { content } = useLessonHeader();
   const providerLabel = useSyncExternalStore(
     subscribeLabelChange,
     getProviderLabel,
     () => "...",
   );
 
-  // Bump version when settings dialog closes so label re-reads
   useEffect(() => { if (!showSettings) labelVersion++; }, [showSettings]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <span className="text-primary">A Tour of Agents</span>
-        </Link>
+        {content ? content.lessonSelector : (
+          <span className="flex items-center gap-2 font-bold text-lg cursor-default">
+            <span className="text-primary">A Tour of Agents</span>
+          </span>
+        )}
         <div className="ml-auto flex items-center gap-2">
-          <a
-            href="https://github.com/ahumblenerd/tour-of-agents"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-muted"
-            title="View source on GitHub"
-            onClick={() => trackGitHubClicked()}
-          >
-            <GitHubIcon />
-            <span className="hidden sm:inline">Source</span>
-          </a>
+          <GitHubLink />
           <Button variant="outline" size="sm" onClick={() => setShowSettings(true)}>
             {providerLabel}
           </Button>
@@ -56,6 +48,17 @@ export function SiteHeader() {
       </div>
       <ApiKeyDialog open={showSettings} onOpenChange={setShowSettings} />
     </header>
+  );
+}
+
+function GitHubLink() {
+  return (
+    <a href="https://github.com/ahumblenerd/tour-of-agents" target="_blank" rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded-md hover:bg-muted"
+      title="View source on GitHub" onClick={() => trackGitHubClicked()}>
+      <GitHubIcon />
+      <span className="hidden sm:inline">Source</span>
+    </a>
   );
 }
 
@@ -68,7 +71,6 @@ function GitHubIcon() {
 }
 
 function ThemeToggle() {
-  // Start with true (matches server-rendered "dark" class) to avoid hydration mismatch
   const [dark, setDark] = useState(true);
 
   useEffect(() => {

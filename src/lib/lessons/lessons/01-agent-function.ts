@@ -6,6 +6,7 @@ export const lesson01: LessonDefinition = {
   number: 1,
   title: "The Agent Function",
   subtitle: "Every ChatGPT message is one HTTP POST. That's all an agent is.",
+  difficulty: "beginner",
   concepts: ["agent", "function", "HTTP POST", "system prompt", "messages"],
   graph: {
     nodes: [

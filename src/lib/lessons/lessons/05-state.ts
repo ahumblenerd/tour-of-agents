@@ -6,6 +6,7 @@ export const lesson05: LessonDefinition = {
   number: 5,
   title: "State = Dict",
   subtitle: "How Claude shows \"Searched 5 files\" — structured tracking alongside the chat.",
+  difficulty: "intermediate",
   concepts: ["state", "structured tracking", "metadata", "observability"],
   graph: {
     direction: "TB",

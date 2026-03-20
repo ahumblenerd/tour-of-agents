@@ -6,6 +6,7 @@ export const lesson03: LessonDefinition = {
   number: 3,
   title: "The Agent Loop",
   subtitle: "Claude searching files, then reading, then searching again. That's this loop.",
+  difficulty: "beginner",
   concepts: ["agent loop", "multi-turn", "tool protocol", "convergence"],
   graph: {
     direction: "TB",

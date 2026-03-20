@@ -2,11 +2,20 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { allLessons } from "@/lib/lessons/registry";
-import { LessonDefinition } from "@/lib/lessons/types";
+import { LessonDefinition, LessonDifficulty } from "@/lib/lessons/types";
 import { getProgress } from "@/lib/settings/progress";
+import { ChevronDown } from "lucide-react";
+
+const DIFFICULTY_STYLES: Record<LessonDifficulty, string> = {
+  beginner: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  intermediate: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  advanced: "bg-violet-500/15 text-violet-400 border-violet-500/30",
+};
 
 interface LessonSelectorProps {
   current: LessonDefinition;
@@ -17,49 +26,53 @@ export function LessonSelector({ current }: LessonSelectorProps) {
   const [completed] = useState(() => getProgress().completed);
 
   return (
-    <div className="relative">
-      <Button
-        variant="ghost"
-        className="w-full justify-start text-left p-0 h-auto hover:bg-transparent"
-        onClick={() => setOpen(!open)}
-      >
-        <h1 className="text-lg font-bold">
-          {current.number}. {current.title}
-          <span className="text-muted-foreground text-xs ml-2">
-            {open ? "\u25B2" : "\u25BC"}
-          </span>
-        </h1>
-      </Button>
-
-      {open && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-md border bg-popover shadow-lg max-h-80 overflow-auto">
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="ghost" className="p-0 h-auto hover:bg-transparent">
+          <h1 className="text-lg font-bold flex items-center gap-1.5">
+            {current.number}. {current.title}
+            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+          </h1>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-80 md:w-96 p-0" sideOffset={8}>
+        <ScrollArea className="max-h-[70vh]">
           {allLessons.map((lesson) => {
             const done = completed.includes(lesson.slug);
+            const isCurrent = lesson.slug === current.slug;
             return (
               <Link
                 key={lesson.slug}
                 href={`/lesson/${lesson.slug}`}
                 onClick={() => setOpen(false)}
-                className={`flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent transition-colors ${
-                  lesson.slug === current.slug
-                    ? "bg-accent font-medium"
-                    : ""
+                className={`flex items-start gap-2.5 px-3 py-3 text-sm hover:bg-accent transition-colors border-b border-border/30 last:border-0 ${
+                  isCurrent ? "bg-accent" : ""
                 }`}
               >
                 <Badge
-                  variant={done ? "default" : lesson.slug === current.slug ? "default" : "outline"}
-                  className={`w-5 h-5 flex items-center justify-center p-0 text-[10px] shrink-0 ${
-                    done && lesson.slug !== current.slug ? "bg-primary/20 text-primary border-0" : ""
+                  variant={done || isCurrent ? "default" : "outline"}
+                  className={`w-5 h-5 flex items-center justify-center p-0 text-[10px] shrink-0 mt-0.5 ${
+                    done && !isCurrent ? "bg-primary/20 text-primary border-0" : ""
                   }`}
                 >
                   {done ? "\u2713" : lesson.number}
                 </Badge>
-                <span className="truncate">{lesson.title}</span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-medium">{lesson.title}</span>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full border shrink-0 ${DIFFICULTY_STYLES[lesson.difficulty]}`}>
+                      {lesson.difficulty}
+                    </span>
+                  </div>
+                  <span className="block text-xs text-muted-foreground mt-0.5">
+                    {lesson.subtitle}
+                  </span>
+                </div>
               </Link>
             );
           })}
-        </div>
-      )}
-    </div>
+        </ScrollArea>
+      </PopoverContent>
+    </Popover>
   );
 }

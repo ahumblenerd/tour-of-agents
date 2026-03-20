@@ -6,6 +6,7 @@ export const lesson07: LessonDefinition = {
   number: 7,
   title: "Policy = Guardrails",
   subtitle: "Why ChatGPT refuses harmful requests. Two gates, a few lines each.",
+  difficulty: "advanced",
   concepts: ["policy", "guardrails", "input gate", "output gate", "safety"],
   graph: {
     nodes: [

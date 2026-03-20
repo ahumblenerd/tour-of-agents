@@ -6,6 +6,7 @@ export const lesson08: LessonDefinition = {
   number: 8,
   title: "Self-Scheduling",
   subtitle: "ChatGPT deep research spawns sub-tasks on its own. A queue + a budget.",
+  difficulty: "advanced",
   concepts: ["self-scheduling", "task queue", "BFS", "convergence", "budget"],
   graph: {
     direction: "TB",
