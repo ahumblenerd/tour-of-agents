@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { allLessons, getLessonBySlug } from "@/lib/lessons/registry";
-import { LessonPageV2 } from "@/components/lesson/lesson-page-v2";
-import { LessonJsonLd } from "@/components/seo/lesson-json-ld";
-import { LessonSeoContent } from "@/components/seo/lesson-seo-content";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
+import { ArticleLayout } from "@/components/learn/article-layout";
+import { LessonJsonLd } from "@/components/seo/lesson-json-ld";
 
 const SITE = "https://tinyagents.dev";
 
@@ -21,30 +20,26 @@ export async function generateMetadata({
   if (!lesson) return {};
 
   const seo = getLessonSeo(lesson);
-  const title = `Lesson ${lesson.number}: ${lesson.title} — A Tour of Agents`;
-  const url = `${SITE}/lesson/${slug}`;
-  const description = `Interactive exercise: ${seo.description} Write and run Python in your browser.`;
+  const title = `${lesson.title}: How It Works — A Tour of Agents`;
+  const url = `${SITE}/learn/${slug}`;
 
   return {
     title,
-    description,
+    description: seo.description,
     keywords: seo.keywords,
     openGraph: {
       title,
-      description,
+      description: seo.description,
       url,
       type: "article",
       images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     },
-    twitter: { card: "summary_large_image", title, description },
-    alternates: {
-      canonical: url,
-      types: { "text/html": `${SITE}/learn/${slug}` },
-    },
+    twitter: { card: "summary_large_image", title, description: seo.description },
+    alternates: { canonical: url },
   };
 }
 
-export default async function LessonRoute({
+export default async function LearnArticle({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -54,17 +49,16 @@ export default async function LessonRoute({
 
   if (!lesson) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-3.5rem)]">
-        <p className="text-muted-foreground">Lesson not found.</p>
+      <div className="flex items-center justify-center h-[calc(100vh-var(--header-height))]">
+        <p className="text-muted-foreground">Article not found.</p>
       </div>
     );
   }
 
   return (
     <>
-      <LessonJsonLd lesson={lesson} />
-      <LessonSeoContent lesson={lesson} />
-      <LessonPageV2 lesson={lesson} />
+      <LessonJsonLd lesson={lesson} basePath="learn" />
+      <ArticleLayout lesson={lesson} />
     </>
   );
 }

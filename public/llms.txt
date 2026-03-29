@@ -18,6 +18,20 @@ An educational course that progressively builds a complete AI agent from scratch
 8. Self-Scheduling: The agent enqueues its own follow-up work (BFS over a task queue)
 9. The Whole Thing: All concepts combined in ~60 lines of Python
 
+## Framework Comparisons
+
+- LangChain vs Plain Python: https://tinyagents.dev/compare/langchain
+- CrewAI vs Plain Python: https://tinyagents.dev/compare/crewai
+- AutoGen vs Plain Python: https://tinyagents.dev/compare/autogen
+- OpenAI Agents SDK vs Plain Python: https://tinyagents.dev/compare/openai-agents-sdk
+
+## Blog
+
+- How AI Agents Actually Work: https://tinyagents.dev/blog/how-ai-agents-work
+- You Don't Need LangChain: https://tinyagents.dev/blog/langchain-vs-plain-python
+- LLM Tool Calling Explained: https://tinyagents.dev/blog/what-is-tool-calling
+- Build vs Buy AI Agent Framework: https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework
+
 ## Key Technical Details
 
 - Python runs client-side via Pyodide (WebAssembly)
@@ -30,5 +44,8 @@ An educational course that progressively builds a complete AI agent from scratch
 ## Links
 
 - Site: https://tinyagents.dev?utm_source=llms_txt&utm_medium=referral&utm_campaign=seo
+- Learn (articles): https://tinyagents.dev/learn
+- Comparisons: https://tinyagents.dev/compare
+- Blog: https://tinyagents.dev/blog
 - Source: https://github.com/ahumblenerd/tour-of-agents
 - Stack: Next.js (static export), Pyodide, React Flow, Tailwind CSS, shadcn/ui
