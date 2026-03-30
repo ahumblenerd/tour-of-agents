@@ -44,4 +44,12 @@
   <url><loc>https://tinyagents.dev/blog/langchain-vs-plain-python</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/what-is-tool-calling</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Build Log -->
+  <url><loc>https://tinyagents.dev/build-log</loc><lastmod>2026-03-30</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://tinyagents.dev/build-log/week-0-the-build</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tinyagents.dev/build-log/week-1-launch-panic</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tinyagents.dev/build-log/week-2-distribution-education</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tinyagents.dev/build-log/week-3-polish-and-organic-signal</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tinyagents.dev/build-log/week-4-seo-bet</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

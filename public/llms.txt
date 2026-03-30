@@ -41,6 +41,16 @@ An educational course that progressively builds a complete AI agent from scratch
 - Works with mock LLM responses (no API key) or real providers (Groq, OpenAI, Anthropic via OpenRouter)
 - API keys stored in browser localStorage only, never sent to any server
 
+## Build Log
+
+Weekly notes on building this course in public — what shipped, what broke, what I learned about distribution.
+
+- Week 0: The Build: https://tinyagents.dev/build-log/week-0-the-build
+- Week 1: Launch Panic: https://tinyagents.dev/build-log/week-1-launch-panic
+- Week 2: Distribution Education: https://tinyagents.dev/build-log/week-2-distribution-education
+- Week 3: Polish + First Organic Signal: https://tinyagents.dev/build-log/week-3-polish-and-organic-signal
+- Week 4: The SEO Bet: https://tinyagents.dev/build-log/week-4-seo-bet
+
 ## Links
 
 - Site: https://tinyagents.dev?utm_source=llms_txt&utm_medium=referral&utm_campaign=seo
