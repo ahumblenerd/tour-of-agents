@@ -1,11 +1,13 @@
 import Link from "next/link";
 import type { LessonDefinition } from "@/lib/lessons/types";
 import { allLessons } from "@/lib/lessons/registry";
+import { getRelatedLinks } from "@/lib/learn/related-links";
 
 /** Renders lesson step prose as a static readable article for SEO */
 export function ArticleLayout({ lesson }: { lesson: LessonDefinition }) {
   const prev = allLessons.find((l) => l.number === lesson.number - 1);
   const next = allLessons.find((l) => l.number === lesson.number + 1);
+  const related = getRelatedLinks(lesson.slug);
 
   return (
     <article className="mx-auto max-w-2xl px-6 py-12">
@@ -53,6 +55,21 @@ export function ArticleLayout({ lesson }: { lesson: LessonDefinition }) {
           Open interactive lesson
         </Link>
       </aside>
+
+      {related.length > 0 && (
+        <nav className="mt-10" aria-label="Related reading">
+          <h2 className="text-sm font-semibold text-muted-foreground mb-2">Related reading</h2>
+          <ul className="space-y-1">
+            {related.map((r) => (
+              <li key={r.href}>
+                <Link href={r.href} className="text-sm text-muted-foreground hover:text-foreground">
+                  {r.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <nav className="mt-8 flex justify-between text-sm" aria-label="Lesson navigation">
         {prev ? (

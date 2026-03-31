@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { FrameworkComparison } from "@/lib/seo/comparisons";
 import { frameworks } from "@/lib/seo/comparisons";
+import { ComparisonSections } from "./comparison-sections";
+import { ComparisonCrossLinks } from "./comparison-cross-links";
 
 export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
   return (
@@ -40,6 +42,8 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
         <p className="text-muted-foreground">{fw.verdict}</p>
       </section>
 
+      {fw.sections && <ComparisonSections sections={fw.sections} />}
+
       <aside className="p-6 rounded-lg bg-muted/50 border border-border mb-8">
         <p className="font-semibold mb-2">Learn the fundamentals</p>
         <p className="text-sm text-muted-foreground mb-4">
@@ -53,6 +57,8 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
           Start the course
         </Link>
       </aside>
+
+      <ComparisonCrossLinks />
 
       <nav aria-label="Other comparisons">
         <h2 className="text-sm font-semibold text-muted-foreground mb-3">

@@ -1,6 +1,7 @@
 # Re-Launch Social Posts — tinyagents.dev
 
 *Created: 2026-03-31*
+*Note: Social posting is handled via a separate project. Copy-paste these when ready.*
 
 ---
 

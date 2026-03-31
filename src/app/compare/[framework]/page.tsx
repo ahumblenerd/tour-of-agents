@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { frameworks, getFramework } from "@/lib/seo/comparisons";
 import { ComparisonArticle } from "@/components/compare/comparison-article";
+import { CompareJsonLd } from "@/components/seo/compare-json-ld";
 
 const SITE = "https://tinyagents.dev";
 
@@ -50,5 +51,10 @@ export default async function ComparePage({
     );
   }
 
-  return <ComparisonArticle fw={fw} />;
+  return (
+    <>
+      <CompareJsonLd fw={fw} />
+      <ComparisonArticle fw={fw} />
+    </>
+  );
 }

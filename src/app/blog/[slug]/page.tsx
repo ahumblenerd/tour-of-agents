@@ -87,6 +87,21 @@ export default async function BlogPostPage({
           ))}
         </div>
 
+        {post.relatedLinks && post.relatedLinks.length > 0 && (
+          <nav className="mt-10" aria-label="Related reading">
+            <h2 className="text-sm font-semibold text-muted-foreground mb-2">Related reading</h2>
+            <ul className="space-y-1">
+              {post.relatedLinks.map((r) => (
+                <li key={r.href}>
+                  <Link href={r.href} className="text-sm text-muted-foreground hover:text-foreground">
+                    {r.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
         <aside className="mt-12 p-6 rounded-lg bg-muted/50 border border-border">
           <p className="font-semibold mb-2">Build it yourself</p>
           <p className="text-sm text-muted-foreground mb-4">{post.cta}</p>

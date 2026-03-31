@@ -6,6 +6,7 @@ export interface BlogPost {
   keywords: string[];
   sections: { heading: string; body: string }[];
   cta: string;
+  relatedLinks?: { label: string; href: string }[];
 }
 
 export const posts: BlogPost[] = [
@@ -47,6 +48,13 @@ export const posts: BlogPost[] = [
       },
     ],
     cta: "Build it yourself in 9 interactive lessons — no install, runs in your browser.",
+    relatedLinks: [
+      { label: "Learn: Agent = Function", href: "/learn/agent-function" },
+      { label: "Learn: The Agent Loop", href: "/learn/agent-loop" },
+      { label: "Learn: Memory", href: "/learn/memory" },
+      { label: "Compare: LangChain vs plain Python", href: "/compare/langchain" },
+      { label: "Compare: CrewAI vs plain Python", href: "/compare/crewai" },
+    ],
   },
   {
     slug: "langchain-vs-plain-python",
@@ -82,6 +90,12 @@ export const posts: BlogPost[] = [
       },
     ],
     cta: "See every LangChain concept rebuilt from scratch in 9 interactive Python lessons.",
+    relatedLinks: [
+      { label: "Learn: Agent = Function", href: "/learn/agent-function" },
+      { label: "Learn: Tools = Dict", href: "/learn/tools" },
+      { label: "Learn: The Agent Loop", href: "/learn/agent-loop" },
+      { label: "Compare: LangChain vs plain Python", href: "/compare/langchain" },
+    ],
   },
   {
     slug: "what-is-tool-calling",
@@ -113,6 +127,12 @@ export const posts: BlogPost[] = [
       },
     ],
     cta: "Build tool calling from scratch in an interactive Python lesson — no install required.",
+    relatedLinks: [
+      { label: "Learn: Tools = Dict", href: "/learn/tools" },
+      { label: "Learn: The Agent Loop", href: "/learn/agent-loop" },
+      { label: "Compare: LangChain vs plain Python", href: "/compare/langchain" },
+      { label: "Compare: OpenAI Agents SDK vs plain Python", href: "/compare/openai-agents-sdk" },
+    ],
   },
   {
     slug: "build-vs-buy-ai-agent-framework",
@@ -153,6 +173,13 @@ export const posts: BlogPost[] = [
       },
     ],
     cta: "Understand the fundamentals first. Build every agent concept from scratch in 9 interactive Python lessons.",
+    relatedLinks: [
+      { label: "Learn: Policy (Guardrails)", href: "/learn/policy" },
+      { label: "Learn: Self-Scheduling", href: "/learn/self-scheduling" },
+      { label: "Compare: LangChain vs plain Python", href: "/compare/langchain" },
+      { label: "Compare: CrewAI vs plain Python", href: "/compare/crewai" },
+      { label: "Compare: OpenAI Agents SDK vs plain Python", href: "/compare/openai-agents-sdk" },
+    ],
   },
 ];
 
