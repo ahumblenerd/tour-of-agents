@@ -1,68 +1,84 @@
-"use client";
-
-import { useEffect, useRef } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { allLessons } from "@/lib/lessons/registry";
-import { getProgress } from "@/lib/settings/progress";
+import { AgentLoopPreview } from "@/components/landing/agent-loop-preview";
+import { ValueProps } from "@/components/landing/value-props";
+import { HomepageClient } from "@/components/landing/homepage-client";
+
+const SITE_URL = "https://tinyagents.dev";
+
+export const metadata: Metadata = {
+  title: "A Tour of Agents — Build AI Agents from Scratch in Python",
+  description:
+    "Interactive course: build an AI agent from scratch in 60 lines of Python. 9 lessons, no framework, runs in your browser.",
+  openGraph: {
+    title: "A Tour of Agents",
+    description:
+      "9 lessons. 60 lines of Python. No framework required. Learn how LangChain, CrewAI, and AutoGen work under the hood.",
+    url: SITE_URL,
+    siteName: "A Tour of Agents",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    type: "website",
+  },
+  alternates: { canonical: SITE_URL },
+};
 
 export default function HomePage() {
-  const router = useRouter();
-  const didRedirect = useRef(false);
-
-  useEffect(() => {
-    if (didRedirect.current) return;
-    didRedirect.current = true;
-    const progress = getProgress();
-    const nextLesson = progress.lastSlug
-      ? allLessons.find((l) => l.slug === progress.lastSlug) ?? allLessons[0]
-      : allLessons.find((l) => !progress.completed.includes(l.slug)) ?? allLessons[0];
-    const params = window.location.search;
-    router.replace(`/lesson/${nextLesson.slug}${params}`);
-  }, [router]);
-
   return (
-    <main className="sr-only" aria-hidden="true">
-      <h1>A Tour of Agents — Build AI Agents from Scratch in Python</h1>
-      <p>
-        Interactive browser-based course: build a complete AI agent in ~60
-        lines of Python. 9 lessons, no framework required. Learn what
-        LangChain, CrewAI, and AutoGen do under the hood.
-      </p>
-      <nav aria-label="Course lessons">
-        <h2>Lessons</h2>
-        <ol>
-          {allLessons.map((l) => (
-            <li key={l.slug}>
-              <Link href={`/lesson/${l.slug}`}>
-                Lesson {l.number}: {l.title}
-              </Link>
-              {" — "}
-              {l.subtitle}
-            </li>
-          ))}
-        </ol>
-      </nav>
-      <section>
-        <h2>What You Will Learn</h2>
-        <ul>
-          <li>How AI agents work — from HTTP POST to autonomous task scheduling</li>
-          <li>LLM tool calling and function calling from scratch</li>
-          <li>The agent loop (ReAct pattern) behind LangChain AgentExecutor</li>
-          <li>Conversation history and context windows</li>
-          <li>State management like LangGraph state channels</li>
-          <li>Persistent memory (what Mem0 and Zep do)</li>
-          <li>Input/output guardrails (what NeMo Guardrails does)</li>
-          <li>Self-scheduling agents with task queues</li>
-        </ul>
-      </section>
-      <section>
-        <h2>No Install Required</h2>
-        <p>
-          Everything runs in your browser via Pyodide (Python in WebAssembly).
-          Write real Python, call real LLM APIs, see real traces — no backend,
-          no setup, no framework.
+    <main>
+      <HomepageClient />
+      <AgentLoopPreview />
+      <ValueProps />
+      <section className="max-w-2xl mx-auto px-6 py-12">
+        <h2 className="text-lg font-semibold mb-2 text-center">
+          9 lessons. Each one builds on the last.
+        </h2>
+        <p className="text-sm text-muted-foreground text-center mb-2">
+          Start anywhere. Every lesson runs live in your browser.
         </p>
+        <p className="text-xs text-muted-foreground/70 text-center mb-6 max-w-md mx-auto">
+          From a single function call to a complete agent framework — learn
+          tool calling, conversation memory, state management, policy gates,
+          and self-scheduling.
+        </p>
+        <nav aria-label="Course lessons">
+          <ol className="space-y-4">
+            {allLessons.map((lesson) => (
+              <li key={lesson.slug}>
+                <Link
+                  href={`/lesson/${lesson.slug}`}
+                  className="block p-4 rounded-lg border border-border hover:border-foreground/20 transition-colors"
+                >
+                  <div className="flex items-baseline gap-3 mb-1">
+                    <span className="text-sm text-muted-foreground font-mono">
+                      {String(lesson.number).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-medium text-sm">{lesson.title}</h3>
+                  </div>
+                  <p className="text-xs text-muted-foreground ml-8">
+                    {lesson.subtitle}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      </section>
+      <section className="border-t">
+        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">
+            One function. One HTTP POST.
+          </h2>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto mb-8">
+            That&apos;s where it starts. The first lesson takes 2 minutes.
+          </p>
+          <Link
+            href="/lesson/agent-function"
+            className="inline-block px-8 py-3 bg-primary text-primary-foreground rounded-md text-base font-medium hover:opacity-90"
+          >
+            Start Lesson 1 &rarr;
+          </Link>
+        </div>
       </section>
     </main>
   );

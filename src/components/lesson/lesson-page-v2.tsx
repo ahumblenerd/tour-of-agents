@@ -43,7 +43,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     markVisited(lesson.slug);
-    trackLessonStarted(lesson.number);
+    trackLessonStarted(lesson.number, lesson.slug);
   }, [lesson.slug, lesson.number]);
   const { setContent } = useLessonHeader();
   useEffect(() => {
@@ -90,11 +90,11 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
       }
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
       if (result.error) {
-        trackCodeError(lesson.number, result.error.includes("Syntax") ? "syntax" : "runtime");
+        trackCodeError(lesson.number, lesson.slug, result.error.includes("Syntax") ? "syntax" : "runtime");
       } else {
-        trackCodeExecuted(lesson.number);
+        trackCodeExecuted(lesson.number, lesson.slug);
         markCompleted(lesson.slug);
-        trackLessonCompleted(lesson.number);
+        trackLessonCompleted(lesson.number, lesson.slug);
         onLessonSuccess();
       }
     },
@@ -120,11 +120,11 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
       monitorRef.current.addFromTrace(result.traceEvents, hasStart ? undefined : "Full code");
       if (result.stdout) monitorRef.current.addOutput(result.stdout);
       if (result.error) {
-        trackCodeError(lesson.number, result.error.includes("Syntax") ? "syntax" : "runtime");
+        trackCodeError(lesson.number, lesson.slug, result.error.includes("Syntax") ? "syntax" : "runtime");
       } else {
-        trackCodeExecuted(lesson.number);
+        trackCodeExecuted(lesson.number, lesson.slug);
         markCompleted(lesson.slug);
-        trackLessonCompleted(lesson.number);
+        trackLessonCompleted(lesson.number, lesson.slug);
         onLessonSuccess();
       }
     }

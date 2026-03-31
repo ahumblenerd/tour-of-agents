@@ -28,20 +28,20 @@ export function track(event: string, properties?: Record<string, unknown>) {
   posthog.capture(event, properties);
 }
 
-export function trackLessonStarted(lesson: number) {
-  track("lesson_started", { lesson, ...getLlmProps() });
+export function trackLessonStarted(lesson: number, lessonId: string) {
+  track("lesson_started", { lesson, lesson_id: lessonId, ...getLlmProps() });
 }
 
-export function trackCodeExecuted(lesson: number) {
-  track("code_executed", { lesson, ...getLlmProps() });
+export function trackCodeExecuted(lesson: number, lessonId: string) {
+  track("code_executed", { lesson, lesson_id: lessonId, ...getLlmProps() });
 }
 
-export function trackCodeError(lesson: number, errorType: string) {
-  track("code_error", { lesson, error_type: errorType });
+export function trackCodeError(lesson: number, lessonId: string, errorType: string) {
+  track("code_error", { lesson, lesson_id: lessonId, error_type: errorType });
 }
 
-export function trackLessonCompleted(lesson: number) {
-  track("lesson_completed", { lesson, ...getLlmProps() });
+export function trackLessonCompleted(lesson: number, lessonId: string) {
+  track("lesson_completed", { lesson, lesson_id: lessonId, ...getLlmProps() });
 }
 
 export function trackCourseCompleted() {
