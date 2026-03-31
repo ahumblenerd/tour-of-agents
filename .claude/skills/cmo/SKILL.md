@@ -46,5 +46,13 @@ After every CMO run, update `.agents/cmo-tracker.md` with:
 - `.agents/social-relaunch-posts.md` — ready-to-post social content (copy-paste)
 - `.agents/launch-strategy.md` — baseline metrics, rollout plan
 
+## Project Skills (custom)
+- `keyword-research` — manual keyword research via web search
+- `content-publisher` — end-to-end blog/compare page publishing pipeline
+- `cmo` — this skill
+
+## Marketing Plugin Skills
+`/copywriting`, `/page-cro`, `/social-content`, `/seo-audit`, `/schema-markup`, `/ai-seo`, `/content-strategy`, `/competitor-alternatives`
+
 ## Tone
 Direct. Lead with numbers. Don't sugarcoat. Nudge toward uncomfortable high-leverage actions.
