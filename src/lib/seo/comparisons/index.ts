@@ -5,6 +5,8 @@ export { autogen } from "./autogen";
 export { openaiAgentsSdk } from "./openai-agents-sdk";
 export { agno } from "./agno";
 export { llamaindex } from "./llamaindex";
+export { semanticKernel } from "./semantic-kernel";
+export { haystack } from "./haystack";
 
 import type { FrameworkComparison } from "./types";
 import { langchain } from "./langchain";
@@ -13,6 +15,8 @@ import { autogen } from "./autogen";
 import { openaiAgentsSdk } from "./openai-agents-sdk";
 import { agno } from "./agno";
 import { llamaindex } from "./llamaindex";
+import { semanticKernel } from "./semantic-kernel";
+import { haystack } from "./haystack";
 
 export const frameworks: FrameworkComparison[] = [
   langchain,
@@ -21,6 +25,8 @@ export const frameworks: FrameworkComparison[] = [
   openaiAgentsSdk,
   agno,
   llamaindex,
+  semanticKernel,
+  haystack,
 ];
 
 export function getFramework(slug: string) {
