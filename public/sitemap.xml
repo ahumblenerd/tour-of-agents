@@ -3,7 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://tinyagents.dev</loc>
-    <lastmod>2026-03-30</lastmod>
+    <lastmod>2026-03-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -37,6 +37,10 @@
   <url><loc>https://tinyagents.dev/compare/crewai</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/compare/autogen</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/compare/openai-agents-sdk</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/compare/agno</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/compare/llamaindex</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/compare/semantic-kernel</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/compare/haystack</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Blog -->
   <url><loc>https://tinyagents.dev/blog</loc><lastmod>2026-03-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -44,6 +48,7 @@
   <url><loc>https://tinyagents.dev/blog/langchain-vs-plain-python</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/what-is-tool-calling</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/blog/tiny-agents-huggingface-vs-from-scratch</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Build Log -->
   <url><loc>https://tinyagents.dev/build-log</loc><lastmod>2026-03-30</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
