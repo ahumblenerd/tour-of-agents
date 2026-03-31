@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useSyncExternalStore } from "react";
 import { MoreVertical } from "lucide-react";
@@ -36,9 +37,16 @@ export function SiteHeader() {
     <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4 md:px-6">
         {content ? content.lessonSelector : (
-          <span className="flex items-center gap-2 font-bold text-lg cursor-default">
-            <span className="text-primary">A Tour of Agents</span>
-          </span>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2 font-bold text-lg hover:opacity-80 transition-opacity">
+              <span className="text-primary">A Tour of Agents</span>
+            </Link>
+            <nav className="hidden md:flex items-center gap-1 text-xs text-muted-foreground">
+              <Link href="/learn" className="px-2 py-1 rounded-md hover:bg-muted hover:text-foreground transition-colors">Learn</Link>
+              <Link href="/compare" className="px-2 py-1 rounded-md hover:bg-muted hover:text-foreground transition-colors">Compare</Link>
+              <Link href="/blog" className="px-2 py-1 rounded-md hover:bg-muted hover:text-foreground transition-colors">Blog</Link>
+            </nav>
+          </div>
         )}
         <div className="ml-auto flex items-center gap-2">
           {/* Desktop: all actions visible */}
@@ -125,6 +133,22 @@ function MobileOverflow({ onOpenSettings }: { onOpenSettings: () => void }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-48 p-1">
+        <Link href="/learn"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
+          onClick={() => setOpen(false)}>
+          Learn
+        </Link>
+        <Link href="/compare"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
+          onClick={() => setOpen(false)}>
+          Compare
+        </Link>
+        <Link href="/blog"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
+          onClick={() => setOpen(false)}>
+          Blog
+        </Link>
+        <div className="h-px bg-border my-1" />
         <button onClick={() => { onOpenSettings(); setOpen(false); }}
           className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors">
           LLM Settings
