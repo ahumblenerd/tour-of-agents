@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { allLessons } from "@/lib/lessons/registry";
+import { AUTHOR } from "@/lib/seo/author";
 import { AgentLoopPreview } from "@/components/landing/agent-loop-preview";
 import { ValueProps } from "@/components/landing/value-props";
 import { HomepageClient } from "@/components/landing/homepage-client";
@@ -80,6 +81,22 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+      <footer className="border-t">
+        <div className="max-w-2xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
+          <p>
+            Built by{" "}
+            <a href={AUTHOR.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+              {AUTHOR.name}
+            </a>
+          </p>
+          <div className="flex items-center gap-4">
+            <a href={AUTHOR.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">X/Twitter</a>
+            <a href={AUTHOR.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">LinkedIn</a>
+            <a href={AUTHOR.github} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">GitHub</a>
+            <Link href="/blog" className="hover:text-foreground">Blog</Link>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

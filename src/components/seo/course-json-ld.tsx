@@ -1,6 +1,7 @@
 import { allLessons } from "@/lib/lessons/registry";
 import { BUILD_DATE, COURSE_PUBLISHED } from "@/lib/seo/build-date";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
+import { AUTHOR_JSONLD } from "@/lib/seo/author";
 
 const SITE = "https://tinyagents.dev";
 
@@ -18,11 +19,7 @@ export function CourseJsonLd() {
       name: "tinyagents.dev",
       url: SITE,
     },
-    author: {
-      "@type": "Person",
-      name: "Arun Devan",
-      url: "https://www.linkedin.com/in/arunwritescode/",
-    },
+    author: AUTHOR_JSONLD,
     isAccessibleForFree: true,
     inLanguage: "en",
     numberOfLessons: allLessons.length,

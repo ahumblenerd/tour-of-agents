@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { posts, getPost } from "@/lib/blog/posts";
+import { AUTHOR, AUTHOR_JSONLD } from "@/lib/seo/author";
 
 const SITE = "https://tinyagents.dev";
 
@@ -56,7 +57,7 @@ export default async function BlogPostPage({
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    author: { "@type": "Person", name: "Arun Devan" },
+    author: AUTHOR_JSONLD,
     publisher: { "@type": "Organization", name: "tinyagents.dev", url: SITE },
     url: `${SITE}/blog/${slug}`,
     keywords: post.keywords.join(", "),
@@ -75,7 +76,12 @@ export default async function BlogPostPage({
             {" / "}<time>{post.date}</time>
           </p>
           <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
-          <p className="text-lg text-muted-foreground">{post.description}</p>
+          <p className="text-lg text-muted-foreground mb-4">{post.description}</p>
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <span>By <a href={AUTHOR.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">{AUTHOR.name}</a></span>
+            <span>&middot;</span>
+            <a href={AUTHOR.twitter} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">@ahd_1337</a>
+          </div>
         </header>
 
         <div className="space-y-8">
