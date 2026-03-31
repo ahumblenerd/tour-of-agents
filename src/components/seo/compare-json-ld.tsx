@@ -1,3 +1,4 @@
+import { BUILD_DATE, COMPARE_PUBLISHED } from "@/lib/seo/build-date";
 import type { FrameworkComparison } from "@/lib/seo/comparisons";
 
 const SITE = "https://tinyagents.dev";
@@ -12,8 +13,8 @@ export function CompareJsonLd({ fw }: { fw: FrameworkComparison }) {
     description: fw.description,
     url,
     keywords: fw.keywords.join(", "),
-    datePublished: "2026-03-30",
-    dateModified: "2026-03-31",
+    datePublished: COMPARE_PUBLISHED,
+    dateModified: BUILD_DATE,
     inLanguage: "en",
     isAccessibleForFree: true,
     author: {

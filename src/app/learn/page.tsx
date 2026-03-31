@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { allLessons } from "@/lib/lessons/registry";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
+import { ListJsonLd } from "@/components/seo/list-json-ld";
 
 const SITE = "https://tinyagents.dev";
 
@@ -25,8 +26,14 @@ export const metadata: Metadata = {
 };
 
 export default function LearnIndex() {
+  const listItems = allLessons.map((l) => ({
+    url: `${SITE}/learn/${l.slug}`,
+    name: `Lesson ${l.number}: ${l.title}`,
+  }));
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
+      <ListJsonLd items={listItems} />
       <h1 className="text-3xl font-bold mb-3">
         Build an AI Agent from Scratch
       </h1>

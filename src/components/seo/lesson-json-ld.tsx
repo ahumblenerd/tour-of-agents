@@ -1,4 +1,5 @@
 import type { LessonDefinition } from "@/lib/lessons/types";
+import { BUILD_DATE, COURSE_PUBLISHED } from "@/lib/seo/build-date";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
 
 const SITE = "https://tinyagents.dev";
@@ -29,8 +30,8 @@ export function LessonJsonLd({
     isAccessibleForFree: true,
     teaches: lesson.concepts.join(", "),
     keywords: seo.keywords.join(", "),
-    datePublished: "2026-03-12",
-    dateModified: "2026-03-30",
+    datePublished: COURSE_PUBLISHED,
+    dateModified: BUILD_DATE,
     author: {
       "@type": "Person",
       name: "Arun Devan",

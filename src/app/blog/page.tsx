@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { posts } from "@/lib/blog/posts";
+import { ListJsonLd } from "@/components/seo/list-json-ld";
 
 const SITE = "https://tinyagents.dev";
 
@@ -23,8 +24,14 @@ export const metadata: Metadata = {
 };
 
 export default function BlogIndex() {
+  const listItems = posts.map((p) => ({
+    url: `${SITE}/blog/${p.slug}`,
+    name: p.title,
+  }));
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
+      <ListJsonLd items={listItems} />
       <h1 className="text-3xl font-bold mb-3">Blog</h1>
       <p className="text-lg text-muted-foreground mb-8">
         How AI agents actually work — no buzzwords, just code.

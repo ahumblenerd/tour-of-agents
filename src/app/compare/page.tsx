@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { frameworks } from "@/lib/seo/comparisons";
+import { ListJsonLd } from "@/components/seo/list-json-ld";
 
 const SITE = "https://tinyagents.dev";
 
@@ -24,8 +25,14 @@ export const metadata: Metadata = {
 };
 
 export default function CompareIndex() {
+  const listItems = frameworks.map((fw) => ({
+    url: `${SITE}/compare/${fw.slug}`,
+    name: fw.title,
+  }));
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-12">
+      <ListJsonLd items={listItems} />
       <h1 className="text-3xl font-bold mb-3">
         AI Agent Frameworks vs Plain Python
       </h1>

@@ -1,4 +1,5 @@
 import { allLessons } from "@/lib/lessons/registry";
+import { BUILD_DATE, COURSE_PUBLISHED } from "@/lib/seo/build-date";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
 
 const SITE = "https://tinyagents.dev";
@@ -27,8 +28,8 @@ export function CourseJsonLd() {
     numberOfLessons: allLessons.length,
     educationalLevel: "Intermediate",
     programmingLanguage: "Python",
-    datePublished: "2026-03-12",
-    dateModified: "2026-03-30",
+    datePublished: COURSE_PUBLISHED,
+    dateModified: BUILD_DATE,
     keywords:
       "AI agents, LLM, Python, LangChain, CrewAI, AutoGen, tool calling, function calling, agent loop, interactive course, build from scratch",
     hasCourseInstance: {
