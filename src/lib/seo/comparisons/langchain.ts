@@ -42,4 +42,9 @@ export const langchain: FrameworkComparison = {
       body: "If your agent calls one LLM provider, uses a handful of tools, and runs a straightforward loop — plain Python is simpler to write, debug, and maintain. You don't need AgentExecutor to write a while loop. You don't need ConversationBufferMemory to append to a list. You don't need @tool to put a function in a dict. Most agents in production are simpler than their framework code suggests. Start with the plain version, add abstractions only when you hit a real pain point (not a hypothetical one), and you'll end up with code your team can actually read at 2 AM when something breaks. The 60-line version has zero dependencies, zero magic, and zero surprises.",
     },
   ],
+  faqs: [
+    { question: "What does LangChain's AgentExecutor actually do?", answer: "AgentExecutor is a while loop that calls the LLM, checks if the response contains tool_calls, executes matching tools from a registry, appends results to the messages array, and repeats until the LLM returns a final answer with no tool requests." },
+    { question: "Can I build an AI agent without LangChain?", answer: "Yes. The core agent pattern is about 60 lines of Python: an HTTP POST to the LLM API, a dict of tool functions, and a while loop that dispatches tool calls. LangChain wraps these patterns in classes, but the underlying logic is simple enough to write directly." },
+    { question: "When should I use LangChain vs plain Python?", answer: "Use LangChain when you need multiple LLM provider integrations, production vector store retrieval (RAG), or LangSmith observability. Use plain Python when your agent is straightforward, you want full debugging control, or you're learning how agents work." },
+  ],
 };

@@ -8,4 +8,5 @@ export interface FrameworkComparison {
   rows: { concept: string; framework: string; plain: string }[];
   verdict: string;
   sections?: { heading: string; body: string }[];
+  faqs?: { question: string; answer: string }[];
 }

@@ -41,4 +41,9 @@ export const crewai: FrameworkComparison = {
       body: "Most \"multi-agent\" systems are actually one agent calling different system prompts depending on the task. If your agents share the same tools and differ only in their instructions, you don't need a framework — you need different system prompt strings. If your task execution is always sequential, a for-loop is clearer than Crew(process=sequential). The overhead of defining Agent, Task, and Crew objects adds ceremony without adding capability when the workflow is simple. Start with plain functions, add role separation through system prompts, and only reach for CrewAI when the orchestration logic itself becomes the hard part — not the prompts, not the tools, but the routing between agents.",
     },
   ],
+  faqs: [
+    { question: "What is CrewAI and how does it work?", answer: "CrewAI organizes AI agents into Crews with defined Agents (role, goal, tools) and Tasks (work items). The Crew orchestrates execution either sequentially or hierarchically. Under the hood, each Agent runs the same while loop pattern: call LLM, dispatch tools, repeat." },
+    { question: "Do I need CrewAI for multi-agent systems?", answer: "Not necessarily. Most multi-agent systems are one agent function called with different system prompts. CrewAI adds value when you need complex orchestration, role-based delegation, or hierarchical task management. For simpler cases, plain Python functions with a task queue work fine." },
+    { question: "What is the difference between CrewAI and LangChain?", answer: "LangChain focuses on single-agent tool use with broad integrations (vector stores, LLM providers). CrewAI focuses on multi-agent orchestration with named roles. LangChain is better for RAG pipelines; CrewAI is better for workflows where agents with different specialties collaborate." },
+  ],
 };

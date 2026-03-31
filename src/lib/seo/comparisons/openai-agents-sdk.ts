@@ -41,4 +41,9 @@ export const openaiAgentsSdk: FrameworkComparison = {
       body: "Since the Agents SDK is already minimal, the gap between \"with framework\" and \"without framework\" is smaller than any other option on this page. The main reasons to skip it: you use non-OpenAI models (the SDK is tightly coupled to OpenAI's API), you want to understand every line of your agent loop (the 60-line version is fully transparent), or you need custom behavior the SDK doesn't support (unusual termination logic, streaming with custom processing, non-standard tool patterns). Auto-schema generation is nice but not essential — writing JSON schemas by hand takes a few extra minutes and gives you full control. For a single-agent, single-provider setup, the plain Python version is barely longer than the SDK version.",
     },
   ],
+  faqs: [
+    { question: "What is the OpenAI Agents SDK?", answer: "The OpenAI Agents SDK (evolved from Swarm) provides Agent, Runner, handoffs, and guardrails for building AI agents with OpenAI models. It's the thinnest framework available — closer to plain Python than LangChain or CrewAI, with auto-schema generation from Python type hints." },
+    { question: "What is the difference between OpenAI Agents SDK and Swarm?", answer: "Agents SDK is the production evolution of Swarm, which was an experimental framework. Both use the same patterns: Agent objects with instructions and tools, a Runner that handles the agent loop, and handoffs for multi-agent routing. Agents SDK adds guardrails and is officially supported." },
+    { question: "Should I use OpenAI Agents SDK or LangChain?", answer: "Use the Agents SDK if you're committed to OpenAI models and want minimal abstraction with auto-schema generation. Use LangChain if you need multi-provider support, vector store integrations, or the LangSmith ecosystem. Use plain Python if you want full control and transparency." },
+  ],
 };

@@ -44,6 +44,22 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
 
       {fw.sections && <ComparisonSections sections={fw.sections} />}
 
+      {fw.faqs && fw.faqs.length > 0 && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Frequently asked questions</h2>
+          <div className="space-y-4">
+            {fw.faqs.map((faq) => (
+              <details key={faq.question} className="border border-border rounded-lg">
+                <summary className="px-4 py-3 text-sm font-medium cursor-pointer hover:bg-muted/50">
+                  {faq.question}
+                </summary>
+                <p className="px-4 pb-3 text-sm text-muted-foreground">{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
+
       <aside className="p-6 rounded-lg bg-muted/50 border border-border mb-8">
         <p className="font-semibold mb-2">Learn the fundamentals</p>
         <p className="text-sm text-muted-foreground mb-4">

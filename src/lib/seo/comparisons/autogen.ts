@@ -41,4 +41,9 @@ export const autogen: FrameworkComparison = {
       body: "If your agents don't actually need to talk to each other — if it's really one agent with tools, or a pipeline where agent A's output feeds agent B's input — AutoGen's conversation model adds indirection without benefit. A single agent with a tools dict and a while loop covers most use cases. Even two-agent collaboration is often just two LLM calls in sequence: \"Draft this\" then \"Review that.\" You don't need initiate_chat() and is_termination_msg callbacks for a two-step pipeline. The GroupChatManager is overkill when you know the execution order in advance. Build the plain version first, and reach for AutoGen only when you need dynamic, multi-turn, multi-agent conversations where the interaction pattern isn't predetermined.",
     },
   ],
+  faqs: [
+    { question: "What is Microsoft AutoGen?", answer: "AutoGen is Microsoft's multi-agent framework that models AI agents as ConversableAgents that chat with each other. It supports two-agent conversations, GroupChat with multiple agents, and nested chats for sub-tasks. The core mechanic is a messages array passed between agent functions." },
+    { question: "How does AutoGen compare to LangChain?", answer: "AutoGen focuses on multi-agent conversations where agents debate and collaborate. LangChain focuses on single-agent tool use with broad integrations. AutoGen excels at complex multi-turn agent interactions; LangChain excels at RAG pipelines and provider-agnostic tooling." },
+    { question: "Can I build multi-agent systems without AutoGen?", answer: "Yes. Multi-agent systems in plain Python are multiple agent functions called in sequence on shared messages. A GroupChat is a for-loop over agent functions. Nested chats are a task queue. AutoGen's value is in dynamic speaker selection and conversation management — patterns you rarely need for straightforward workflows." },
+  ],
 };
