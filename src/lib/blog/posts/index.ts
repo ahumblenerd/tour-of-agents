@@ -16,6 +16,7 @@ export { buildVsBuyAiAgentFramework } from "./build-vs-buy-ai-agent-framework";
 export { tinyAgentsHuggingfaceVsFromScratch } from "./tiny-agents-huggingface-vs-from-scratch";
 export { whyAiAgentProjectsFail } from "./why-ai-agent-projects-fail";
 export { whatIsTheAgentLoop } from "./what-is-the-agent-loop";
+export { aiAgentFrameworkRanking2026 } from "./ai-agent-framework-ranking-2026";
 
 import { howAiAgentsWork } from "./how-ai-agents-work";
 import { langchainVsPlainPython } from "./langchain-vs-plain-python";
@@ -24,6 +25,7 @@ import { buildVsBuyAiAgentFramework } from "./build-vs-buy-ai-agent-framework";
 import { tinyAgentsHuggingfaceVsFromScratch } from "./tiny-agents-huggingface-vs-from-scratch";
 import { whyAiAgentProjectsFail } from "./why-ai-agent-projects-fail";
 import { whatIsTheAgentLoop } from "./what-is-the-agent-loop";
+import { aiAgentFrameworkRanking2026 } from "./ai-agent-framework-ranking-2026";
 
 export const posts: BlogPost[] = [
   howAiAgentsWork,
@@ -33,6 +35,7 @@ export const posts: BlogPost[] = [
   tinyAgentsHuggingfaceVsFromScratch,
   whyAiAgentProjectsFail,
   whatIsTheAgentLoop,
+  aiAgentFrameworkRanking2026,
 ];
 
 export function getPost(slug: string) {

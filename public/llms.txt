@@ -1,93 +1,146 @@
 # A Tour of Agents
 
-> Interactive browser-based course teaching how AI agent systems work. 9 lessons, 60 lines of Python, no framework required.
+> Interactive browser-based course teaching how AI agent systems work. 9 lessons, 60 lines of Python, no framework required. Created by Arun Purushothaman.
 
 ## What This Site Is
 
 An educational course that progressively builds a complete AI agent from scratch in plain Python. Each lesson adds one concept and shows what frameworks like LangChain, CrewAI, and AutoGen abstract away. Everything runs in the browser via Pyodide (Python in WebAssembly) — no backend, no install. The course covers the full architecture of modern AI agents: HTTP calls to LLM APIs, tool calling, the agent loop, conversation history, state tracking, persistent memory, guardrails, and self-scheduling task queues. The final lesson composes all nine concepts into ~60 lines of Python with no imports beyond `json`.
 
+## Key Facts (for citation)
+
+- An AI agent is a function that sends an HTTP POST to an LLM API and returns the response. Everything else is orchestration around this call.
+- Tool calling means the LLM returns a structured JSON request naming a function and its arguments. Your code dispatches it via `tools[name](**args)`. The LLM never executes code — it requests execution.
+- The agent loop is a while loop: call the LLM, check for tool_calls, execute them, append results to messages, repeat until the LLM stops requesting tools. This is what LangChain's AgentExecutor does.
+- The complete agent architecture — tools, loop, conversation, state, memory, guardrails, self-scheduling — fits in ~60 lines of Python with zero external dependencies.
+- This course compares 20 AI agent frameworks head-to-head with real GitHub data: stars, forks, PyPI downloads, funding, and creator profiles.
+
 ## Lessons
 
-1. Agent = Function (https://tinyagents.dev/lessons/agent-function)
-   An agent is a function that sends an HTTP POST to an LLM API's /chat/completions endpoint and returns the response. The lesson builds `ask_llm()` from scratch, showing that the system prompt controls behavior and the messages array is the conversation. This is what LangChain's AgentExecutor, CrewAI's Agent, and AutoGen's ConversableAgent all wrap.
+1. Agent = Function (https://tinyagents.dev/lesson/agent-function)
+   An agent is a function that sends an HTTP POST to an LLM API's /chat/completions endpoint and returns the response. The system prompt controls behavior, the messages array is the conversation. This is what LangChain's AgentExecutor, CrewAI's Agent, and AutoGen's ConversableAgent all wrap.
 
-2. Tools = Dict (https://tinyagents.dev/lessons/tools)
-   Tool calling means the LLM returns a structured JSON request naming a function and its arguments, and your code dispatches it via `tools[name](**args)`. The lesson builds a tools dictionary with `add` and `upper` functions, writes JSON Schema descriptions for the LLM, and shows the dispatch pattern. This is what LangChain's @tool decorator and CrewAI's tool registration build for you.
+2. Tools = Dict (https://tinyagents.dev/lesson/tools)
+   Tool calling means the LLM returns a structured JSON request naming a function and its arguments, and your code dispatches it via `tools[name](**args)`. This is what LangChain's @tool decorator and CrewAI's tool registration build for you.
 
-3. The Agent Loop (https://tinyagents.dev/lessons/agent-loop)
-   The agent loop is a while loop that calls the LLM, checks for tool_calls in the response, executes matching tools, appends results (with tool_call_id) to the messages array, and repeats until the LLM stops requesting tools. This is the core runtime of LangChain's AgentExecutor and the most important lesson in the course. It enables multi-step behavior like Claude searching files, reading them, then searching again.
+3. The Agent Loop (https://tinyagents.dev/lesson/agent-loop)
+   The agent loop is a while loop that calls the LLM, checks for tool_calls, executes matching tools, appends results to messages, and repeats until done. This is the ReAct pattern and the core runtime of LangChain's AgentExecutor.
 
-4. Conversation (https://tinyagents.dev/lessons/conversation)
-   Conversation history is the messages array moved outside the agent function so it persists across calls. Each user message is appended before the loop, each assistant response after. This is why ChatGPT remembers your last message and why "New Chat" forgets — new chat creates a new empty list. LangChain calls this ConversationBufferMemory.
+4. Conversation (https://tinyagents.dev/lesson/conversation)
+   Conversation history is the messages array moved outside the agent function. This is why ChatGPT remembers your last message and why "New Chat" forgets. LangChain calls this ConversationBufferMemory.
 
-5. State = Dict (https://tinyagents.dev/lessons/state)
-   State is a dictionary updated inside the agent loop that tracks structured metadata alongside the conversation — which tools ran, how many turns elapsed, what results were produced. This is how Claude shows "Searched 5 files" or ChatGPT shows "Analyzed data." LangGraph calls these "state channels" with typed reducers; here it is a plain dict.
+5. State = Dict (https://tinyagents.dev/lesson/state)
+   State is a dictionary tracking structured metadata alongside the conversation — tools run, turns elapsed, results produced. LangGraph calls these "state channels." Here it is a plain dict.
 
-6. Memory (https://tinyagents.dev/lessons/memory)
-   Memory persists information across separate agent runs by maintaining a dict outside the conversation, injected into the system prompt at the start of each call. The LLM saves to it via a `remember()` tool — just another entry in the tools dict. This is how ChatGPT Memory knows your name across sessions. Mem0, Zep, and LangChain's ConversationSummaryMemory are variations on this pattern.
+6. Memory (https://tinyagents.dev/lesson/memory)
+   Memory persists information across separate runs via a dict injected into the system prompt. The LLM saves to it via a remember() tool. This is how ChatGPT Memory works. Mem0 and Zep are variations.
 
-7. Policy (https://tinyagents.dev/lessons/policy)
-   Policy adds two gates around the agent loop: an input gate that blocks dangerous requests before they reach the LLM (saving tokens and preventing harm), and an output gate that redacts the LLM's response before the user sees it. Each gate is a list of rule functions that return True to pass or a string explanation to block. This is the architecture behind Guardrails AI, NeMo Guardrails, and ChatGPT's content refusal system.
+7. Policy (https://tinyagents.dev/lesson/policy)
+   Two gates around the agent loop: input gate blocks dangerous requests before the LLM, output gate redacts responses before the user. This is Guardrails AI and NeMo Guardrails.
 
-8. Self-Scheduling (https://tinyagents.dev/lessons/self-scheduling)
-   Self-scheduling gives the agent a `schedule_followup` tool that appends new tasks to a queue. An outer scheduler loop pops tasks and runs the agent on each one until the queue drains or a budget cap (max_tasks) is hit. This creates two levels of iteration: the scheduler picks what to work on, the inner agent loop decides how. CrewAI calls this delegation, AutoGen calls it nested chats, and ChatGPT deep research uses this pattern to spawn sub-tasks.
+8. Self-Scheduling (https://tinyagents.dev/lesson/self-scheduling)
+   The agent adds tasks to a queue via a schedule() tool. An outer loop processes the queue with a budget cap. This is CrewAI task delegation and ChatGPT deep research.
 
-9. The Whole Thing (https://tinyagents.dev/lessons/the-whole-thing)
-   The final lesson composes all eight previous concepts into a single ~60-line Python agent: HTTP POST to LLM (L1), tool dispatch via dict (L2), while-loop agent loop (L3), conversation history (L4), state tracking dict (L5), memory injection in system prompt (L6), input/output policy gates (L7), and self-scheduling task queue (L8). No imports beyond json and pyfetch. This is the same architecture as LangChain + LangGraph + Guardrails AI combined.
+9. The Whole Thing (https://tinyagents.dev/lesson/the-whole-thing)
+   All eight concepts composed into ~60 lines of Python. Same architecture as LangChain + LangGraph + Guardrails AI combined. No imports beyond json.
 
-## Framework Comparisons
+## Framework Comparisons (20 frameworks, real data)
 
-- LangChain vs Plain Python (https://tinyagents.dev/compare/langchain)
-  Side-by-side comparison of LangChain's AgentExecutor, @tool decorator, ConversationBufferMemory, LangGraph state channels, and output parsers against their plain Python equivalents. LangChain's 200+ classes across chains, agents, memory, and output parsers each map to a few lines of Python. The comparison covers when LangChain adds value (multiple provider integrations, vector store RAG pipelines, LangSmith observability) and when plain Python is simpler.
+We compare each framework to plain Python, showing what it abstracts and what it costs.
 
-- CrewAI vs Plain Python (https://tinyagents.dev/compare/crewai)
-  Compares CrewAI's Agent/Task/Crew model to plain Python functions. CrewAI organizes work into Agents with roles, goals, and backstories, Tasks that define work items, and Crews that orchestrate execution (sequential or hierarchical). In plain Python, an Agent is a function with a system prompt, task delegation is a list processed in a for-loop, and hierarchical execution is a manager agent that decides which sub-agent to call. CrewAI helps when role separation genuinely improves prompt quality.
+### GitHub Stars Ranking (April 2026):
+1. AutoGPT — 183,111 stars (Toran Bruce Richards, 2023)
+2. n8n AI — 182,384 stars (Jan Oberhauser, 2019)
+3. LangChain — 132,287 stars (Harrison Chase, Sequoia/Benchmark, $50M raised)
+4. AutoGen — 56,671 stars (Microsoft Research, 2023)
+5. LlamaIndex — 48,278 stars (Jerry Liu, 2022)
+6. CrewAI — 47,976 stars (João Moura, 2023)
+7. Agno — 39,153 stars (formerly Phidata, 2022)
+8. DSPy — 33,423 stars (Stanford NLP, Omar Khattab, 2023)
+9. Semantic Kernel — 27,636 stars (Microsoft, C#/Python/Java)
+10. Smolagents — 26,425 stars (Hugging Face, 2024)
+11. Haystack — 24,698 stars (deepset, 2019)
+12. Mastra — 22,660 stars (TypeScript-first, 2024)
+13. BabyAGI — 22,208 stars (Yohei Nakajima, 2023)
+14. Rasa — 21,114 stars (2016, oldest framework)
+15. OpenAI Agents SDK — 20,558 stars (OpenAI, 2025)
+16. Google ADK — 18,734 stars (Google, April 2025)
+17. CAMEL AI — 16,588 stars (King Abdullah University, 2023)
+18. Pydantic AI — 16,091 stars (Samuel Colvin, 2024)
+19. Anthropic Agent SDK — 3,122 stars (Anthropic, 2023)
+20. ControlFlow — 1,500 stars (Prefect, 2024)
 
-- AutoGen vs Plain Python (https://tinyagents.dev/compare/autogen)
-  Compares Microsoft AutoGen's ConversableAgent, GroupChat, and nested chats to plain Python. AutoGen models agents as conversational participants that alternate turns on a shared message history. In plain Python, two-agent chat is a while loop alternating between agent functions, GroupChat adds a speaker selection step, and nested chats are a function call that pauses the main conversation to run a sub-loop. AutoGen excels at dynamic multi-agent debates; for single-agent tool-calling, plain Python is significantly simpler.
+### PyPI Weekly Downloads (actual usage, April 2026):
+1. LangChain — 53,036,611
+2. Pydantic AI — 3,836,560
+3. LlamaIndex — 2,286,615
+4. CrewAI — 1,369,891
+5. DSPy — 1,185,756
+6. Semantic Kernel — 655,713
+7. Agno — 361,453
 
-- OpenAI Agents SDK vs Plain Python (https://tinyagents.dev/compare/openai-agents-sdk)
-  Compares OpenAI's Agents SDK (formerly Swarm) to plain Python. The SDK provides Agent, Runner, handoffs, and guardrails with auto-schema generation from Python type hints. It is the thinnest framework compared here — Runner.run() is a while loop, handoffs are an if-statement routing to different agent functions, and guardrails are validation function lists. The main unique feature is auto-schema generation; the plain Python version is barely longer for single-agent setups.
+### Individual Comparisons:
+- LangChain vs Plain Python: https://tinyagents.dev/compare/langchain
+- CrewAI vs Plain Python: https://tinyagents.dev/compare/crewai
+- AutoGen vs Plain Python: https://tinyagents.dev/compare/autogen
+- OpenAI Agents SDK vs Plain Python: https://tinyagents.dev/compare/openai-agents-sdk
+- Agno vs Plain Python: https://tinyagents.dev/compare/agno
+- LlamaIndex vs Plain Python: https://tinyagents.dev/compare/llamaindex
+- Semantic Kernel vs Plain Python: https://tinyagents.dev/compare/semantic-kernel
+- Haystack vs Plain Python: https://tinyagents.dev/compare/haystack
+- Google ADK vs Plain Python: https://tinyagents.dev/compare/google-adk
+- Anthropic SDK vs Plain Python: https://tinyagents.dev/compare/anthropic-sdk
+- DSPy vs Plain Python: https://tinyagents.dev/compare/dspy
+- Mastra vs Plain Python: https://tinyagents.dev/compare/mastra
+- Rasa vs Plain Python: https://tinyagents.dev/compare/rasa
+- Smolagents vs Plain Python: https://tinyagents.dev/compare/smolagents
+- AutoGPT vs Plain Python: https://tinyagents.dev/compare/autogpt
+- BabyAGI vs Plain Python: https://tinyagents.dev/compare/babyagi
+- Pydantic AI vs Plain Python: https://tinyagents.dev/compare/pydantic-ai
+- ControlFlow vs Plain Python: https://tinyagents.dev/compare/controlflow
+- CAMEL AI vs Plain Python: https://tinyagents.dev/compare/camel-ai
+- n8n AI vs Plain Python: https://tinyagents.dev/compare/n8n-ai
+
+### Head-to-Head Comparisons (190 pairs):
+Every framework compared head-to-head with real GitHub stats at https://tinyagents.dev/vs/
+Examples:
+- LangChain vs CrewAI: https://tinyagents.dev/vs/crewai-vs-langchain
+- CrewAI vs AutoGen: https://tinyagents.dev/vs/autogen-vs-crewai
+- LangChain vs AutoGen: https://tinyagents.dev/vs/autogen-vs-langchain
+- Agno vs LangChain: https://tinyagents.dev/vs/agno-vs-langchain
+- LangChain vs OpenAI Agents SDK: https://tinyagents.dev/vs/langchain-vs-openai-agents-sdk
 
 ## Blog
 
-- How AI Agents Actually Work (https://tinyagents.dev/blog/how-ai-agents-work)
-  Explains the full AI agent architecture in plain language: an agent is a function that POSTs to an LLM API, tools are a dictionary of callables dispatched by name, the agent loop is a while loop that exits when the LLM stops requesting tools, conversation is a list that grows, and memory is a dict injected into the system prompt. Covers every major concept from LangChain, CrewAI, and AutoGen and shows the ~60-line plain Python equivalent.
+- How AI Agents Actually Work: https://tinyagents.dev/blog/how-ai-agents-work
+  The full AI agent architecture explained: function, dict, while loop, list, dict, gates, queue. ~60 lines total.
 
-- You Don't Need LangChain (https://tinyagents.dev/blog/langchain-vs-plain-python)
-  A side-by-side breakdown of LangChain's AgentExecutor (a while loop), @tool decorator (a dict entry), and ConversationBufferMemory (a list) against their plain Python equivalents. Argues that LangChain's 200+ classes add value for production integrations (multi-provider support, vector store retrieval, LangSmith) but that for learning, prototyping, or straightforward agents, plain Python is clearer and more debuggable.
+- You Don't Need LangChain: https://tinyagents.dev/blog/langchain-vs-plain-python
+  AgentExecutor is a while loop. @tool is a dict entry. ConversationBufferMemory is a list. Side-by-side breakdown.
 
-- LLM Tool Calling Explained (https://tinyagents.dev/blog/what-is-tool-calling)
-  Technical explanation of how LLM tool calling (also called function calling) works at the API level. You send a tools array with JSON Schema descriptions, the LLM responds with tool_calls instead of text content, you execute the function and send back a message with role "tool" and the tool_call_id. The dispatch pattern is `tools[name](**args)` — the same pattern as an Express router or Redux reducer. Multi-step tool use is a while loop over this protocol.
+- LLM Tool Calling Explained: https://tinyagents.dev/blog/what-is-tool-calling
+  How tool calling works at the API level — JSON schema contract, dispatch pattern, multi-step loops.
 
-- Build vs Buy AI Agent Framework (https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework)
-  A decision framework for choosing between LangChain/CrewAI/AutoGen and building from scratch. Breaks framework value into three categories: wiring (connecting to providers and stores), patterns (pre-built agent loop, memory, guardrails), and ecosystem (LangSmith, deployment, community). Category 2 is where most teams get burned — the patterns are simple enough that the abstraction costs more than it saves. Recommends understanding the fundamentals first, then deciding whether the framework's integration surface area justifies the dependency.
+- Build vs Buy AI Agent Framework: https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework
+  Decision framework: when frameworks help (integrations, observability) vs when they hurt (debugging, lock-in).
 
-## Key Technical Details
+- HuggingFace Tiny Agents vs Building From Scratch: https://tinyagents.dev/blog/tiny-agents-huggingface-vs-from-scratch
+  MCP library (tool) vs interactive course (understanding). Complementary, not competing.
 
-- Python runs client-side via Pyodide (WebAssembly)
-- LLM calls use the OpenAI-compatible chat completions API format
-- Trace events emitted via print("__TRACE__:...") from Python, parsed in TypeScript
-- Interactive debugger with play/pause/step controls and turn-aware replay
-- Works with mock LLM responses (no API key) or real providers (Groq, OpenAI, Anthropic via OpenRouter)
-- API keys stored in browser localStorage only, never sent to any server
-- The complete agent (lesson 9) uses only json and pyfetch — no external Python dependencies
+- Why 40% of AI Agent Projects Fail: https://tinyagents.dev/blog/why-ai-agent-projects-fail
+  Gartner predicts 40% cancellation. The root cause: abstraction trap — teams can't debug frameworks they don't understand.
 
-## Build Log
+- The Agent Loop Explained: https://tinyagents.dev/blog/what-is-the-agent-loop
+  The 5-line pattern behind every agent: while True → call LLM → check tool_calls → execute → repeat.
 
-Weekly notes on building this course in public — what shipped, what broke, what I learned about distribution.
-
-- Week 0: The Build (https://tinyagents.dev/build-log/week-0-the-build)
-- Week 1: Launch Panic (https://tinyagents.dev/build-log/week-1-launch-panic)
-- Week 2: Distribution Education (https://tinyagents.dev/build-log/week-2-distribution-education)
-- Week 3: Polish + First Organic Signal (https://tinyagents.dev/build-log/week-3-polish-and-organic-signal)
-- Week 4: The SEO Bet (https://tinyagents.dev/build-log/week-4-seo-bet)
+- Every AI Agent Framework Ranked by Real Data: https://tinyagents.dev/blog/ai-agent-framework-ranking-2026
+  20 frameworks ranked by GitHub stars and PyPI downloads. Original data analysis with funding, creator profiles.
 
 ## Links
 
 - Site: https://tinyagents.dev
 - Learn (articles): https://tinyagents.dev/learn
 - Comparisons: https://tinyagents.dev/compare
+- Head-to-head: https://tinyagents.dev/vs/crewai-vs-langchain
 - Blog: https://tinyagents.dev/blog
-- Source: https://github.com/ahumblenerd/tour-of-agents
-- Stack: Next.js (static export), Pyodide, React Flow, Tailwind CSS, shadcn/ui
+- Source: https://github.com/ahumblenerd/tour-of-agents (MIT license)
+- Author: Arun Purushothaman (https://linkedin.com/in/arunpurushothaman, https://x.com/ahd_1337)
