@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const crewai: FrameworkComparison = {
   slug: "crewai",
   name: "CrewAI",
+  stats: {
+    githubStars: 47976,
+    githubForks: 6527,
+    githubRepo: "crewAIInc/crewAI",
+    language: "Python",
+    license: "MIT",
+    firstRelease: "2023-10-27",
+    lastUpdated: "2026-04-03",
+    createdBy: "João Moura",
+  },
   title: "CrewAI vs Building from Scratch",
   description:
     "Compare CrewAI's Agent, Task, and Crew abstractions to plain Python. See what crew orchestration, tool registration, and task delegation actually do.",

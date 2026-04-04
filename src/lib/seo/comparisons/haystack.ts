@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const haystack: FrameworkComparison = {
   slug: "haystack",
   name: "Haystack",
+  stats: {
+    githubStars: 24698,
+    githubForks: 2696,
+    githubRepo: "deepset-ai/haystack",
+    language: "Python",
+    license: "Apache-2.0",
+    firstRelease: "2019-11-14",
+    lastUpdated: "2026-04-03",
+    createdBy: "deepset",
+  },
   title: "Haystack vs Building from Scratch",
   description:
     "Compare deepset Haystack's pipeline architecture and components to plain Python. See what Pipeline, Agent, Retrievers, and document stores actually do — in ~60 lines.",

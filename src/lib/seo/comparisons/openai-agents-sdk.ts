@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const openaiAgentsSdk: FrameworkComparison = {
   slug: "openai-agents-sdk",
   name: "OpenAI Agents SDK",
+  stats: {
+    githubStars: 20558,
+    githubForks: 3370,
+    githubRepo: "openai/openai-agents-python",
+    language: "Python",
+    license: "MIT",
+    firstRelease: "2025-03-11",
+    lastUpdated: "2026-04-04",
+    createdBy: "OpenAI",
+  },
   title: "OpenAI Agents SDK vs Building from Scratch",
   description:
     "Compare OpenAI's Agents SDK (formerly Swarm) to plain Python. See what Runner, handoffs, and guardrails do — it's the same agent loop you can build yourself.",

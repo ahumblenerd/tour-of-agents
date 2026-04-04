@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const autogen: FrameworkComparison = {
   slug: "autogen",
   name: "AutoGen",
+  stats: {
+    githubStars: 56671,
+    githubForks: 8521,
+    githubRepo: "microsoft/autogen",
+    language: "Python",
+    license: "CC-BY-4.0",
+    firstRelease: "2023-08-18",
+    lastUpdated: "2026-04-02",
+    createdBy: "Microsoft Research",
+  },
   title: "AutoGen vs Building from Scratch",
   description:
     "Compare Microsoft AutoGen's ConversableAgent and nested chats to plain Python. See what multi-agent conversations and group chat actually do under the hood.",

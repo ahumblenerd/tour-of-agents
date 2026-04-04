@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const llamaindex: FrameworkComparison = {
   slug: "llamaindex",
   name: "LlamaIndex",
+  stats: {
+    githubStars: 48278,
+    githubForks: 7156,
+    githubRepo: "run-llama/llama_index",
+    language: "Python",
+    license: "MIT",
+    firstRelease: "2022-11-02",
+    lastUpdated: "2026-04-04",
+    createdBy: "Jerry Liu",
+  },
   title: "LlamaIndex Agents vs Building from Scratch",
   description:
     "Compare LlamaIndex's AgentRunner, ReActAgent, QueryEngine tools, and index-backed retrieval to plain Python. See what each abstraction actually does — in ~60 lines.",

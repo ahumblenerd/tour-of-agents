@@ -3,6 +3,23 @@ import type { FrameworkComparison } from "./types";
 export const langchain: FrameworkComparison = {
   slug: "langchain",
   name: "LangChain",
+  stats: {
+    githubStars: 132287,
+    githubForks: 21823,
+    githubRepo: "langchain-ai/langchain",
+    language: "Python",
+    license: "MIT",
+    firstRelease: "2022-10-17",
+    lastUpdated: "2026-04-04",
+    createdBy: "Harrison Chase",
+    backedBy: "Sequoia Capital, Benchmark",
+    fundingStatus: "$25M Series A (2023), $25M Series B (2024)",
+    weeklyNpmDownloads: 3457691,
+    documentationUrl: "https://python.langchain.com/docs",
+    notableUsers: ["Notion", "Elastic", "Instacart"],
+    productionReady: true,
+    cloudOffering: "LangSmith (observability), LangServe (deployment)",
+  },
   title: "LangChain vs Building from Scratch",
   description:
     "Compare LangChain's abstractions to plain Python. See what AgentExecutor, @tool, ConversationBufferMemory, and output parsers actually do — in ~60 lines.",

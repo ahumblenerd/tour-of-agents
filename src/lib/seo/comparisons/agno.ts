@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const agno: FrameworkComparison = {
   slug: "agno",
   name: "Agno",
+  stats: {
+    githubStars: 39153,
+    githubForks: 5207,
+    githubRepo: "agno-agi/agno",
+    language: "Python",
+    license: "Apache-2.0",
+    firstRelease: "2022-05-04",
+    lastUpdated: "2026-04-03",
+    createdBy: "Agno (formerly Phidata)",
+  },
   title: "Agno (Phidata) vs Building from Scratch",
   description:
     "Compare Agno's Agent class, tools, teams, and knowledge bases to plain Python. See what each abstraction actually does — in ~60 lines.",

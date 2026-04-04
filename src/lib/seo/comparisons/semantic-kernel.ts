@@ -3,6 +3,16 @@ import type { FrameworkComparison } from "./types";
 export const semanticKernel: FrameworkComparison = {
   slug: "semantic-kernel",
   name: "Semantic Kernel",
+  stats: {
+    githubStars: 27636,
+    githubForks: 4533,
+    githubRepo: "microsoft/semantic-kernel",
+    language: "C#",
+    license: "MIT",
+    firstRelease: "2023-02-27",
+    lastUpdated: "2026-04-01",
+    createdBy: "Microsoft",
+  },
   title: "Semantic Kernel vs Building from Scratch",
   description:
     "Compare Microsoft Semantic Kernel's Kernel, Plugins, and Planners to plain Python. See what ChatCompletionAgent, KernelFunction, and StepwisePlanner actually do — in ~60 lines.",
