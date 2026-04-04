@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://tinyagents.dev/sitemap.xml
+
+# All AI search crawlers welcome
+# GPTBot (ChatGPT), PerplexityBot, ClaudeBot, Google-Extended (Gemini), Bingbot (Copilot)
