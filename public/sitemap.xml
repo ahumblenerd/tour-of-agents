@@ -49,6 +49,8 @@
   <url><loc>https://tinyagents.dev/blog/what-is-tool-calling</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/build-vs-buy-ai-agent-framework</loc><lastmod>2026-03-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://tinyagents.dev/blog/tiny-agents-huggingface-vs-from-scratch</loc><lastmod>2026-03-31</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tinyagents.dev/blog/why-ai-agent-projects-fail</loc><lastmod>2026-04-03</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tinyagents.dev/blog/what-is-the-agent-loop</loc><lastmod>2026-04-03</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
 
   <!-- Build Log -->
   <url><loc>https://tinyagents.dev/build-log</loc><lastmod>2026-03-30</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
