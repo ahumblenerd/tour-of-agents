@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
+    "@next/third-parties": "^16.2.2",
     "@types/dagre": "^0.7.54",
     "@xyflow/react": "^12.10.1",
     "canvas-confetti": "^1.9.4",
