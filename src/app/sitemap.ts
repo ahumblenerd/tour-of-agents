@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import type { MetadataRoute } from "next";
 import { allLessons } from "@/lib/lessons/registry";
 import { frameworks } from "@/lib/seo/comparisons";
@@ -6,6 +8,21 @@ import { posts } from "@/lib/blog/posts";
 
 const SITE = "https://tinyagents.dev";
 const today = new Date().toISOString().split("T")[0];
+
+/**
+ * Drip-feed VS pages to Google — release 5 per day starting Apr 5, 2026.
+ * Core pages (homepage, lessons, learn, compare, blog) are always included.
+ * VS pages are added incrementally so Google sees steady publishing.
+ */
+const VS_DRIP_START = new Date("2026-04-05");
+
+function getVsPagesAllowed(): number {
+  const now = new Date();
+  if (now < VS_DRIP_START) return 0;
+  const ms = now.getTime() - VS_DRIP_START.getTime();
+  const halfDays = Math.floor(ms / (12 * 60 * 60 * 1000)); // every 12 hours
+  return halfDays + 1; // morning 1, evening 1 = 2 per day. All 190 in ~95 days
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
@@ -34,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // Framework comparisons (individual)
+  // Framework comparisons (individual — always included)
   entries.push({ url: `${SITE}/compare`, lastModified: today, changeFrequency: "weekly", priority: 0.8 });
   for (const fw of frameworks) {
     entries.push({
@@ -45,10 +62,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // Framework VS pages (all pairs)
-  for (const pair of getAllPairs()) {
+  // VS pages — drip-fed, 5 per day
+  const allPairs = getAllPairs();
+  const allowed = Math.min(getVsPagesAllowed(), allPairs.length);
+  for (let i = 0; i < allowed; i++) {
     entries.push({
-      url: `${SITE}/vs/${pair.slug}`,
+      url: `${SITE}/vs/${allPairs[i].slug}`,
       lastModified: today,
       changeFrequency: "monthly",
       priority: 0.7,
