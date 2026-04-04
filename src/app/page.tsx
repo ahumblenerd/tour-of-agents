@@ -21,6 +21,11 @@ export const metadata: Metadata = {
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     type: "website",
   },
+  keywords: [
+    "AI agents", "build AI agent", "60 lines Python", "LangChain alternative",
+    "agent framework comparison", "AI agent from scratch", "no framework",
+    "interactive course", "Python agent tutorial", "A Tour of Agents",
+  ],
   alternates: { canonical: SITE_URL },
 };
 
