@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { BookOpen, Play, ChevronRight } from "lucide-react";
 import { LessonDefinition } from "@/lib/lessons/types";
@@ -10,6 +10,7 @@ interface MobileLessonLayoutProps {
   lesson: LessonDefinition;
   onFinish?: () => void;
   canFinish?: boolean;
+  running?: boolean;
   prose: ReactNode;
   graph: ReactNode;
   playback: ReactNode;
@@ -21,10 +22,20 @@ interface MobileLessonLayoutProps {
 type Tab = "learn" | "run";
 
 export function MobileLessonLayout({
-  lesson, onFinish, canFinish,
+  lesson, onFinish, canFinish, running,
   prose, graph, playback, traceLog, inputBar, fullCode,
 }: MobileLessonLayoutProps) {
   const [tab, setTab] = useState<Tab>("learn");
+  const wasRunning = useRef(false);
+
+  // Auto-switch to Run tab when code starts executing
+  useEffect(() => {
+    if (running && !wasRunning.current) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing UI with external run state
+      setTab("run");
+    }
+    wasRunning.current = !!running;
+  }, [running]);
   const next = getNextLesson(lesson);
   const isLast = !next;
 

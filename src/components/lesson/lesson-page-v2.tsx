@@ -127,6 +127,8 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
         trackLessonCompleted(lesson.number, lesson.slug);
         onLessonSuccess();
       }
+      // On desktop, graph panel updates automatically (right side).
+      // On mobile, the running prop triggers auto-switch to Run tab.
     }
   }, [lesson.fullCode, lesson.slug, lesson.number, onLessonSuccess]);
 
@@ -141,6 +143,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
           lesson={lesson}
           onFinish={courseComplete.trigger}
           canFinish={isLastLesson && monitor.entries.length > 0}
+          running={runner.running}
           prose={<ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
             runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />}
           graph={<AgentGraph graph={lesson.graph} entries={monitor.entries} cursor={playback.cursor} turns={turns} />}
