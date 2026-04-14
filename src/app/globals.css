@@ -304,3 +304,12 @@
   animation: chip-bounce 1.5s ease-in-out infinite;
 }
 
+/* Gentle shimmer for inline guide card */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+

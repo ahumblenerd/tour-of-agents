@@ -6,7 +6,7 @@ interface TourStep {
   target: string; // data-tour attribute value
   title: string;
   body: string;
-  position: "top" | "bottom" | "left" | "right";
+  position: "top" | "bottom" | "left" | "right" | "center";
   triggerOnFinish?: boolean; // click the first button inside the target
 }
 
@@ -16,19 +16,13 @@ const STEPS: TourStep[] = [
     target: "prose-column",
     title: "Lesson Content",
     body: "Read the lesson here. Each step builds on the last, with inline code you can run directly.",
-    position: "right",
+    position: "center",
   },
   {
     target: "agent-graph",
     title: "Agent Graph",
     body: "See how the agent's components connect. Nodes light up as you run code.",
     position: "bottom",
-  },
-  {
-    target: "playback-area",
-    title: "Playback Controls",
-    body: "After running code, step through the agent's trace or hit Play to auto-advance.",
-    position: "top",
   },
   {
     target: "sample-chips",
@@ -63,6 +57,13 @@ export function TourGuide() {
       const timer = setTimeout(() => setStep(0), 800);
       return () => clearTimeout(timer);
     }
+  }, []);
+
+  // Listen for manual trigger from TourButton
+  useEffect(() => {
+    const handler = () => setStep(0);
+    window.addEventListener("tour:start", handler);
+    return () => window.removeEventListener("tour:start", handler);
   }, []);
 
   // Measure the target element for the current step
@@ -101,7 +102,7 @@ export function TourGuide() {
             />
           </mask>
         </defs>
-        <rect width="100%" height="100%" fill="rgba(0,0,0,0.6)" mask="url(#tour-mask)" />
+        <rect width="100%" height="100%" fill="rgba(0,0,0,0.3)" mask="url(#tour-mask)" />
       </svg>
 
       <div
@@ -147,6 +148,11 @@ export function TourGuide() {
 function getTooltipStyle(rect: DOMRect, pos: string): React.CSSProperties {
   const gap = 12;
   switch (pos) {
+    case "center": return {
+      left: rect.left + rect.width / 2,
+      top: rect.top + rect.height / 2,
+      transform: "translate(-50%, -50%)",
+    };
     case "right": return { left: rect.right + gap, top: rect.top };
     case "left": return { right: window.innerWidth - rect.left + gap, top: rect.top };
     case "bottom": return { left: rect.left, top: rect.bottom + gap };
@@ -157,12 +163,11 @@ function getTooltipStyle(rect: DOMRect, pos: string): React.CSSProperties {
 
 /** Button to re-trigger the tour */
 export function TourButton() {
-  const restart = () => {
-    localStorage.removeItem(STORAGE_KEY);
-    window.location.reload();
+  const start = () => {
+    window.dispatchEvent(new Event("tour:start"));
   };
   return (
-    <button onClick={restart} title="Start tour"
+    <button onClick={start} title="Start tour"
       className="h-7 px-2 text-xs rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
       ? Tour
     </button>

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { allLessons } from "@/lib/lessons/registry";
 import { LessonDefinition, LessonDifficulty } from "@/lib/lessons/types";
 import { getProgress } from "@/lib/settings/progress";
@@ -39,7 +38,7 @@ export function LessonSelector({ current }: LessonSelectorProps) {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-80 md:w-96 p-0" sideOffset={8}>
-        <ScrollArea className="max-h-[70vh]">
+        <div className="max-h-[70vh] overflow-y-auto overscroll-contain touch-pan-y">
           {allLessons.map((lesson) => {
             const done = completed.includes(lesson.slug);
             const isCurrent = lesson.slug === current.slug;
@@ -74,7 +73,7 @@ export function LessonSelector({ current }: LessonSelectorProps) {
               </Link>
             );
           })}
-        </ScrollArea>
+        </div>
       </PopoverContent>
     </Popover>
   );
