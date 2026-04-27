@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { FrameworkComparison } from "@/lib/seo/comparisons";
-import { frameworks } from "@/lib/seo/comparisons";
 import { ComparisonSections } from "./comparison-sections";
-import { ComparisonCrossLinks } from "./comparison-cross-links";
+import { ComparisonQuickLinks } from "./comparison-quick-links";
+import { ComparisonBottom } from "./comparison-bottom";
+import { MarkdownInline } from "./markdown";
 
 export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
   return (
@@ -15,6 +16,17 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
         <h1 className="text-3xl font-bold mb-3">{fw.title}</h1>
         <p className="text-lg text-muted-foreground">{fw.intro}</p>
       </header>
+
+      <ComparisonQuickLinks
+        name={fw.name}
+        references={fw.references}
+        statsGithubRepo={fw.stats?.githubRepo}
+      />
+
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">The verdict</h2>
+        <p className="text-[17px] text-foreground leading-[1.7]">{fw.verdict}</p>
+      </section>
 
       <div className="overflow-x-auto mb-8">
         <table className="w-full text-sm border-collapse">
@@ -29,18 +41,17 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
             {fw.rows.map((row) => (
               <tr key={row.concept} className="border-b border-border/50">
                 <td className="py-3 pr-4 font-medium align-top">{row.concept}</td>
-                <td className="py-3 pr-4 text-muted-foreground align-top">{row.framework}</td>
-                <td className="py-3 align-top">{row.plain}</td>
+                <td className="py-3 pr-4 align-top">
+                  <MarkdownInline>{row.framework}</MarkdownInline>
+                </td>
+                <td className="py-3 align-top">
+                  <MarkdownInline>{row.plain}</MarkdownInline>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-3">The verdict</h2>
-        <p className="text-muted-foreground">{fw.verdict}</p>
-      </section>
 
       {fw.sections && <ComparisonSections sections={fw.sections} />}
 
@@ -74,26 +85,7 @@ export function ComparisonArticle({ fw }: { fw: FrameworkComparison }) {
         </Link>
       </aside>
 
-      <ComparisonCrossLinks />
-
-      <nav aria-label="Other comparisons">
-        <h2 className="text-sm font-semibold text-muted-foreground mb-3">
-          Other framework comparisons
-        </h2>
-        <div className="flex flex-wrap gap-2">
-          {frameworks
-            .filter((f) => f.slug !== fw.slug)
-            .map((f) => (
-              <Link
-                key={f.slug}
-                href={`/compare/${f.slug}`}
-                className="text-sm px-3 py-1.5 rounded-md border border-border hover:border-foreground/20 transition-colors"
-              >
-                vs {f.name}
-              </Link>
-            ))}
-        </div>
-      </nav>
+      <ComparisonBottom fw={fw} />
     </article>
   );
 }

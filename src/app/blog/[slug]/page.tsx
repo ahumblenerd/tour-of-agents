@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { posts, getPost } from "@/lib/blog/posts";
 import { AUTHOR, AUTHOR_JSONLD } from "@/lib/seo/author";
+import { MarkdownProse } from "@/components/compare/markdown";
 
 const SITE = "https://tinyagents.dev";
 
@@ -75,8 +76,8 @@ export default async function BlogPostPage({
             <Link href="/blog" className="hover:text-foreground">Blog</Link>
             {" / "}<time>{post.date}</time>
           </p>
-          <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
-          <p className="text-lg text-muted-foreground mb-4">{post.description}</p>
+          <h1 className="text-4xl font-bold mb-4 leading-tight tracking-tight">{post.title}</h1>
+          <p className="text-xl text-foreground/70 mb-6 leading-relaxed">{post.description}</p>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>By <a href={AUTHOR.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">{AUTHOR.name}</a></span>
             <span>&middot;</span>
@@ -84,11 +85,11 @@ export default async function BlogPostPage({
           </div>
         </header>
 
-        <div className="space-y-8">
+        <div className="space-y-10">
           {post.sections.map((s) => (
             <section key={s.heading}>
-              <h2 className="text-xl font-semibold mb-3">{s.heading}</h2>
-              <p className="text-muted-foreground leading-relaxed">{s.body}</p>
+              <h2 className="text-2xl font-semibold mb-4 leading-tight">{s.heading}</h2>
+              <MarkdownProse>{s.body}</MarkdownProse>
             </section>
           ))}
         </div>
