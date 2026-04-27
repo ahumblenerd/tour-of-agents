@@ -1,8 +1,11 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { entries, getEntry } from "@/lib/build-log/entries";
+import { AUTHOR_JSONLD } from "@/lib/seo/author";
+import { OG_IMAGE, PUBLISHER_JSONLD, SITE_URL, toIsoUtc } from "@/lib/seo/site";
+import { BUILD_DATE } from "@/lib/seo/build-date";
 
-const SITE = "https://tinyagents.dev";
+const SITE = SITE_URL;
 
 export function generateStaticParams() {
   return entries.map((e) => ({ slug: e.slug }));
@@ -58,9 +61,12 @@ export default async function BuildLogEntry({
     "@type": "BlogPosting",
     headline: entry.title,
     description: entry.description,
-    datePublished: entry.date,
-    author: { "@type": "Person", name: "Arun Devan" },
-    publisher: { "@type": "Organization", name: "tinyagents.dev", url: SITE },
+    image: OG_IMAGE,
+    datePublished: toIsoUtc(entry.date),
+    dateModified: BUILD_DATE,
+    inLanguage: "en",
+    author: AUTHOR_JSONLD,
+    publisher: PUBLISHER_JSONLD,
     url: `${SITE}/build-log/${slug}`,
   };
 

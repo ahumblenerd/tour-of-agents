@@ -2,8 +2,7 @@ import type { LessonDefinition } from "@/lib/lessons/types";
 import { BUILD_DATE, COURSE_PUBLISHED } from "@/lib/seo/build-date";
 import { getLessonSeo } from "@/lib/seo/lesson-seo";
 import { AUTHOR_JSONLD } from "@/lib/seo/author";
-
-const SITE = "https://tinyagents.dev";
+import { OG_IMAGE, PUBLISHER_JSONLD, SITE_URL } from "@/lib/seo/site";
 
 export function LessonJsonLd({
   lesson,
@@ -13,7 +12,7 @@ export function LessonJsonLd({
   basePath?: string;
 }) {
   const seo = getLessonSeo(lesson);
-  const lessonUrl = `${SITE}/${basePath}/${lesson.slug}`;
+  const lessonUrl = `${SITE_URL}/${basePath}/${lesson.slug}`;
 
   const schema = {
     "@context": "https://schema.org",
@@ -22,6 +21,7 @@ export function LessonJsonLd({
     headline: `${lesson.title} — Build AI Agents from Scratch`,
     description: seo.description,
     url: lessonUrl,
+    image: OG_IMAGE,
     educationalLevel: lesson.difficulty === "beginner"
       ? "Beginner" : lesson.difficulty === "intermediate"
       ? "Intermediate" : "Advanced",
@@ -34,15 +34,11 @@ export function LessonJsonLd({
     datePublished: COURSE_PUBLISHED,
     dateModified: BUILD_DATE,
     author: AUTHOR_JSONLD,
-    publisher: {
-      "@type": "Organization",
-      name: "tinyagents.dev",
-      url: SITE,
-    },
+    publisher: PUBLISHER_JSONLD,
     isPartOf: {
       "@type": "Course",
       name: "A Tour of Agents",
-      url: SITE,
+      url: SITE_URL,
       description:
         "Interactive course: build a complete AI agent in ~60 lines of Python. 9 lessons covering the architecture behind LangChain, CrewAI, and AutoGen.",
     },
@@ -54,7 +50,7 @@ export function LessonJsonLd({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "A Tour of Agents", item: SITE },
+      { "@type": "ListItem", position: 1, name: "A Tour of Agents", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: `Lesson ${lesson.number}: ${lesson.title}`, item: lessonUrl },
     ],
   };

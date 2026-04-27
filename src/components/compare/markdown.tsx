@@ -4,7 +4,21 @@ import type { ComponentPropsWithoutRef } from "react";
 
 const codeClasses = "font-mono text-[0.9em] px-1 py-0.5 rounded bg-muted text-foreground";
 
-function ExternalLink(props: ComponentPropsWithoutRef<"a">) {
+// react-markdown injects an internal `node` prop on every renderer. Spreading
+// it onto a DOM element leaks `node="[object Object]"` into the HTML, which
+// breaks Google's structured-data parser and is invalid markup. Strip it.
+type MdProps<T extends keyof React.JSX.IntrinsicElements> = ComponentPropsWithoutRef<T> & {
+  node?: unknown;
+};
+
+function stripNode<T extends { node?: unknown }>(all: T): Omit<T, "node"> {
+  const { node, ...rest } = all;
+  void node;
+  return rest;
+}
+
+function ExternalLink(allProps: MdProps<"a">) {
+  const props = stripNode(allProps);
   return (
     <a
       {...props}
@@ -15,7 +29,8 @@ function ExternalLink(props: ComponentPropsWithoutRef<"a">) {
   );
 }
 
-function InlineCode(props: ComponentPropsWithoutRef<"code">) {
+function InlineCode(allProps: MdProps<"code">) {
+  const props = stripNode(allProps);
   return <code {...props} className={codeClasses} />;
 }
 

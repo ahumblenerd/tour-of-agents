@@ -1,12 +1,12 @@
 /**
- * Build-time date for structured data.
+ * Build-time dates for structured data.
  *
- * These are server components, so `new Date()` runs at build time
- * during static export (`next build`), giving us the build date
- * without any manual updates.
+ * Google Rich Results requires ISO 8601 with timezone. Plain `YYYY-MM-DD`
+ * fails validation. We anchor everything to UTC so static export and
+ * Search Console agree.
  */
-export const BUILD_DATE = new Date().toISOString().split("T")[0];
+export const BUILD_DATE = new Date().toISOString();
 
-/** Fixed publish dates — the actual day content first went live. */
-export const COURSE_PUBLISHED = "2026-03-12";
-export const COMPARE_PUBLISHED = "2026-03-30";
+/** Fixed publish dates — the actual day content first went live, in UTC. */
+export const COURSE_PUBLISHED = "2026-03-12T00:00:00+00:00";
+export const COMPARE_PUBLISHED = "2026-03-30T00:00:00+00:00";

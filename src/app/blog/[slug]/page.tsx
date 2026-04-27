@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import { posts, getPost } from "@/lib/blog/posts";
 import { AUTHOR, AUTHOR_JSONLD } from "@/lib/seo/author";
 import { MarkdownProse } from "@/components/compare/markdown";
+import { OG_IMAGE, PUBLISHER_JSONLD, SITE_URL, toIsoUtc } from "@/lib/seo/site";
+import { BUILD_DATE } from "@/lib/seo/build-date";
 
-const SITE = "https://tinyagents.dev";
+const SITE = SITE_URL;
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -57,9 +59,12 @@ export default async function BlogPostPage({
     "@type": "BlogPosting",
     headline: post.title,
     description: post.description,
-    datePublished: post.date,
+    image: OG_IMAGE,
+    datePublished: toIsoUtc(post.date),
+    dateModified: BUILD_DATE,
+    inLanguage: "en",
     author: AUTHOR_JSONLD,
-    publisher: { "@type": "Organization", name: "tinyagents.dev", url: SITE },
+    publisher: PUBLISHER_JSONLD,
     url: `${SITE}/blog/${slug}`,
     keywords: post.keywords.join(", "),
   };
