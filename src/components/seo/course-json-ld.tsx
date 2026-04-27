@@ -1,9 +1,13 @@
 import { allLessons } from "@/lib/lessons/registry";
 import { BUILD_DATE, COURSE_PUBLISHED } from "@/lib/seo/build-date";
-import { getLessonSeo } from "@/lib/seo/lesson-seo";
 import { AUTHOR_JSONLD } from "@/lib/seo/author";
 import { OG_IMAGE, PUBLISHER_JSONLD, SITE_URL } from "@/lib/seo/site";
 
+// The course → lesson hierarchy is expressed via `isPartOf` on each
+// LessonJsonLd, not via `hasPart` here. Google's Course rich-results
+// validator rejects `Course` nested inside `Course.hasPart`, and
+// `LearningResource` was rejected too — so we don't emit hasPart at all
+// and rely on the bottom-up isPartOf relationship + the sitemap.
 export function CourseJsonLd() {
   const schema = {
     "@context": "https://schema.org",
@@ -30,23 +34,6 @@ export function CourseJsonLd() {
       courseMode: "Online",
       courseWorkload: "PT30M",
     },
-    hasPart: allLessons.map((l) => {
-      const seo = getLessonSeo(l);
-      return {
-        "@type": "Course",
-        name: `Lesson ${l.number}: ${l.title}`,
-        description: seo.description,
-        url: `${SITE_URL}/lesson/${l.slug}`,
-        position: l.number,
-        teaches: l.concepts.join(", "),
-        provider: PUBLISHER_JSONLD,
-        hasCourseInstance: {
-          "@type": "CourseInstance",
-          courseMode: "Online",
-          courseWorkload: "PT5M",
-        },
-      };
-    }),
   };
 
   return (
