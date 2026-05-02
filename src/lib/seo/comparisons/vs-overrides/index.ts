@@ -11,7 +11,11 @@ import type { VsCopy } from "../types";
  */
 
 // REGISTRY_START
-export const vsCopyMap: Record<string, VsCopy> = {};
+import crewaiVsLangchain from "./crewai-vs-langchain";
+
+export const vsCopyMap: Record<string, VsCopy> = {
+  "crewai-vs-langchain": crewaiVsLangchain,
+};
 // REGISTRY_END
 
 export function getVsCopy(slug: string): VsCopy | undefined {

@@ -42,11 +42,11 @@ const sourceB = readFileSync(fileB, "utf8");
 
 process.stdout.write(`You are writing real head-to-head comparison copy for the page /vs/${pair} on tinyagents.dev.
 
-Use the **competitor-alternatives** skill (vs-page / "X vs Y" format) and the **copywriting** skill (engineer audience, no fluff) as your guidance. Apply both.
+Use the **competitor-alternatives** skill (vs-page / "X vs Y" format) and the **copywriting** skill (engineer audience, no fluff). Apply both.
 
 # Context
 
-The brand thesis on tinyagents.dev is "an AI agent is ~60 lines of plain Python." That message belongs at the BOTTOM of every /vs/* page, as the third option. It must NOT be the dominant voice. The /vs/* page is for someone actively choosing between two frameworks; they want a real comparison first.
+Brand thesis: "an AI agent is ~60 lines of plain Python." This page is NOT the place to push that — it lives in a trailing CTA below your sections. Your sections compare A vs B head-to-head. Do NOT mention plain Python in any of the four sections you write.
 
 Audience: senior engineers / tech-leads. They already know what an LLM agent is. Skip basics. Be specific — name actual classes, decorators, concepts (e.g. \`AgentExecutor\`, \`@tool\`, \`Crew\`, \`Task\`, \`role\`/\`goal\`/\`backstory\`). No marketing speak. Avoid words like "robust," "powerful," "seamless," "leverage."
 
@@ -62,41 +62,42 @@ ${sourceA}
 ${sourceB}
 \`\`\`
 
-# Your task
+# READABILITY CONSTRAINTS — apply to all fields
 
-Write four pieces of copy comparing these two frameworks head-to-head.
+- **No walls of text.** Every paragraph: 2-3 sentences max. Use \\n\\n between paragraphs.
+- **Use markdown subheadings** (### in headToHead) to make it scannable.
+- **Use bulleted lists** in pickAIf and pickBIf — not run-on prose.
+- **Bold the key noun phrase** in each bullet so a skimmer can read it in 5s.
+- **Inline code** for every framework concept name (\`AgentExecutor\`, \`Crew\`, etc.).
+- Never start a paragraph with "Furthermore," "Additionally," "Moreover."
+- Reading age target: technical reader scanning, not deep-reading.
 
-**1. headToHead** (2-3 paragraphs, ~250-400 words total)
-- Compare on real axes: paradigm/mental model, opinionation, ecosystem size, language, target use case, multi-agent vs single-agent, deploy/observability story.
-- Reference concrete classes/concepts from each framework's source above. Show you read it.
-- No preamble like "When choosing between X and Y..." — start with the substance.
-- Markdown allowed (\`code\`, **bold**, lists). Keep formatting light.
-- Do NOT mention plain Python in this section.
+# Your task — four fields
 
-**2. pickAIf** (1 paragraph, 60-100 words)
-- Start exactly with: "Pick ${a} if"
-- 2-3 concrete scenarios where this framework wins over the other one.
-- Be specific: name the integration, the team profile, the use case.
+**1. headToHead** (~250-400 words)
+Use exactly THREE markdown subsections (### Paradigm, ### Ecosystem, ### Use case) — each 2-3 short sentences. Reference concrete classes/concepts from the source. Show you read it. Compare A and B against each other on each axis; do not describe them in isolation.
 
-**3. pickBIf** (1 paragraph, 60-100 words)
-- Start exactly with: "Pick ${b} if"
-- Same shape as pickAIf but for B.
+**2. pickAIf** (~80-120 words)
+Format:
+- Lead sentence: "Pick ${a} if your project lives or dies on X." (one sentence, ~20 words)
+- Then a markdown bulleted list of 3 bullets. Each bullet is **bold lead phrase** then 1-2 sentences of detail.
 
-**4. sharedConcerns** (1 paragraph, 60-100 words)
-- What both frameworks add that you might not need (deps, abstraction layers, ramp-up cost).
-- This is the segue into the plain-Python option below the section.
-- Do not pitch the lesson directly here — just acknowledge the cost honestly.
+**3. pickBIf** (~80-120 words)
+Same exact format as pickAIf but for B.
+
+**4. sharedConcerns** (~60-90 words)
+2 short paragraphs (\\n\\n separated). What both frameworks add that you might not need (deps, abstractions, ramp-up). Honest, not pitchy. Do not mention plain Python or the lesson — that's the next section on the page, not this one.
 
 # Output format
 
-OUTPUT VALID JSON ONLY. No prose before or after. No markdown code fences. Exactly this shape:
+OUTPUT VALID JSON ONLY. No prose before. No prose after. No markdown code fences around the JSON. Exactly this shape:
 
 {
-  "headToHead": "...",
-  "pickAIf": "Pick ${a} if ...",
-  "pickBIf": "Pick ${b} if ...",
-  "sharedConcerns": "..."
+  "headToHead": "### Paradigm\\n\\n...\\n\\n### Ecosystem\\n\\n...\\n\\n### Use case\\n\\n...",
+  "pickAIf": "Pick ${a} if ...\\n\\n- **...**: ...\\n- **...**: ...\\n- **...**: ...",
+  "pickBIf": "Pick ${b} if ...\\n\\n- **...**: ...\\n- **...**: ...\\n- **...**: ...",
+  "sharedConcerns": "...\\n\\n..."
 }
 
-Strings can contain markdown (\`code\`, **bold**, line breaks as \\n). They will be rendered through ReactMarkdown + remark-gfm.
+Strings will render through ReactMarkdown + remark-gfm — markdown inside the strings is expected. Real \\n characters as escape sequences inside the JSON strings.
 `);

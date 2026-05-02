@@ -5,7 +5,6 @@ interface MergedRow {
   concept: string;
   frameworkA: string;
   frameworkB: string;
-  plain: string;
 }
 
 function mergeRows(pair: FrameworkPair): MergedRow[] {
@@ -16,7 +15,6 @@ function mergeRows(pair: FrameworkPair): MergedRow[] {
       concept: row.concept,
       frameworkA: row.framework,
       frameworkB: "—",
-      plain: row.plain,
     });
   }
 
@@ -29,7 +27,6 @@ function mergeRows(pair: FrameworkPair): MergedRow[] {
         concept: row.concept,
         frameworkA: "—",
         frameworkB: row.framework,
-        plain: row.plain,
       });
     }
   }
@@ -49,10 +46,9 @@ export function VsComparisonTable({ pair }: { pair: FrameworkPair }) {
             <th className="text-left py-3 pr-4 font-semibold">
               {pair.nameA}
             </th>
-            <th className="text-left py-3 pr-4 font-semibold">
+            <th className="text-left py-3 font-semibold">
               {pair.nameB}
             </th>
-            <th className="text-left py-3 font-semibold">Plain Python</th>
           </tr>
         </thead>
         <tbody>
@@ -64,10 +60,9 @@ export function VsComparisonTable({ pair }: { pair: FrameworkPair }) {
               <td className="py-3 pr-4 text-muted-foreground align-top">
                 {row.frameworkA}
               </td>
-              <td className="py-3 pr-4 text-muted-foreground align-top">
+              <td className="py-3 text-muted-foreground align-top">
                 {row.frameworkB}
               </td>
-              <td className="py-3 align-top">{row.plain}</td>
             </tr>
           ))}
         </tbody>

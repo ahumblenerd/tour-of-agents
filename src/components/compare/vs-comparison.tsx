@@ -5,6 +5,11 @@ import { ComparisonCrossLinks } from "./comparison-cross-links";
 import { StatsComparison } from "./framework-stats";
 import { MarkdownProse } from "./markdown";
 
+function firstSentence(s: string): string {
+  const m = s.match(/^[^.!?]+[.!?]/);
+  return (m ? m[0] : s).trim();
+}
+
 export function VsComparison({ pair }: { pair: FrameworkPair }) {
   const { frameworkA: a, frameworkB: b } = pair;
 
@@ -21,10 +26,10 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
           {pair.nameA} vs {pair.nameB}: Which Agent Framework to Use?
         </h1>
         <p className="text-lg text-muted-foreground">
-          {a.name} {a.intro.split(".")[0].toLowerCase()}.{" "}
-          {b.name} {b.intro.split(".")[0].toLowerCase()}.{" "}
-          Here is how they compare — and what the same patterns look
-          like in plain Python.
+          {firstSentence(a.intro)}{" "}
+          {firstSentence(b.intro)}{" "}
+          Here is how they compare — paradigm, ecosystem, and the use
+          cases each one is actually built for.
         </p>
       </header>
 
