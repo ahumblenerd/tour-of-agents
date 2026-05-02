@@ -11,7 +11,6 @@ import { useStepRunner } from "@/hooks/use-step-runner";
 import { useMonitor } from "@/hooks/use-monitor";
 import { usePlayback } from "@/hooks/use-playback";
 import { useTurns } from "@/hooks/use-turns";
-import { usePyodide } from "@/lib/pyodide/pyodide-provider";
 import { ProseColumn } from "./prose-column";
 import { AgentGraph } from "./agent-graph";
 import { TraceLog } from "./trace-log";
@@ -61,7 +60,6 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
   const courseComplete = useCourseComplete();
   const isLastLesson = !getNextLesson(lesson);
   const mobile = useIsMobile();
-  const { loading: pyLoading } = usePyodide();
   const runner = useStepRunner();
   const monitor = useMonitor();
   const runnerRef = useRef(runner);
@@ -145,24 +143,24 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
           canFinish={isLastLesson && monitor.entries.length > 0}
           running={runner.running}
           prose={<ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
-            runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />}
+            runningStepId={runner.runningStepId} disabled={runner.running} onRunStep={handleRunStep} />}
           graph={<AgentGraph graph={lesson.graph} entries={monitor.entries} cursor={playback.cursor} turns={turns} />}
           playback={<PlaybackControls playback={playback} entryCount={monitor.entries.length} turns={turns} />}
           traceLog={<TraceLog entries={monitor.entries} cursor={playback.cursor} isLive={playback.isLive}
             running={runner.running} turns={turns} activeTurnIndex={playback.activeTurnIndex} onGoToTurn={playback.goToTurn} />}
           inputBar={<InputBar inputConfig={inputStep?.inputConfig} onSend={handleSend} onClear={handleClear}
-            running={runner.running} disabled={pyLoading} replaying={playback.replaying} entryCount={monitor.entries.length} />}
+            running={runner.running} disabled={false} replaying={playback.replaying} entryCount={monitor.entries.length} />}
           fullCode={<FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
-            running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} />}
+            running={runner.runningStepId === "__all__"} disabled={runner.running} result={runner.stepResults["__all__"]} />}
         />
       ) : (
         <ResizablePanelGroup id={`lesson-${lesson.slug}`} className="flex-1">
           <ResizablePanel id={`prose-${lesson.slug}`} defaultSize={50} minSize={30}>
             <div className="h-full overflow-auto" data-scroll-root="" data-tour="prose-column">
               <ProseColumn steps={lesson.steps} stepResults={runner.stepResults}
-                runningStepId={runner.runningStepId} disabled={pyLoading || runner.running} onRunStep={handleRunStep} />
+                runningStepId={runner.runningStepId} disabled={runner.running} onRunStep={handleRunStep} />
               <div data-tour="full-code"><FullCodeBlock code={lesson.fullCode} onRun={handleRunAll}
-                running={runner.runningStepId === "__all__"} disabled={pyLoading || runner.running} result={runner.stepResults["__all__"]} /></div>
+                running={runner.runningStepId === "__all__"} disabled={runner.running} result={runner.stepResults["__all__"]} /></div>
             </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
@@ -179,7 +177,7 @@ export function LessonPageV2({ lesson }: LessonPageV2Props) {
                   running={runner.running} turns={turns} activeTurnIndex={playback.activeTurnIndex} onGoToTurn={playback.goToTurn} />
               </div>
               <InputBar inputConfig={inputStep?.inputConfig} onSend={handleSend} onClear={handleClear}
-                running={runner.running} disabled={pyLoading} replaying={playback.replaying} entryCount={monitor.entries.length} />
+                running={runner.running} disabled={false} replaying={playback.replaying} entryCount={monitor.entries.length} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

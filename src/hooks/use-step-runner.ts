@@ -28,7 +28,7 @@ export interface StepRunnerState {
 }
 
 export function useStepRunner(): StepRunnerState {
-  const { pyodide, loading } = usePyodide();
+  const { pyodide, ensureLoaded } = usePyodide();
   const [running, setRunning] = useState(false);
   const [runningStepId, setRunningStepId] = useState<string | null>(null);
   const [stepResults, setStepResults] = useState<Record<string, StepResult>>(
@@ -37,14 +37,20 @@ export function useStepRunner(): StepRunnerState {
   const lastConfigKey = useRef("");
   const executedSteps = useRef<Set<string>>(new Set());
   const pyRef = useRef(pyodide);
-  const loadingRef = useRef(loading);
   useEffect(() => { pyRef.current = pyodide; }, [pyodide]);
-  useEffect(() => { loadingRef.current = loading; }, [loading]);
 
   const captureRun = useCallback(
     async (code: string): Promise<StepResult> => {
-      const py = pyRef.current;
-      if (!py || loadingRef.current) {
+      let py = pyRef.current;
+      if (!py) {
+        try {
+          py = await ensureLoaded();
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : String(e);
+          return { stdout: "", traceEvents: [], error: `Pyodide failed to load: ${msg}` };
+        }
+      }
+      if (!py) {
         return { stdout: "", traceEvents: [], error: "Pyodide not loaded" };
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,7 +89,7 @@ sys.stderr = _captured_output
         return { stdout: "", traceEvents: [], error: msg };
       }
     },
-    [] // stable — reads pyodide from ref
+    [ensureLoaded]
   );
 
   const runStep = useCallback(
