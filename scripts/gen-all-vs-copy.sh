@@ -18,7 +18,16 @@ if [ ! -f "$LIST" ]; then
   exit 2
 fi
 
-mapfile -t PAIRS < <(grep -v '^\s*#' "$LIST" | grep -v '^\s*$')
+PAIRS=()
+while IFS= read -r LINE; do
+  case "$LINE" in
+    '#'*|'') continue ;;
+  esac
+  TRIMMED="$(echo "$LINE" | tr -d '[:space:]')"
+  [ -z "$TRIMMED" ] && continue
+  PAIRS+=("$TRIMMED")
+done < "$LIST"
+
 TOTAL=${#PAIRS[@]}
 i=0
 for PAIR in "${PAIRS[@]}"; do
