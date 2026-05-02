@@ -70,7 +70,7 @@ export default async function BlogPostPage({
   };
 
   return (
-    <>
+    <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -125,6 +125,6 @@ export default async function BlogPostPage({
           </Link>
         </aside>
       </article>
-    </>
+    </main>
   );
 }

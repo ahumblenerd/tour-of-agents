@@ -61,10 +61,10 @@ export default async function LessonRoute({
   }
 
   return (
-    <>
+    <main>
       <LessonJsonLd lesson={lesson} />
       <LessonSeoContent lesson={lesson} />
       <LessonPageV2 lesson={lesson} />
-    </>
+    </main>
   );
 }

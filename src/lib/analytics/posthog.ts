@@ -14,6 +14,7 @@ export function initPostHog() {
     capture_pageleave: true,
     persistence: "localStorage",
     session_recording: { maskAllInputs: false },
+    disable_surveys: true,
   });
   initialized = true;
 }

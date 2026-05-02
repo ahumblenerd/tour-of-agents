@@ -53,10 +53,10 @@ export default async function ComparePage({
   }
 
   return (
-    <>
+    <main>
       <CompareJsonLd fw={fw} />
       {fw.faqs && <FaqJsonLd faqs={fw.faqs} />}
       <ComparisonArticle fw={fw} />
-    </>
+    </main>
   );
 }

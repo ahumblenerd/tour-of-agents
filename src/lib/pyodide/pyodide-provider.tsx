@@ -30,9 +30,9 @@ export function PyodideProvider({ children }: { children: ReactNode }) {
 
     async function load() {
       try {
-        // Load pyodide from CDN
         const script = document.createElement("script");
         script.src = "https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js";
+        script.async = true;
         script.onload = async () => {
           try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,7 +57,17 @@ export function PyodideProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    load();
+    // Defer Pyodide load until well after LCP/TTI so it doesn't dominate TBT.
+    // Real users typically spend a few seconds reading the lesson before clicking Run;
+    // any earlier Run click will await the in-flight load.
+    let cancelled = false;
+    const start = () => { if (!cancelled) load(); };
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => void };
+    const t = setTimeout(() => {
+      if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 2000 });
+      else start();
+    }, 4000);
+    return () => { cancelled = true; clearTimeout(t); };
   }, []);
 
   return (

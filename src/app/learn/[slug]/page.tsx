@@ -56,9 +56,9 @@ export default async function LearnArticle({
   }
 
   return (
-    <>
+    <main>
       <LessonJsonLd lesson={lesson} basePath="learn" />
       <ArticleLayout lesson={lesson} />
-    </>
+    </main>
   );
 }

@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# lighthouse audit artifacts
+/.lighthouse/
+
 # production
 /build
 

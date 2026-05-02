@@ -128,8 +128,8 @@ function MobileOverflow({ onOpenSettings }: { onOpenSettings: () => void }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm" className="md:hidden h-8 w-8 p-0">
-          <MoreVertical className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="md:hidden h-8 w-8 p-0" aria-label="Open menu">
+          <MoreVertical className="h-4 w-4" aria-hidden="true" />
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-48 p-1">
