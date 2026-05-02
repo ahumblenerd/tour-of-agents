@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { CourseJsonLd } from "@/components/seo/course-json-ld";
+import { DeferredGA } from "@/components/analytics/deferred-ga";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,7 +62,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <GoogleAnalytics gaId="G-1LWH9HJ17W" />
+        <DeferredGA gaId="G-1LWH9HJ17W" />
         <CourseJsonLd />
         <Providers>
           {children}
