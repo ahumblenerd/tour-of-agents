@@ -3,6 +3,7 @@ import type { FrameworkPair } from "@/lib/seo/comparisons/pairs";
 import { VsComparisonTable } from "./vs-comparison-table";
 import { ComparisonCrossLinks } from "./comparison-cross-links";
 import { StatsComparison } from "./framework-stats";
+import { MarkdownProse } from "./markdown";
 
 export function VsComparison({ pair }: { pair: FrameworkPair }) {
   const { frameworkA: a, frameworkB: b } = pair;
@@ -50,11 +51,11 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-3">When to use {a.name}</h2>
-        <p className="text-muted-foreground leading-relaxed mb-4">{a.verdict}</p>
+        <MarkdownProse>{a.verdict}</MarkdownProse>
         {a.sections?.slice(0, 2).map((s) => (
           <div key={s.heading} className="mb-4">
             <h3 className="text-base font-medium mb-2">{s.heading}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">{s.body}</p>
+            <MarkdownProse>{s.body}</MarkdownProse>
           </div>
         ))}
         <Link href={`/compare/${a.slug}`} className="text-sm text-primary hover:underline">
@@ -64,11 +65,11 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-3">When to use {b.name}</h2>
-        <p className="text-muted-foreground leading-relaxed mb-4">{b.verdict}</p>
+        <MarkdownProse>{b.verdict}</MarkdownProse>
         {b.sections?.slice(0, 2).map((s) => (
           <div key={s.heading} className="mb-4">
             <h3 className="text-base font-medium mb-2">{s.heading}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">{s.body}</p>
+            <MarkdownProse>{s.body}</MarkdownProse>
           </div>
         ))}
         <Link href={`/compare/${b.slug}`} className="text-sm text-primary hover:underline">
