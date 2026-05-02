@@ -1,5 +1,7 @@
 import { frameworks } from "./index";
-import type { FrameworkComparison } from "./types";
+import type { FrameworkComparison, VsCopy } from "./types";
+import { getVsCopy } from "./vs-overrides";
+import { synthesizeVsCopy } from "./vs-default-copy";
 
 export interface FrameworkPair {
   slug: string;
@@ -12,6 +14,8 @@ export interface FrameworkPair {
   title: string;
   description: string;
   keywords: string[];
+  /** Always present. Override from vs-overrides/* takes priority; otherwise synthesized from framework data. */
+  copy: VsCopy;
 }
 
 /** Generate all unique pairs, alphabetical by slug */
@@ -56,6 +60,7 @@ function buildPair(
         "AI agent framework comparison",
       ]),
     ],
+    copy: getVsCopy(slug) ?? synthesizeVsCopy(a, b),
   };
 }
 

@@ -37,44 +37,30 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
 
       <section className="mb-8">
         <h2 className="text-xl font-semibold mb-3">
-          What both do in plain Python
+          {a.name} vs {b.name}, head to head
         </h2>
-        <p className="text-muted-foreground leading-relaxed">
-          Every concept in the table above — agent, tools, loop, memory,
-          state — maps to a handful of Python primitives: a function, a
-          dict, a list, and a while loop. Both {a.name} and {b.name} wrap
-          these primitives in their own class hierarchies and APIs. The
-          underlying pattern is the same ~60 lines of code. The difference
-          is how much ceremony each framework adds on top.
-        </p>
+        <MarkdownProse>{pair.copy.headToHead}</MarkdownProse>
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-3">When to use {a.name}</h2>
-        <MarkdownProse>{a.verdict}</MarkdownProse>
-        {a.sections?.slice(0, 2).map((s) => (
-          <div key={s.heading} className="mb-4">
-            <h3 className="text-base font-medium mb-2">{s.heading}</h3>
-            <MarkdownProse>{s.body}</MarkdownProse>
-          </div>
-        ))}
+        <h2 className="text-xl font-semibold mb-3">Pick {a.name} if</h2>
+        <MarkdownProse>{pair.copy.pickAIf}</MarkdownProse>
         <Link href={`/compare/${a.slug}`} className="text-sm text-primary hover:underline">
           Full {a.name} comparison &rarr;
         </Link>
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-3">When to use {b.name}</h2>
-        <MarkdownProse>{b.verdict}</MarkdownProse>
-        {b.sections?.slice(0, 2).map((s) => (
-          <div key={s.heading} className="mb-4">
-            <h3 className="text-base font-medium mb-2">{s.heading}</h3>
-            <MarkdownProse>{s.body}</MarkdownProse>
-          </div>
-        ))}
+        <h2 className="text-xl font-semibold mb-3">Pick {b.name} if</h2>
+        <MarkdownProse>{pair.copy.pickBIf}</MarkdownProse>
         <Link href={`/compare/${b.slug}`} className="text-sm text-primary hover:underline">
           Full {b.name} comparison &rarr;
         </Link>
+      </section>
+
+      <section className="mb-8">
+        <h2 className="text-xl font-semibold mb-3">What both add</h2>
+        <MarkdownProse>{pair.copy.sharedConcerns}</MarkdownProse>
       </section>
 
       <section className="mb-8 p-6 border border-border rounded-lg">

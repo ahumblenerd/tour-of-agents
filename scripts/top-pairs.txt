@@ -1,0 +1,40 @@
+# Top 30 pairs to generate /vs/* head-to-head copy for.
+# Selected from GSC 28d impressions (2026-04-04 → 2026-05-02) plus
+# canonical "obvious" pairs that should rank but aren't yet.
+#
+# Pair slugs are alphabetical (canonical form). Lines starting with
+# # are comments. Edit freely before running gen-all-vs-copy.sh.
+
+# === GSC top-impression pairs ===
+langchain-vs-n8n-ai
+langchain-vs-mastra
+anthropic-sdk-vs-langchain
+langchain-vs-rasa
+camel-ai-vs-langchain
+agno-vs-crewai
+langchain-vs-llamaindex
+autogpt-vs-langchain
+crewai-vs-mastra
+babyagi-vs-langchain
+crewai-vs-haystack
+dspy-vs-langchain
+anthropic-sdk-vs-crewai
+autogen-vs-google-adk
+crewai-vs-llamaindex
+autogen-vs-haystack
+
+# === Canonical obvious pairs ===
+crewai-vs-langchain
+autogen-vs-langchain
+langchain-vs-openai-agents-sdk
+autogen-vs-crewai
+agno-vs-langchain
+mastra-vs-pydantic-ai
+semantic-kernel-vs-langchain
+smolagents-vs-langchain
+controlflow-vs-langchain
+anthropic-sdk-vs-openai-agents-sdk
+crewai-vs-pydantic-ai
+agno-vs-mastra
+langchain-vs-pydantic-ai
+google-adk-vs-langchain
