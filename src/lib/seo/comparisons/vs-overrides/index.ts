@@ -21,24 +21,35 @@ import autogenVsCrewai from "./autogen-vs-crewai";
 import autogenVsGoogleAdk from "./autogen-vs-google-adk";
 import autogenVsHaystack from "./autogen-vs-haystack";
 import autogenVsLangchain from "./autogen-vs-langchain";
+import autogenVsLanggraph from "./autogen-vs-langgraph";
 import autogptVsLangchain from "./autogpt-vs-langchain";
+import awsAgentcoreVsAwsStrands from "./aws-agentcore-vs-aws-strands";
+import awsAgentcoreVsLangchain from "./aws-agentcore-vs-langchain";
+import awsStrandsVsCrewai from "./aws-strands-vs-crewai";
+import awsStrandsVsLangchain from "./aws-strands-vs-langchain";
 import babyagiVsLangchain from "./babyagi-vs-langchain";
 import camelAiVsLangchain from "./camel-ai-vs-langchain";
 import controlflowVsLangchain from "./controlflow-vs-langchain";
 import crewaiVsHaystack from "./crewai-vs-haystack";
 import crewaiVsLangchain from "./crewai-vs-langchain";
+import crewaiVsLanggraph from "./crewai-vs-langgraph";
 import crewaiVsLlamaindex from "./crewai-vs-llamaindex";
 import crewaiVsMastra from "./crewai-vs-mastra";
 import crewaiVsPydanticAi from "./crewai-vs-pydantic-ai";
+import crewaiVsVercelAiSdk from "./crewai-vs-vercel-ai-sdk";
 import dspyVsLangchain from "./dspy-vs-langchain";
 import googleAdkVsLangchain from "./google-adk-vs-langchain";
+import langchainVsLanggraph from "./langchain-vs-langgraph";
 import langchainVsLlamaindex from "./langchain-vs-llamaindex";
 import langchainVsMastra from "./langchain-vs-mastra";
 import langchainVsN8nAi from "./langchain-vs-n8n-ai";
 import langchainVsOpenaiAgentsSdk from "./langchain-vs-openai-agents-sdk";
 import langchainVsPydanticAi from "./langchain-vs-pydantic-ai";
 import langchainVsRasa from "./langchain-vs-rasa";
+import langchainVsVercelAiSdk from "./langchain-vs-vercel-ai-sdk";
+import langgraphVsMastra from "./langgraph-vs-mastra";
 import mastraVsPydanticAi from "./mastra-vs-pydantic-ai";
+import mastraVsVercelAiSdk from "./mastra-vs-vercel-ai-sdk";
 import semanticKernelVsLangchain from "./semantic-kernel-vs-langchain";
 import smolagentsVsLangchain from "./smolagents-vs-langchain";
 
@@ -53,24 +64,35 @@ export const vsCopyMap: Record<string, VsCopy> = {
   "autogen-vs-google-adk": autogenVsGoogleAdk,
   "autogen-vs-haystack": autogenVsHaystack,
   "autogen-vs-langchain": autogenVsLangchain,
+  "autogen-vs-langgraph": autogenVsLanggraph,
   "autogpt-vs-langchain": autogptVsLangchain,
+  "aws-agentcore-vs-aws-strands": awsAgentcoreVsAwsStrands,
+  "aws-agentcore-vs-langchain": awsAgentcoreVsLangchain,
+  "aws-strands-vs-crewai": awsStrandsVsCrewai,
+  "aws-strands-vs-langchain": awsStrandsVsLangchain,
   "babyagi-vs-langchain": babyagiVsLangchain,
   "camel-ai-vs-langchain": camelAiVsLangchain,
   "controlflow-vs-langchain": controlflowVsLangchain,
   "crewai-vs-haystack": crewaiVsHaystack,
   "crewai-vs-langchain": crewaiVsLangchain,
+  "crewai-vs-langgraph": crewaiVsLanggraph,
   "crewai-vs-llamaindex": crewaiVsLlamaindex,
   "crewai-vs-mastra": crewaiVsMastra,
   "crewai-vs-pydantic-ai": crewaiVsPydanticAi,
+  "crewai-vs-vercel-ai-sdk": crewaiVsVercelAiSdk,
   "dspy-vs-langchain": dspyVsLangchain,
   "google-adk-vs-langchain": googleAdkVsLangchain,
+  "langchain-vs-langgraph": langchainVsLanggraph,
   "langchain-vs-llamaindex": langchainVsLlamaindex,
   "langchain-vs-mastra": langchainVsMastra,
   "langchain-vs-n8n-ai": langchainVsN8nAi,
   "langchain-vs-openai-agents-sdk": langchainVsOpenaiAgentsSdk,
   "langchain-vs-pydantic-ai": langchainVsPydanticAi,
   "langchain-vs-rasa": langchainVsRasa,
+  "langchain-vs-vercel-ai-sdk": langchainVsVercelAiSdk,
+  "langgraph-vs-mastra": langgraphVsMastra,
   "mastra-vs-pydantic-ai": mastraVsPydanticAi,
+  "mastra-vs-vercel-ai-sdk": mastraVsVercelAiSdk,
   "semantic-kernel-vs-langchain": semanticKernelVsLangchain,
   "smolagents-vs-langchain": smolagentsVsLangchain,
 };
