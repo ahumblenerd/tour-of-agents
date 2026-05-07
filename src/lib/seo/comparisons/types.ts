@@ -66,6 +66,8 @@ export interface FrameworkComparison {
   faqs?: { question: string; answer: string }[];
   stats?: FrameworkStats;
   references?: ComparisonReferences;
+  /** ISO date of last monthly depth update. Drives sitemap lastModified. */
+  lastDepthUpdate?: string;
 }
 
 /**
@@ -83,4 +85,6 @@ export interface VsCopy {
   pickBIf: string;
   /** 1 paragraph: what both frameworks add that you might not need — segue into the plain-Python option. */
   sharedConcerns: string;
+  /** ISO date of last monthly depth update. Drives sitemap lastModified. */
+  lastDepthUpdate?: string;
 }

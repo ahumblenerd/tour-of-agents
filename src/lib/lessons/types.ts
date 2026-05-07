@@ -45,4 +45,6 @@ export interface LessonDefinition {
   llmConfig?: LlmConfig;
   graph: GraphDefinition;
   frameworkName: string;
+  /** ISO date (YYYY-MM-DD) of last monthly depth update. Drives sitemap lastModified for freshness. Bumped by scripts/depth-candidates.ts workflow. */
+  lastDepthUpdate?: string;
 }

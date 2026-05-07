@@ -14,6 +14,7 @@
     "prebuild": "tsx scripts/build-llms.ts",
     "build": "next build && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static",
     "build:llms": "tsx scripts/build-llms.ts",
+    "seo:candidates": "tsx scripts/depth-candidates.ts",
     "start": "HOSTNAME=0.0.0.0 node .next/standalone/server.js",
     "lint": "eslint",
     "test": "vitest run --project=unit",

@@ -7,6 +7,8 @@ export interface BlogPost {
   sections: { heading: string; body: string }[];
   cta: string;
   relatedLinks?: { label: string; href: string }[];
+  /** ISO date of last monthly depth update. Drives sitemap lastModified. */
+  lastDepthUpdate?: string;
 }
 
 export { howAiAgentsWork } from "./how-ai-agents-work";

@@ -30,56 +30,56 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Homepage
   entries.push({ url: SITE, lastModified: today, changeFrequency: "weekly", priority: 1.0 });
 
-  // Interactive lessons
+  // Interactive lessons — lastDepthUpdate when present (freshness signal)
   for (const l of allLessons) {
     entries.push({
       url: `${SITE}/lesson/${l.slug}`,
-      lastModified: today,
+      lastModified: l.lastDepthUpdate ?? today,
       changeFrequency: "monthly",
       priority: l.number <= 3 || l.number === 9 ? 0.9 : 0.8,
     });
   }
 
-  // Learn articles
+  // Learn articles — share lastDepthUpdate with their lesson sibling
   entries.push({ url: `${SITE}/learn`, lastModified: today, changeFrequency: "weekly", priority: 0.9 });
   for (const l of allLessons) {
     entries.push({
       url: `${SITE}/learn/${l.slug}`,
-      lastModified: today,
+      lastModified: l.lastDepthUpdate ?? today,
       changeFrequency: "monthly",
       priority: 0.8,
     });
   }
 
-  // Framework comparisons (individual — always included)
+  // Framework comparisons — lastDepthUpdate when present
   entries.push({ url: `${SITE}/compare`, lastModified: today, changeFrequency: "weekly", priority: 0.8 });
   for (const fw of frameworks) {
     entries.push({
       url: `${SITE}/compare/${fw.slug}`,
-      lastModified: today,
+      lastModified: fw.lastDepthUpdate ?? today,
       changeFrequency: "monthly",
       priority: 0.8,
     });
   }
 
-  // VS pages — drip-fed, 5 per day
+  // VS pages — drip-fed, 2 per day; lastDepthUpdate from override copy when present
   const allPairs = getAllPairs();
   const allowed = Math.min(getVsPagesAllowed(), allPairs.length);
   for (let i = 0; i < allowed; i++) {
     entries.push({
       url: `${SITE}/vs/${allPairs[i].slug}`,
-      lastModified: today,
+      lastModified: allPairs[i].copy.lastDepthUpdate ?? today,
       changeFrequency: "monthly",
       priority: 0.7,
     });
   }
 
-  // Blog
+  // Blog — lastDepthUpdate beats post.date when bumped
   entries.push({ url: `${SITE}/blog`, lastModified: today, changeFrequency: "weekly", priority: 0.8 });
   for (const post of posts) {
     entries.push({
       url: `${SITE}/blog/${post.slug}`,
-      lastModified: post.date,
+      lastModified: post.lastDepthUpdate ?? post.date,
       changeFrequency: "monthly",
       priority: 0.8,
     });
