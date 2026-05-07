@@ -76,6 +76,12 @@ Source: ${SITE}/compare/${fw.slug}
 
 export function vsMd(pair: ReturnType<typeof getAllPairs>[number]): string {
   const c = pair.copy;
+  const codeBlock = c.codeSideBySide
+    ? `\n## Same task in ${pair.nameA} and ${pair.nameB}\n\n${c.codeSideBySide}\n`
+    : "";
+  const migrationBlock = c.migrationNotes
+    ? `\n## Migrating between ${pair.nameA} and ${pair.nameB}\n\n${c.migrationNotes}\n`
+    : "";
   return `# ${pair.nameA} vs ${pair.nameB}: Which Agent Framework to Use?
 
 > ${pair.description}
@@ -95,7 +101,7 @@ ${c.pickBIf}
 ## What both add
 
 ${c.sharedConcerns}
-
+${codeBlock}${migrationBlock}
 ---
 Source: ${SITE}/vs/${pair.slug}
 `;

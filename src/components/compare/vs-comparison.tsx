@@ -68,6 +68,24 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
         <MarkdownProse>{pair.copy.sharedConcerns}</MarkdownProse>
       </section>
 
+      {pair.copy.codeSideBySide && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-3">
+            Same task in {a.name} and {b.name}
+          </h2>
+          <MarkdownProse>{pair.copy.codeSideBySide}</MarkdownProse>
+        </section>
+      )}
+
+      {pair.copy.migrationNotes && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold mb-3">
+            Migrating between {a.name} and {b.name}
+          </h2>
+          <MarkdownProse>{pair.copy.migrationNotes}</MarkdownProse>
+        </section>
+      )}
+
       <section className="mb-8 p-6 border border-border rounded-lg">
         <h2 className="text-lg font-semibold mb-2">
           Or build your own in 60 lines

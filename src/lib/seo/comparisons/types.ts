@@ -85,6 +85,10 @@ export interface VsCopy {
   pickBIf: string;
   /** 1 paragraph: what both frameworks add that you might not need — segue into the plain-Python option. */
   sharedConcerns: string;
+  /** Optional: same realistic task implemented in both frameworks, with commentary. Markdown with code blocks. Added during depth-update passes. */
+  codeSideBySide?: string;
+  /** Optional: "if you're migrating from A to B (or vice versa)" — what to expect. Markdown. Added during depth-update passes. */
+  migrationNotes?: string;
   /** ISO date of last monthly depth update. Drives sitemap lastModified. */
   lastDepthUpdate?: string;
 }
