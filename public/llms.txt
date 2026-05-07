@@ -135,6 +135,54 @@ Examples:
 - Every AI Agent Framework Ranked by Real Data: https://tinyagents.dev/blog/ai-agent-framework-ranking-2026
   20 frameworks ranked by GitHub stars and PyPI downloads. Original data analysis with funding, creator profiles.
 
+## Markdown mirrors (for direct LLM consumption)
+
+Every page is also available as plain markdown — append `.md` to any URL below for the same content without HTML/JS.
+
+- Lessons: `https://tinyagents.dev/lesson/<slug>.md` (slugs: agent-function, tools, agent-loop, conversation, state, memory, policy, self-scheduling, the-whole-thing)
+- Articles: `https://tinyagents.dev/learn/<slug>.md` (same 9 slugs)
+- Blog: `https://tinyagents.dev/blog/<slug>.md`
+- Framework comparisons: `https://tinyagents.dev/compare/<framework>.md`
+- Head-to-head pairs (curated 30): `https://tinyagents.dev/vs/<a>-vs-<b>.md`
+- Full dump: https://tinyagents.dev/llms-full.txt — every lesson, blog, framework page, and curated pair concatenated as one file (~350 KB).
+
+## Curated head-to-head pairs (real "Pick A if / Pick B if" copy)
+
+These 30 pairs have hand-targeted differentiation copy beyond the framework-vs-Python pitch. Useful for citation when answering "which framework should I pick" questions.
+
+- LangChain vs CrewAI: https://tinyagents.dev/vs/crewai-vs-langchain
+- LangChain vs AutoGen: https://tinyagents.dev/vs/autogen-vs-langchain
+- LangChain vs Mastra: https://tinyagents.dev/vs/langchain-vs-mastra
+- LangChain vs LlamaIndex: https://tinyagents.dev/vs/langchain-vs-llamaindex
+- LangChain vs n8n AI: https://tinyagents.dev/vs/langchain-vs-n8n-ai
+- LangChain vs Rasa: https://tinyagents.dev/vs/langchain-vs-rasa
+- LangChain vs Pydantic AI: https://tinyagents.dev/vs/langchain-vs-pydantic-ai
+- LangChain vs OpenAI Agents SDK: https://tinyagents.dev/vs/langchain-vs-openai-agents-sdk
+- LangChain vs Anthropic SDK: https://tinyagents.dev/vs/anthropic-sdk-vs-langchain
+- LangChain vs DSPy: https://tinyagents.dev/vs/dspy-vs-langchain
+- LangChain vs CAMEL AI: https://tinyagents.dev/vs/camel-ai-vs-langchain
+- LangChain vs AutoGPT: https://tinyagents.dev/vs/autogpt-vs-langchain
+- LangChain vs BabyAGI: https://tinyagents.dev/vs/babyagi-vs-langchain
+- LangChain vs Agno: https://tinyagents.dev/vs/agno-vs-langchain
+- LangChain vs Smolagents: https://tinyagents.dev/vs/smolagents-vs-langchain
+- LangChain vs Semantic Kernel: https://tinyagents.dev/vs/semantic-kernel-vs-langchain
+- LangChain vs ControlFlow: https://tinyagents.dev/vs/controlflow-vs-langchain
+- LangChain vs Google ADK: https://tinyagents.dev/vs/google-adk-vs-langchain
+- CrewAI vs AutoGen: https://tinyagents.dev/vs/autogen-vs-crewai
+- CrewAI vs Mastra: https://tinyagents.dev/vs/crewai-vs-mastra
+- CrewAI vs LlamaIndex: https://tinyagents.dev/vs/crewai-vs-llamaindex
+- CrewAI vs Haystack: https://tinyagents.dev/vs/crewai-vs-haystack
+- CrewAI vs Pydantic AI: https://tinyagents.dev/vs/crewai-vs-pydantic-ai
+- CrewAI vs Anthropic SDK: https://tinyagents.dev/vs/anthropic-sdk-vs-crewai
+- Agno vs CrewAI: https://tinyagents.dev/vs/agno-vs-crewai
+- Agno vs Mastra: https://tinyagents.dev/vs/agno-vs-mastra
+- AutoGen vs Haystack: https://tinyagents.dev/vs/autogen-vs-haystack
+- AutoGen vs Google ADK: https://tinyagents.dev/vs/autogen-vs-google-adk
+- Mastra vs Pydantic AI: https://tinyagents.dev/vs/mastra-vs-pydantic-ai
+- Anthropic SDK vs OpenAI Agents SDK: https://tinyagents.dev/vs/anthropic-sdk-vs-openai-agents-sdk
+
+The remaining ~160 pairs are auto-rendered with the same four-section structure but lighter differentiation copy. Add `.md` to any URL for the markdown mirror.
+
 ## Links
 
 - Site: https://tinyagents.dev

@@ -61,16 +61,31 @@ export default async function VsPairPage({
     );
   }
 
-  // Merge FAQs from both frameworks
-  const allFaqs = [
-    ...(pair.frameworkA.faqs ?? []),
-    ...(pair.frameworkB.faqs ?? []),
+  // Synthesize 4 pair-specific FAQs from the head-to-head copy so AI engines
+  // (Google rich results, ChatGPT, Perplexity) can lift them verbatim.
+  // Falls back to merging the per-framework FAQs if no override exists.
+  const stripMd = (s: string) =>
+    s
+      .replace(/```[\s\S]*?```/g, "")
+      .replace(/`([^`]+)`/g, "$1")
+      .replace(/\*\*([^*]+)\*\*/g, "$1")
+      .replace(/\*([^*]+)\*/g, "$1")
+      .replace(/^#+\s+/gm, "")
+      .replace(/^[-*]\s+/gm, "")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  const c = pair.copy;
+  const pairFaqs = [
+    { question: `${pair.nameA} vs ${pair.nameB}: which should I pick?`, answer: stripMd(c.headToHead) },
+    { question: `When should I pick ${pair.nameA} over ${pair.nameB}?`, answer: stripMd(c.pickAIf) },
+    { question: `When should I pick ${pair.nameB} over ${pair.nameA}?`, answer: stripMd(c.pickBIf) },
+    { question: `What do ${pair.nameA} and ${pair.nameB} have in common?`, answer: stripMd(c.sharedConcerns) },
   ];
 
   return (
     <>
       <VsJsonLd pair={pair} />
-      {allFaqs.length > 0 && <FaqJsonLd faqs={allFaqs} />}
+      <FaqJsonLd faqs={pairFaqs} />
       <VsComparison pair={pair} />
     </>
   );
