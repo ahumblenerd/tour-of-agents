@@ -21,9 +21,16 @@ export async function generateMetadata({
   if (!lesson) return {};
 
   const seo = getLessonSeo(lesson);
-  const title = `Lesson ${lesson.number}: ${lesson.title} — A Tour of Agents`;
+  // Lesson 1 owns the "build an ai agent from scratch in python" exact-match query (autocomplete-confirmed).
+  const title =
+    lesson.number === 1
+      ? `Build an AI Agent from Scratch in Python — Lesson 1: ${lesson.title} | A Tour of Agents`
+      : `Lesson ${lesson.number}: ${lesson.title} — A Tour of Agents`;
   const url = `${SITE}/lesson/${slug}`;
-  const description = `Interactive exercise: ${seo.description} Write and run Python in your browser.`;
+  const description =
+    lesson.number === 1
+      ? `Build an AI agent from scratch in Python — interactive lesson 1 of 9. ${seo.description} Runs in your browser via Pyodide. No install, no framework.`
+      : `Interactive exercise: ${seo.description} Write and run Python in your browser.`;
 
   return {
     title,

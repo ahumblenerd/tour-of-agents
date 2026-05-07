@@ -19,6 +19,7 @@ export { tinyAgentsHuggingfaceVsFromScratch } from "./tiny-agents-huggingface-vs
 export { whyAiAgentProjectsFail } from "./why-ai-agent-projects-fail";
 export { whatIsTheAgentLoop } from "./what-is-the-agent-loop";
 export { aiAgentFrameworkRanking2026 } from "./ai-agent-framework-ranking-2026";
+export { langchainAlternatives } from "./langchain-alternatives";
 
 import { howAiAgentsWork } from "./how-ai-agents-work";
 import { langchainVsPlainPython } from "./langchain-vs-plain-python";
@@ -28,8 +29,10 @@ import { tinyAgentsHuggingfaceVsFromScratch } from "./tiny-agents-huggingface-vs
 import { whyAiAgentProjectsFail } from "./why-ai-agent-projects-fail";
 import { whatIsTheAgentLoop } from "./what-is-the-agent-loop";
 import { aiAgentFrameworkRanking2026 } from "./ai-agent-framework-ranking-2026";
+import { langchainAlternatives } from "./langchain-alternatives";
 
 export const posts: BlogPost[] = [
+  langchainAlternatives,
   howAiAgentsWork,
   langchainVsPlainPython,
   whatIsToolCalling,

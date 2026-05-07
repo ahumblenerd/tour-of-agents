@@ -21,6 +21,10 @@ import { pydanticAi } from "./pydantic-ai";
 import { controlflow } from "./controlflow";
 import { camelAi } from "./camel-ai";
 import { n8nAi } from "./n8n-ai";
+import { langgraph } from "./langgraph";
+import { vercelAiSdk } from "./vercel-ai-sdk";
+import { awsStrands } from "./aws-strands";
+import { awsAgentcore } from "./aws-agentcore";
 
 export const frameworks: FrameworkComparison[] = [
   langchain, crewai, autogen, openaiAgentsSdk,
@@ -28,6 +32,7 @@ export const frameworks: FrameworkComparison[] = [
   googleAdk, anthropicSdk, dspy, mastra,
   rasa, smolagents, autogpt, babyagi,
   pydanticAi, controlflow, camelAi, n8nAi,
+  langgraph, vercelAiSdk, awsStrands, awsAgentcore,
 ];
 
 export function getFramework(slug: string) {

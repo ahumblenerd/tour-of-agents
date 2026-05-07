@@ -38,3 +38,17 @@ crewai-vs-pydantic-ai
 agno-vs-mastra
 langchain-vs-pydantic-ai
 google-adk-vs-langchain
+
+# === Newly added frameworks (2026-05-07) — autocomplete-confirmed demand ===
+# Slugs are auto-canonicalized alphabetically by gen-vs-copy.sh
+langchain-vs-langgraph
+crewai-vs-langgraph
+autogen-vs-langgraph
+langgraph-vs-mastra
+langchain-vs-vercel-ai-sdk
+crewai-vs-vercel-ai-sdk
+mastra-vs-vercel-ai-sdk
+aws-strands-vs-langchain
+aws-strands-vs-crewai
+aws-agentcore-vs-langchain
+aws-agentcore-vs-aws-strands
