@@ -38,7 +38,7 @@ The tool_call_id is critical. When the LLM requests multiple tools in parallel (
     },
     {
       heading: "The dispatch pattern",
-      body: `Once you understand the API mechanics, the implementation pattern is almost anticlimactic. Tool dispatch is a dictionary lookup: tools[name](**args). You define your functions in a Python dict, look up by the name the LLM returned, and call the function with the arguments the LLM provided. Three lines of code.
+      body: `Once you understand the API mechanics, the implementation pattern is almost anticlimactic. Tool dispatch is a dictionary lookup: \`tools[name](**args)\`. You define your functions in a Python dict, look up by the name the LLM returned, and call the function with the arguments the LLM provided. Three lines of code.
 
 This is the same pattern as an Express.js router mapping paths to handlers, a Redux reducer mapping action types to state transitions, or a command dispatcher mapping command names to handler functions. It is one of the oldest patterns in software engineering. LangChain's @tool decorator builds this dict for you. CrewAI's tool registration does the same thing. AutoGen's function map is the same thing. They all resolve to a dictionary of name-to-function mappings.
 

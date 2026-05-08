@@ -28,7 +28,7 @@ export const lesson02: LessonDefinition = {
     ],
   },
   frameworkName:
-    "LangChain's @tool, CrewAI's tool registration — it's tools[name](**args).",
+    "LangChain's @tool, CrewAI's tool registration — it's `tools[name](**args)`.",
   llmConfig: {
     systemPrompt: "You have tools: add(a,b) and upper(text). Use them.",
     tools: [

@@ -5,6 +5,7 @@ const sections: BlogPost["sections"] = [
     heading: "The loop in 5 lines",
     body: `Here is the entire agent loop, the pattern that powers every AI agent you have ever used:
 
+\`\`\`python
 while True:
     response = llm(messages, tools)
     if not response.tool_calls:
@@ -12,6 +13,7 @@ while True:
     for tc in response.tool_calls:
         result = tools[tc.name](**tc.args)
         messages.append(tool_result(tc.id, result))
+\`\`\`
 
 Call the LLM with the conversation history and available tools. If the response contains no tool calls, the agent is done — break and return the response to the user. If there are tool calls, execute each one by looking up the function name in a dictionary and calling it with the provided arguments. Append each result to the messages list so the LLM can see what happened. Then loop back and call the LLM again with the updated history. That is it. Five lines of logic. Everything else — every framework, every orchestration library, every "agentic AI platform" — is built on top of this pattern. LangChain's AgentExecutor is this loop with error handling and callbacks. CrewAI's task execution is this loop with role-based prompts. AutoGen's conversation patterns are this loop distributed across multiple agents. The loop is the atom. Everything else is molecules.`,
   },
