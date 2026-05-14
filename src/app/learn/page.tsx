@@ -48,7 +48,7 @@ export default function LearnIndex() {
           return (
             <Link
               key={lesson.slug}
-              href={`/learn/${lesson.slug}`}
+              href={`/lesson/${lesson.slug}`}
               className="block p-5 rounded-lg border border-border hover:border-foreground/20 transition-colors"
             >
               <div className="flex items-baseline gap-3 mb-1">

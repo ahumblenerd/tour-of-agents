@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { LessonDefinition } from "@/lib/lessons/types";
 import { allLessons } from "@/lib/lessons/registry";
 import { getRelatedLinks } from "@/lib/learn/related-links";
+import { TryThisNowSidebar } from "./try-this-now-sidebar";
 
 /** Renders lesson step prose as a static readable article for SEO */
 export function ArticleLayout({ lesson }: { lesson: LessonDefinition }) {
@@ -11,6 +12,20 @@ export function ArticleLayout({ lesson }: { lesson: LessonDefinition }) {
 
   return (
     <article className="mx-auto max-w-2xl px-6 py-12">
+      <TryThisNowSidebar slug={lesson.slug} lessonNumber={lesson.number} />
+
+      <Link
+        href={`/lesson/${lesson.slug}`}
+        className="lg:hidden block mb-6 rounded-lg border border-primary/40 bg-primary/5 p-4 hover:bg-primary/10 transition-colors"
+      >
+        <p className="text-xs font-mono text-muted-foreground mb-1">
+          Lesson {lesson.number} &middot; Interactive
+        </p>
+        <p className="font-semibold text-sm">
+          Try it in your browser &rarr;
+        </p>
+      </Link>
+
       <header className="mb-8">
         <p className="text-sm text-muted-foreground mb-2">
           <Link href="/learn" className="hover:text-foreground">A Tour of Agents</Link>
