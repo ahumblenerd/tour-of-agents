@@ -89,21 +89,26 @@ export function TourGuide() {
   const pad = 6;
   const tooltip = getTooltipStyle(rect, s.position);
 
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const innerR = Math.max(rect.width, rect.height) / 2 + 24;
+  const outerR = innerR + 220;
+  // For center popups: leave a faint blur over the target so the area is still
+  // legible-ish (the user gets a sense of what's there) while the popup stays
+  // the focal point. For side popups: fully clear the target.
+  const innerStop = s.position === "center" ? "rgba(0,0,0,0.35)" : "transparent";
+  const radialMask = `radial-gradient(circle at ${cx}px ${cy}px, ${innerStop} ${innerR}px, black ${outerR}px)`;
+
   return (
     <div className="fixed inset-0 z-[100]" onClick={() => finish()}>
-      <svg className="absolute inset-0 w-full h-full">
-        <defs>
-          <mask id="tour-mask">
-            <rect width="100%" height="100%" fill="white" />
-            <rect
-              x={rect.left - pad} y={rect.top - pad}
-              width={rect.width + pad * 2} height={rect.height + pad * 2}
-              rx="8" fill="black"
-            />
-          </mask>
-        </defs>
-        <rect width="100%" height="100%" fill="rgba(0,0,0,0.3)" mask="url(#tour-mask)" />
-      </svg>
+      <div
+        className="absolute inset-0 backdrop-blur-md"
+        style={{
+          WebkitMaskImage: radialMask,
+          maskImage: radialMask,
+          backgroundColor: "rgba(0,0,0,0.12)",
+        }}
+      />
 
       <div
         className="absolute border-2 border-primary rounded-lg pointer-events-none animate-pulse"
