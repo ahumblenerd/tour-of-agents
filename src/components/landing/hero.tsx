@@ -26,13 +26,9 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
           <br />
           60 Lines of Python
         </h1>
-        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-2">
-          No framework. No install. See what LangChain, CrewAI, and
-          AutoGen actually do &mdash; by building it yourself.
-        </p>
-        <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-8">
-          9 interactive lessons. Write real Python, call real LLM APIs,
-          see real traces. Everything runs in your browser.
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-8">
+          Write the code. Run it in your browser. See exactly what LangChain,
+          CrewAI, and AutoGen do under the hood.
         </p>
 
         <div className="flex flex-wrap gap-3 justify-center mb-4">
@@ -54,7 +50,9 @@ export function Hero({ nextSlug, hasProgress, nextTitle }: HeroProps) {
         </div>
 
         <div className="flex flex-wrap gap-4 justify-center text-xs text-muted-foreground">
-          <span>~30 minutes total</span>
+          <span>9 lessons</span>
+          <span>&middot;</span>
+          <span>~30 minutes</span>
           <span>&middot;</span>
           <span>No signup required</span>
           <span>&middot;</span>
