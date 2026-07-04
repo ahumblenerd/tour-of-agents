@@ -25,6 +25,8 @@ import { langgraph } from "./langgraph";
 import { vercelAiSdk } from "./vercel-ai-sdk";
 import { awsStrands } from "./aws-strands";
 import { awsAgentcore } from "./aws-agentcore";
+import { eve } from "./eve";
+import { flue } from "./flue";
 
 export const frameworks: FrameworkComparison[] = [
   langchain, crewai, autogen, openaiAgentsSdk,
@@ -33,6 +35,7 @@ export const frameworks: FrameworkComparison[] = [
   rasa, smolagents, autogpt, babyagi,
   pydanticAi, controlflow, camelAi, n8nAi,
   langgraph, vercelAiSdk, awsStrands, awsAgentcore,
+  eve, flue,
 ];
 
 export function getFramework(slug: string) {

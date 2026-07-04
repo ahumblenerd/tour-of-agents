@@ -38,6 +38,12 @@ import crewaiVsMastra from "./crewai-vs-mastra";
 import crewaiVsPydanticAi from "./crewai-vs-pydantic-ai";
 import crewaiVsVercelAiSdk from "./crewai-vs-vercel-ai-sdk";
 import dspyVsLangchain from "./dspy-vs-langchain";
+import eveVsFlue from "./eve-vs-flue";
+import eveVsLanggraph from "./eve-vs-langgraph";
+import eveVsMastra from "./eve-vs-mastra";
+import eveVsVercelAiSdk from "./eve-vs-vercel-ai-sdk";
+import flueVsLangchain from "./flue-vs-langchain";
+import flueVsMastra from "./flue-vs-mastra";
 import googleAdkVsLangchain from "./google-adk-vs-langchain";
 import langchainVsLanggraph from "./langchain-vs-langgraph";
 import langchainVsLlamaindex from "./langchain-vs-llamaindex";
@@ -81,6 +87,12 @@ export const vsCopyMap: Record<string, VsCopy> = {
   "crewai-vs-pydantic-ai": crewaiVsPydanticAi,
   "crewai-vs-vercel-ai-sdk": crewaiVsVercelAiSdk,
   "dspy-vs-langchain": dspyVsLangchain,
+  "eve-vs-flue": eveVsFlue,
+  "eve-vs-langgraph": eveVsLanggraph,
+  "eve-vs-mastra": eveVsMastra,
+  "eve-vs-vercel-ai-sdk": eveVsVercelAiSdk,
+  "flue-vs-langchain": flueVsLangchain,
+  "flue-vs-mastra": flueVsMastra,
   "google-adk-vs-langchain": googleAdkVsLangchain,
   "langchain-vs-langgraph": langchainVsLanggraph,
   "langchain-vs-llamaindex": langchainVsLlamaindex,
