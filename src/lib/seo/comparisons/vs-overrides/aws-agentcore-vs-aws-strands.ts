@@ -1,15 +1,9 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-AgentCore is the **runtime layer** — a closed-source AWS SaaS bundling Runtime, Memory, Identity, Gateway, and Observability. You don't import it; you point it at agent code and it executes inside MicroVM-isolated sessions. Strands is the **SDK layer** — an Apache-2.0 Python package with \`Agent(model, tools, system_prompt)\`, the \`@tool\` decorator, and multi-agent primitives like \`Graph\` and \`Swarm\`. They sit at different layers of the stack: Strands is what you write; AgentCore is where it runs.
-
-### Ecosystem
+  headToHead: `AgentCore is the **runtime layer** — a closed-source AWS SaaS bundling Runtime, Memory, Identity, Gateway, and Observability. You don't import it; you point it at agent code and it executes inside MicroVM-isolated sessions. Strands is the **SDK layer** — an Apache-2.0 Python package with \`Agent(model, tools, system_prompt)\`, the \`@tool\` decorator, and multi-agent primitives like \`Graph\` and \`Swarm\`. They sit at different layers of the stack: Strands is what you write; AgentCore is where it runs.
 
 AgentCore is **framework-agnostic** — it runs Strands, LangGraph, CrewAI, or hand-rolled Python equally. Strands has its own ecosystem story: native MCP server/client support, type-hint-driven tool schemas, and multi-agent primitives shipped in the SDK. The two are designed by AWS to pair, but neither requires the other — you can run LangGraph on AgentCore, or run Strands on a bare Lambda. The GitHub picture matches: Strands lives at \`strands-agents/sdk-python\` (~4.2k stars, Apache-2.0); AgentCore is proprietary AWS infrastructure with no source repo.
-
-### Use case
 
 The choice isn't really A vs B — it's which **layer you're picking for**. AgentCore earns its place when operational concerns are real: multi-tenant session isolation, per-user OAuth credential vending, OTel traces with cost attribution, long-term memory at scale. Strands earns its place when you want a thin SDK that doesn't fight Bedrock and treats MCP as a first-class citizen. Production AWS deployments often use both; teams off AWS use neither.`,
   pickAIf: `Pick aws-agentcore if your project lives or dies on running multi-tenant agents safely on AWS.

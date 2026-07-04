@@ -1,23 +1,17 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-LangChain is a **component library**: \`AgentExecutor\`, \`LLMChain\`, \`@tool\`, \`ConversationBufferMemory\`, \`OutputParser\` — wire them together and the executor runs an internal reason-act loop. LangGraph is a **state-machine runtime**: you declare a \`StateGraph\` of nodes and edges over a typed \`State\` channel, and the runtime walks the graph, merging updates via reducers like \`add_messages\`.
+  headToHead: `LangChain is a **component library**: \`AgentExecutor\`, \`LLMChain\`, \`@tool\`, \`ConversationBufferMemory\`, \`OutputParser\` — wire them together and the executor runs an internal reason-act loop. LangGraph is a **state-machine runtime**: you declare a \`StateGraph\` of nodes and edges over a typed \`State\` channel, and the runtime walks the graph, merging updates via reducers like \`add_messages\`.
 
 LangChain hides the loop inside \`AgentExecutor.invoke()\`. LangGraph makes control flow explicit — every transition is an edge you wrote, every branch is a \`add_conditional_edges\` call.
-
-### Ecosystem
 
 Both ship from LangChain Inc, share LangSmith for tracing, and reuse the same tool and model abstractions. LangChain's draw is breadth: document loaders, text splitters, embeddings, dozens of vector stores, provider wrappers.
 
 LangGraph's draw is depth on workflow primitives the executor lacks — \`MemorySaver\` / \`PostgresSaver\` checkpointing per \`thread_id\`, \`interrupt_before\` / \`interrupt_after\` for approvals, parallel fanout with reducer-merged state, and time-travel debugging via state history. In practice teams pair them: LangChain for tools and integrations, LangGraph for orchestration.
 
-### Use case
+Use LangChain when the agent is a **single reason-act loop** plus a pile of integrations — RAG over a vector store, swap OpenAI for Anthropic by changing one class, ship via LangServe. \`AgentExecutor\` covers that shape directly.
 
-Reach for LangChain when the agent is a **single reason-act loop** plus a pile of integrations — RAG over a vector store, swap OpenAI for Anthropic by changing one class, ship via LangServe. \`AgentExecutor\` covers that shape directly.
-
-Reach for LangGraph when the agent is a **workflow**: branch on intermediate results, fan out parallel sub-agents, pause for human approval, resume after a crash. The graph, typed channels, and checkpointer exist precisely because \`AgentExecutor\`'s opaque internal loop can't express any of that cleanly.`,
+Use LangGraph when the agent is a **workflow**: branch on intermediate results, fan out parallel sub-agents, pause for human approval, resume after a crash. The graph, typed channels, and checkpointer exist precisely because \`AgentExecutor\`'s opaque internal loop can't express any of that cleanly.`,
   pickAIf: `Pick langchain if your project lives or dies on the breadth of integrations and a single agent loop is enough.
 
 - **Integration catalog over orchestration**: You need PDF loaders, text splitters, embeddings, and a specific vector store wired up yesterday. \`AgentExecutor\` plus the integration list is faster than building a graph.

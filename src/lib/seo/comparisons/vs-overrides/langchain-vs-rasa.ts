@@ -1,62 +1,50 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
+  headToHead: `These two frameworks don't really compete. They get compared because both have "build a bot" energy, but they're built for different jobs and different buyers.
 
-LangChain is a **general-purpose LLM orchestration toolkit** built around composable primitives — \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, \`OutputParser\` — that you wire together in code. Rasa is a **domain-specific framework for conversational AI**, where you declare intents, entities, slots, and stories in YAML and let trained models drive the conversation.
+LangChain is a Python (and JS) library you import. You compose \`AgentExecutor\`, \`@tool\`, and a retriever, then run it. The bot is whatever the LLM decides to do that turn. It's flexible by default and deterministic only if you write the determinism yourself.
 
-LangChain assumes the LLM does the reasoning; you compose chains around it. Rasa traditionally split that work across an **NLU pipeline** (classifier + entity extractor) and **dialogue policies**, with \`CALM\` now layering an LLM on top of deterministic \`Flows\`.
+Rasa is a product. You declare intents, slots, and stories in YAML, train models, and run an action server alongside a dialogue engine. The bot does what your flow says. The newer \`CALM\` layer lets an LLM choose between \`Flows\` you've already defined, but the flows are still authored, not improvised.
 
-### Ecosystem
+If you put both in front of the same product manager, LangChain is the prototype that ships in a week and surprises you for the next year. Rasa is the system that takes a quarter to stand up and behaves the same in month 18 as it did on day one.
 
-LangChain has a **massive integration catalog** — document loaders, vector stores, embedding models, dozens of provider adapters — plus \`LangSmith\` for tracing and \`LangGraph\` for stateful workflows. The dependency tree is large and the abstractions move fast.
+### Where the on-prem question decides everything
 
-Rasa's ecosystem is **narrower and more vertical**: training pipelines, an action server, conversation analytics, on-prem deployment, and \`Rasa Pro\` for enterprise features like end-to-end testing and SSO. It optimizes for chatbot-specific tooling rather than breadth.
+If the bot has to live behind a firewall, this comparison is usually over before it starts.
 
-### Use case
+Rasa runs fully on-prem out of the box. NLU server, action server, dialogue engine — you host all three. \`Rasa Pro\` lets you point CALM at a self-hosted LLM (Llama, Mistral, anything behind a private endpoint) so no user message leaves the data perimeter. Transcripts stay in your database. For banking (PCI, FFIEC), healthcare (HIPAA), or telecom (lawful intercept), this is the floor regulators expect, and Rasa's per-turn logs (intent, confidence, policy decision) line up with what auditors want to see.
 
-Reach for LangChain when you're building **agents that reason and call tools** — RAG pipelines, multi-step research workflows, anything where \`LangGraph\` branching and provider-swapping matter. Reach for Rasa when you're building a **scripted assistant** with regulated, auditable flows — banking, healthcare, telecom IVR — where deterministic behavior beats flexibility.
+LangChain doesn't care where you run it, which sounds the same but isn't. The Python process is easy to self-host. The default integrations are not: OpenAI, Anthropic, Pinecone, LangSmith — all hosted, all cross-border, all sending your data somewhere. Going fully on-prem with LangChain means swapping in vLLM or Ollama for the model, Weaviate or pgvector for retrieval, and rolling your own audit log. It's all possible. It's all on you to assemble.
 
-The overlap is thin. A LangChain agent answering open-ended questions is a different shape of system than a Rasa assistant guiding a user through a fixed claim-filing flow.
+Rule of thumb that holds up: if a compliance officer needs to read your stack diagram before launch, Rasa saves you weeks. If you're shipping in a normal SaaS posture, LangChain is faster.
 
-### On-prem and regulated industries
+### How the two companies make money
 
-If your assistant has to live behind a firewall, that single constraint usually decides this comparison.
+LangChain the library is MIT-licensed and free forever. The money is in \`LangSmith\` (hosted tracing and evals — free tier, then per-trace and per-seat) and \`LangGraph Platform\` (hosted runtime for stateful agents). You can self-host the tracing layer, but most teams pay for LangSmith because building it yourself is a side project nobody finishes.
 
-Rasa is **fully on-prem by default**. You self-host the NLU server, the action server, and the dialogue engine. With \`Rasa Pro\` you can plug in a self-hosted LLM (Llama, Mistral, or a corporate-approved model behind a private endpoint) so no user message ever leaves the data perimeter. Conversation transcripts stay in your own database. For **banking** (PCI, FFIEC), **healthcare** (HIPAA, PHI handling), or **telecom** (lawful intercept, retention rules), this is the baseline regulators expect — and Rasa's audit story (per-turn traces, intent confidence logs, policy decisions) maps directly onto the controls auditors ask for.
+Rasa splits Apache-licensed \`Rasa Open Source\` from \`Rasa Pro\`, which is the paid SKU with CALM, end-to-end testing, SSO, audit logs, and an analytics UI. Pricing isn't on the website — it's quoted per deployment. If you want to put a credit card down on a docs page, that's a LangChain motion. If you want an MSA, a named CSM, and a renewal cycle, Rasa Pro is built for procurement.`,
+  pickAIf: `Pick LangChain when the work is reasoning and retrieval, not a scripted conversation.
 
-LangChain is **agnostic to where you run it**, which sounds like the same thing but isn't. You can self-host the Python process easily — but the default integrations call hosted APIs (OpenAI, Anthropic, Pinecone, LangSmith), and the framework gives you no built-in audit trail of which prompt produced which decision. Going fully on-prem with LangChain means wiring up a local LLM (vLLM or Ollama), a self-hosted vector store (Weaviate, Qdrant, pgvector), and your own tracing layer — every piece is possible, but it's your responsibility to assemble and document. For regulated workloads, plan to spend more time on the compliance scaffolding than on the agent itself.
+- You want \`AgentExecutor\`-shaped behavior: model decides what to call, you supply the tools, the loop runs until it doesn't need to.
+- You need \`LangGraph\` for branching state machines or \`LangSmith\` for trace-level debugging in prod.
+- Your integration list looks like "OpenAI plus Pinecone plus a Postgres" and you don't want to write adapters.
+- Hosted models are acceptable. No one is going to ask for an air-gap diagram.`,
+  pickBIf: `Pick Rasa when the conversation is the contract.
 
-The decision rule that holds up in practice: if a compliance officer needs to read your stack diagram before you can ship, Rasa's opinions probably save you weeks. If you can use hosted models and ship in a normal SaaS posture, LangChain's flexibility wins.
+- The flow is "collect order ID, then check status, then offer refund" and skipping a step is a bug, not a feature.
+- You're in a regulated industry where shipping a transcript to OpenAI's API is a non-starter.
+- The buyer is enterprise IT, not a developer with a credit card. SSO, RBAC, audit logs, on-prem are all hard requirements.
+- You already have a Rasa team and an action server in production, and replacing that with an LLM agent is rewriting a working system.`,
+  sharedConcerns: `Both come with vocabulary you'll have to teach every new engineer. LangChain has \`AgentExecutor\`, \`BaseTool\`, \`Runnable\`, \`LCEL\`, plus whichever memory class is currently in fashion. Rasa has intents, entities, slots, stories, rules, policies, and a separate action server process. Either way, the framework's mental model is a thing your team is learning before they're shipping.
 
-### Enterprise tooling and pricing
+The dependency footprint is real too. LangChain's optional-integrations tree is wide; Rasa ships training infrastructure and a second process to manage. If the actual job is "one LLM call and two tools," both feel like carrying a workbench to drive a nail.`,
+  migrationNotes: `Rasa to LangChain happens when the bot has outgrown scripted flows. Usually product wants open-ended Q&A, document summarization, or anything where the user's next utterance isn't predictable. You throw out the stories and intents, rebuild around an agent loop with retrieval, and lose the deterministic guarantees on the way out. Plan compensating controls before launch: output filters, deterministic tool wrappers, a real eval suite. Otherwise you're shipping a downgrade in reliability for an upgrade in surface area.
 
-The two frameworks monetize very differently, which matters once procurement gets involved.
+LangChain to Rasa is rarer and almost always has one cause: a compliance or procurement bar the LangChain stack can't clear without months of custom plumbing. The migration itself is less terrifying than it sounds. The agent's *actual* flow is usually narrower than the code suggests, so it re-encodes into \`Flows\` plus a few action-server endpoints. The model calls move behind CALM. The hard part is replacing whatever the LLM was papering over — intent gaps, edge cases, fallback prompts — with explicit business rules you have to write down.
 
-LangChain itself is **MIT-licensed and free**. Money changes hands at the observability layer — \`LangSmith\` is the hosted tracing/evals platform (free tier exists, paid tiers scale per-trace and per-seat), and \`LangGraph Platform\` is the hosted deployment runtime for stateful agents. You can run LangChain entirely free with self-hosted tracing, but most production teams end up paying for LangSmith because the alternative is building it.
-
-Rasa splits **open source (\`Rasa Open Source\`, free under Apache-2.0)** from **\`Rasa Pro\` (paid, per-conversation or enterprise contract)**. The free tier is enough to ship a working assistant; \`Rasa Pro\` adds end-to-end conversation testing, an analytics UI, SSO, CALM LLM integration, and the kinds of governance features (role-based access, audit logs, SLA) that enterprise procurement teams require. Pricing isn't published — it's quoted per deployment.
-
-Roughly: if you want a credit card and a docs page, LangChain + LangSmith fits that motion. If you want a signed MSA, named support, and a renewal cycle, Rasa Pro is built for that procurement shape.`,
-  pickAIf: `Pick langchain if your project lives or dies on the breadth of LLM and data integrations you can compose.
-
-- **Multi-provider, multi-store stack**: You need to swap OpenAI for Anthropic, plug in \`pgvector\` or Pinecone, and load PDFs without writing adapters. The catalog is the product.
-- **Tool-using agents over scripted dialogue**: Your workload is \`AgentExecutor\`-shaped — reason, call a tool, observe, repeat — not a fixed conversation flow with predictable branches.
-- **\`LangGraph\` + \`LangSmith\` tooling**: You want typed state channels for branching workflows and hosted tracing/evals for debugging agent runs in production.
-- **Hosted-model posture is fine**: You can ship in a normal SaaS shape — OpenAI/Anthropic API calls, hosted vector stores — without a compliance officer blocking the architecture.`,
-  pickBIf: `Pick rasa if your project lives or dies on deterministic, auditable conversation flows in a regulated environment.
-
-- **On-prem and compliance constraints**: Banking, healthcare, or telecom rules mean you can't ship transcripts to a third-party API, and you need an audit trail per turn.
-- **Scripted business flows beat open-ended reasoning**: \`CALM\` \`Flows\` and typed slots give you the guarantees a \`while\` loop around an LLM cannot — the bot must collect order ID before checking status, every time.
-- **Enterprise procurement shape**: You need SSO, role-based access, conversation analytics, and a signed support contract — not a credit card on a hosted dashboard.
-- **Existing chatbot tooling investment**: You already run an action server, \`Rasa Pro\` analytics, and end-to-end conversation tests, and the team thinks in intents and stories.`,
-  sharedConcerns: `Both frameworks add a layer of vocabulary on top of what is, underneath, an HTTP call and some control flow. LangChain gives you \`AgentExecutor\`, \`BaseTool\`, and chain composition; Rasa gives you NLU pipelines, stories, and an action server. Either way you're learning a framework's mental model before you ship anything.
-
-The dependency footprint is non-trivial too — LangChain pulls in a wide tree of optional integrations, and Rasa ships training infrastructure and a separate action server process. If your use case is narrow, both can feel like carrying a toolbox to hammer one nail.`,
-  migrationNotes: `Teams migrate **Rasa → LangChain** when the assistant outgrows scripted flows — usually because product wants the bot to answer open-ended questions, summarize documents, or reason over a knowledge base. Expect to throw away the stories and intents and rebuild around an agent loop with retrieval; the deterministic guarantees go with them, so plan compensating controls (output filters, deterministic tool wrappers, eval suites) before you ship.
-
-Teams migrate **LangChain → Rasa** less often, and almost always for one reason: a compliance or procurement bar the LangChain stack can't clear without months of custom work. The migration is mostly about re-encoding the agent's *actual* flow — which is usually narrower than it looks — into \`Flows\` plus a handful of action-server endpoints. The LLM calls themselves move behind \`CALM\`. The hard part is replacing whatever was being papered over by the LLM's flexibility (intent gaps, edge cases, fallback prompts) with explicit business rules.`,
-  lastDepthUpdate: "2026-05-13",
+In both directions, the migration is mostly a clarification exercise. You find out what the bot is actually supposed to do, often for the first time.`,
+  lastDepthUpdate: "2026-05-17",
 };
 
 export default copy;

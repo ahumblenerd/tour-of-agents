@@ -1,23 +1,17 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-Mastra is a **TypeScript-first runtime**: \`new Agent({ model, instructions, tools })\` plus a \`Workflow\` class with \`.step()\`, \`.then()\`, \`.branch()\` for orchestration. Pydantic AI is a **Python type-system wrapper**: an \`Agent\` with a \`result_type\` Pydantic model, \`@agent.tool\` decorators, and \`RunContext[DepsType]\` for typed dependency injection.
+  headToHead: `Mastra is a **TypeScript-first runtime**: \`new Agent({ model, instructions, tools })\` plus a \`Workflow\` class with \`.step()\`, \`.then()\`, \`.branch()\` for orchestration. Pydantic AI is a **Python type-system wrapper**: an \`Agent\` with a \`result_type\` Pydantic model, \`@agent.tool\` decorators, and \`RunContext[DepsType]\` for typed dependency injection.
 
 Mastra optimizes for end-to-end coverage — agents, workflows, RAG, memory, Studio. Pydantic AI optimizes for one thing — making tool args, outputs, and deps validate at write-time.
-
-### Ecosystem
 
 Mastra ships RAG (chunking, embedding, vector search), short-term thread memory plus long-term vector memory, and **Mastra Studio** for local trace inspection. It assumes a Node/TypeScript stack and bundles Composio for third-party tool connections.
 
 Pydantic AI ships a **unified interface across 25+ model providers** (\`openai:gpt-4o\` to \`anthropic:claude-sonnet\` is a one-line swap), Logfire for observability, and not much else. There is no built-in workflow engine, no RAG pipeline, no GUI debugger — those are your problem.
 
-### Use case
+Use Mastra when the agent is one piece of a larger TypeScript app and you need branching workflows, document retrieval, and a debugging GUI in one cohesive package. The \`Workflow.branch()\` primitive and Studio traces pay off when business logic spans many steps.
 
-Reach for Mastra when the agent is one piece of a larger TypeScript app and you need branching workflows, document retrieval, and a debugging GUI in one cohesive package. The \`Workflow.branch()\` primitive and Studio traces pay off when business logic spans many steps.
-
-Reach for Pydantic AI when the agent feeds typed data into downstream Python systems and you want the LLM's tool calls and final output to validate against \`BaseModel\` schemas. If your agent produces a \`CustomerRecord\`, Pydantic AI catches a missing field before it reaches your database — Mastra leaves that to you.`,
+Use Pydantic AI when the agent feeds typed data into downstream Python systems and you want the LLM's tool calls and final output to validate against \`BaseModel\` schemas. If your agent produces a \`CustomerRecord\`, Pydantic AI catches a missing field before it reaches your database — Mastra leaves that to you.`,
   pickAIf: `Pick mastra if your project is TypeScript-end-to-end and the agent is one slice of a multi-step application.
 
 - **Workflow orchestration is core**: You need explicit \`.step()\`, \`.then()\`, \`.branch()\` semantics with error handling and observability, not just a \`while\` loop around tool calls.

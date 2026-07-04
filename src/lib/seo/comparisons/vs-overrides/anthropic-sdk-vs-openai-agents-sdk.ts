@@ -1,21 +1,15 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-The Anthropic SDK ships Claude Code as a runtime — \`bash\`, file I/O, web tools, and MCP servers come pre-wired, and you intercept behavior through 18 lifecycle hooks. The OpenAI Agents SDK ships four primitives — \`Agent\`, \`Runner\`, \`Handoff\`, \`InputGuardrail\`/\`OutputGuardrail\` — and expects you to bring your own tools as typed Python functions.
+  headToHead: `The Anthropic SDK ships Claude Code as a runtime — \`bash\`, file I/O, web tools, and MCP servers come pre-wired, and you intercept behavior through 18 lifecycle hooks. The OpenAI Agents SDK ships four primitives — \`Agent\`, \`Runner\`, \`Handoff\`, \`InputGuardrail\`/\`OutputGuardrail\` — and expects you to bring your own tools as typed Python functions.
 
 One is a **productized agent**; the other is a **thin convention layer**. Anthropic gives you a working filesystem-aware coder out of the box. OpenAI gives you \`Runner.run()\` and gets out of the way.
-
-### Ecosystem
 
 Anthropic's gravity is **MCP**: one-line config connects Playwright, Slack, GitHub, and a growing server registry. OpenAI's gravity is **schema ergonomics**: type hints on a Python function become a tool schema automatically, and \`Handoff\` between \`Agent\` objects gives you a clean multi-agent routing pattern without writing the dispatcher.
 
 Both are MCP-aware now, but Anthropic treats MCP as a first-class entry point while OpenAI treats it as one transport among many. Model lock-in cuts both ways — neither SDK is realistically portable to the other provider without rewriting the loop.
 
-### Use case
-
-Reach for the Anthropic SDK when the agent's job is **acting on a machine** — running shell commands, editing files, hitting MCP servers — and you'd rather not reimplement Claude Code's tool implementations. Reach for the OpenAI Agents SDK when the agent's job is **routing between specialists** — a triage agent handing off to a research agent handing off to a writer — with \`InputGuardrail\` tripwires gating each step.
+Use the Anthropic SDK when the agent's job is **acting on a machine** — running shell commands, editing files, hitting MCP servers — and you'd rather not reimplement Claude Code's tool implementations. Use the OpenAI Agents SDK when the agent's job is **routing between specialists** — a triage agent handing off to a research agent handing off to a writer — with \`InputGuardrail\` tripwires gating each step.
 
 If your agent is one model, a few custom tools, and a loop, the OpenAI SDK is closer to what you'd write anyway. If your agent needs \`bash\` and a Playwright browser by Tuesday, Anthropic saves you the plumbing.`,
   pickAIf: `Pick anthropic-sdk if your project lives or dies on real-world tool execution and MCP integrations rather than orchestration logic.

@@ -1,15 +1,9 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-Strands is **model-driven**: you instantiate \`Agent(model, tools, system_prompt)\` and the model decides when to call tools and when to stop. CrewAI is **role-driven**: each \`Agent(role, goal, backstory)\` is shaped by prompt-level identity, and a \`Crew\` schedules \`Task\` objects across them. Strands hides the loop; CrewAI hides the orchestration around the loop.
-
-### Ecosystem
+  headToHead: `Strands is **model-driven**: you instantiate \`Agent(model, tools, system_prompt)\` and the model decides when to call tools and when to stop. CrewAI is **role-driven**: each \`Agent(role, goal, backstory)\` is shaped by prompt-level identity, and a \`Crew\` schedules \`Task\` objects across them. Strands hides the loop; CrewAI hides the orchestration around the loop.
 
 CrewAI has the larger footprint — ~48k stars, MIT, shipping since October 2023, with an enterprise platform and $18M behind it. Strands is newer (May 2025, ~4.2k stars) but ships from AWS with native ties to Bedrock AgentCore for hosted runtime, identity, and observability. Both treat MCP as first-class; Strands wires it directly into the \`Agent\` surface, CrewAI exposes MCP servers as a tool source via its \`@tool\` layer.
-
-### Use case
 
 Strands fits **single-agent or \`Swarm\`-of-equals** designs where the model leads, MCP is central, and deployment lands on AWS. CrewAI fits **named-specialist workflows** — researcher → writer → editor, collector → analyst → reporter — where role separation drives prompt quality and \`Crew(process=hierarchical)\` gives a manager agent control over delegation. Pick on shape: a model-led loop with optional handoff, or a predefined team of roles working a task list.`,
   pickAIf: `Pick aws-strands if your project lives or dies on AWS Bedrock deployment and MCP-first design.

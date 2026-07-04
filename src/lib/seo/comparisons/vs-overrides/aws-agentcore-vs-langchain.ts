@@ -1,19 +1,13 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-AgentCore is a **managed runtime platform** — closed-source SaaS that ships five services (\`Runtime\`, \`Memory\`, \`Identity\`, \`Gateway\`, \`Observability\`) and runs *your* agent code inside them. LangChain is an **open-source Python library** you import, with class hierarchies like \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, and \`PydanticOutputParser\`.
+  headToHead: `AgentCore is a **managed runtime platform** — closed-source SaaS that ships five services (\`Runtime\`, \`Memory\`, \`Identity\`, \`Gateway\`, \`Observability\`) and runs *your* agent code inside them. LangChain is an **open-source Python library** you import, with class hierarchies like \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, and \`PydanticOutputParser\`.
 
 They aren't really peers. LangChain code can *run on* AgentCore — AgentCore is framework-agnostic. The real question is which layer you adopt: orchestration code (LangChain) or the platform underneath it (AgentCore).
-
-### Ecosystem
 
 LangChain has **132k stars, MIT, and a deep integration catalog** — dozens of vector stores, document loaders, embedding models, plus \`LangSmith\` for traces and \`LangServe\` for deployment. Provider swap is a one-class change.
 
 AgentCore is **AWS-only and proprietary**, with deep ties to CloudWatch, IAM, Secrets Manager, and Lambda/Fargate. It compensates with services LangChain doesn't try to give you: per-session MicroVM isolation, OAuth inbound + per-user credential vending outbound, and \`Gateway\` to expose any Lambda or API as an MCP-compliant tool.
-
-### Use case
 
 LangChain solves the **"how do I write the agent"** problem — orchestrating an LLM call, a tool registry, memory, and an output parser. AgentCore solves the **"how do I run the agent for many users on AWS without leaking state or hardcoding tokens"** problem.
 

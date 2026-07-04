@@ -1,21 +1,15 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-AutoGen models agents as \`ConversableAgent\` instances that **chat with each other** — a \`GroupChat\` plus \`GroupChatManager\` picks the next speaker, and \`register_nested_chats()\` spawns sub-conversations. LangGraph models agents as a \`StateGraph\` of nodes and edges over a typed \`State\` channel, with conditional edges and reducers like \`Annotated[list, add_messages]\`.
+  headToHead: `AutoGen models agents as \`ConversableAgent\` instances that **chat with each other** — a \`GroupChat\` plus \`GroupChatManager\` picks the next speaker, and \`register_nested_chats()\` spawns sub-conversations. LangGraph models agents as a \`StateGraph\` of nodes and edges over a typed \`State\` channel, with conditional edges and reducers like \`Annotated[list, add_messages]\`.
 
 One thinks in **dialogue**, the other in **state machines**. AutoGen's primitive is the message; LangGraph's primitive is the node transition.
-
-### Ecosystem
 
 AutoGen ships from Microsoft Research (CC-BY-4.0, ~57k stars) with a code execution sandbox and v0.4 rewrite for scale. LangGraph ships from LangChain Inc (MIT, ~19k stars) and plugs into the LangChain tool/memory layer plus LangSmith tracing and the hosted LangGraph Platform.
 
 LangGraph has the deeper **production story** — \`PostgresSaver\` checkpoints, time-travel debugging, listed users like Replit and Klarna. AutoGen's story is research-flavored multi-agent patterns with enterprise backing.
 
-### Use case
-
-Reach for AutoGen when the interesting part is **agents debating** — author/reviewer loops, planner/executor pairs, dynamic speaker selection where you don't know the order in advance. Reach for LangGraph when the interesting part is the **workflow shape** — explicit branches, parallel fanout, checkpointed pause/resume, \`interrupt_before\` for human approval.
+Use AutoGen when the interesting part is **agents debating** — author/reviewer loops, planner/executor pairs, dynamic speaker selection where you don't know the order in advance. Use LangGraph when the interesting part is the **workflow shape** — explicit branches, parallel fanout, checkpointed pause/resume, \`interrupt_before\` for human approval.
 
 A two-agent critique loop is awkward in LangGraph (you'd model speakers as nodes). A long-running approval pipeline with retries is awkward in AutoGen (no first-class checkpointing). Pick the one whose primitive matches your problem shape.`,
   pickAIf: `Pick autogen if your project lives or dies on multiple agents talking to each other in patterns you can't pre-script.

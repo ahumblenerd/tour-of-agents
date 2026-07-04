@@ -1,15 +1,9 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-AutoGen models cooperation as conversation. Two agents alternate via \`initiate_chat()\`, and N agents share a transcript through \`GroupChat\` with a \`GroupChatManager\` picking the next speaker — round-robin, random, or LLM-selected. ADK models it as hierarchy: an \`LlmAgent\` holds a \`sub_agents\` list and delegates downward, with \`SequentialAgent\`, \`ParallelAgent\`, and \`LoopAgent\` as explicit workflow primitives. AutoGen's structure emerges turn by turn from the transcript; ADK's structure is declared statically before the run.
-
-### Ecosystem
+  headToHead: `AutoGen models cooperation as conversation. Two agents alternate via \`initiate_chat()\`, and N agents share a transcript through \`GroupChat\` with a \`GroupChatManager\` picking the next speaker — round-robin, random, or LLM-selected. ADK models it as hierarchy: an \`LlmAgent\` holds a \`sub_agents\` list and delegates downward, with \`SequentialAgent\`, \`ParallelAgent\`, and \`LoopAgent\` as explicit workflow primitives. AutoGen's structure emerges turn by turn from the transcript; ADK's structure is declared statically before the run.
 
 AutoGen has the older, larger footprint — ~57k stars since August 2023, Microsoft Research backing, and a built-in code execution sandbox for agents that need to write and run code. ADK is newer (April 2025, ~19k stars) but ships with first-class Vertex AI deployment, Gemini-tuned defaults, managed \`Session\`/\`State\` services, and bidirectional audio/video streaming. If you live on Google Cloud and Gemini, ADK has the cleaner deployment story; otherwise AutoGen has more community examples, a longer track record, and a published research paper.
-
-### Use case
 
 Pick AutoGen when the interaction pattern itself is the value — agents debating, critiquing, or iteratively refining each other's work, where you don't know in advance who should speak next. \`register_nested_chats()\` is genuinely hard to reproduce well. Pick ADK when you know the topology up front and want it expressed as a tree plus workflow primitives, then containerized to Vertex AI Agent Engine or Cloud Run. AutoGen rewards dynamic, emergent collaboration; ADK rewards structured orchestration backed by a managed cloud runtime.`,
   pickAIf: `Pick AutoGen if your project lives or dies on agents talking to each other dynamically.

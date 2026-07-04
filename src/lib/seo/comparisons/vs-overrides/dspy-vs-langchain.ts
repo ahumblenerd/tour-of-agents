@@ -1,19 +1,13 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-DSPy treats prompts as a **compilation target**: you declare a \`Signature\` like \`"question -> answer"\`, wrap it in \`ChainOfThought\` or \`ReAct\`, and let \`BootstrapFewShot\` or \`MIPROv2\` search for the best instructions and few-shot examples against a metric. LangChain treats agents as **orchestration**: \`AgentExecutor\` runs the reason-act-observe loop, \`@tool\` decorates your functions, and \`ConversationBufferMemory\` carries history — prompts are hand-authored strings you pass through.
+  headToHead: `DSPy treats prompts as a **compilation target**: you declare a \`Signature\` like \`"question -> answer"\`, wrap it in \`ChainOfThought\` or \`ReAct\`, and let \`BootstrapFewShot\` or \`MIPROv2\` search for the best instructions and few-shot examples against a metric. LangChain treats agents as **orchestration**: \`AgentExecutor\` runs the reason-act-observe loop, \`@tool\` decorates your functions, and \`ConversationBufferMemory\` carries history — prompts are hand-authored strings you pass through.
 
 One framework asks "what should this prompt be?" The other asks "how do these pieces wire together?"
-
-### Ecosystem
 
 LangChain's surface area is enormous — dozens of \`BaseLLM\` providers, document loaders, vector stores, output parsers, plus \`LangGraph\` for stateful workflows and \`LangSmith\` for tracing and evals. DSPy's surface is small and academic: a handful of modules (\`Predict\`, \`ChainOfThought\`, \`ReAct\`, \`ProgramOfThought\`), a few optimizers, and \`dspy.Evaluate\`.
 
 If your agent is one node in a sprawling integration graph, LangChain has the catalog. If your agent is a focused pipeline you want to tune against data, DSPy stays out of the way.
-
-### Use case
 
 LangChain's \`AgentExecutor\` is the shortest path to **product engineering** — chatbots, RAG, tool-calling agents that need to ship next sprint. DSPy is the shortest path to **measurable accuracy** — classification chains, multi-hop QA, anything where you have a labeled dev set and a metric like F1 or exact-match.
 

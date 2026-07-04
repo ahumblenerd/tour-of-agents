@@ -1,15 +1,9 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-CrewAI thinks in **people**: an \`Agent\` carries a \`role\`, \`goal\`, and \`backstory\`, and a \`Crew\` runs a list of \`Task\` objects sequentially or hierarchically. LangGraph thinks in **graphs**: a \`StateGraph\` of node functions wired by edges, with a typed \`State\` channel and reducers like \`Annotated[list, add_messages]\` controlling how updates merge. CrewAI hides the agent loop inside \`Agent\` execution; LangGraph forces you to draw it as \`add_conditional_edges\` from a node back to itself until \`END\`.
-
-### Ecosystem
+  headToHead: `CrewAI thinks in **people**: an \`Agent\` carries a \`role\`, \`goal\`, and \`backstory\`, and a \`Crew\` runs a list of \`Task\` objects sequentially or hierarchically. LangGraph thinks in **graphs**: a \`StateGraph\` of node functions wired by edges, with a typed \`State\` channel and reducers like \`Annotated[list, add_messages]\` controlling how updates merge. CrewAI hides the agent loop inside \`Agent\` execution; LangGraph forces you to draw it as \`add_conditional_edges\` from a node back to itself until \`END\`.
 
 CrewAI is its own stack — the open-source \`crewai\` package plus a hosted enterprise platform from João Moura's company. LangGraph ships under LangChain Inc (Sequoia/Benchmark, $50M raised across A and B) and inherits the LangChain world: existing \`@tool\` definitions, memory classes, and node-by-node tracing in LangSmith. If you already wrote tools for LangChain, LangGraph plugs in; CrewAI asks you to redefine them with its own \`@tool\` decorator and custom \`Tool\` subclasses.
-
-### Use case
 
 Pick CrewAI when the natural model is "researcher hands off to writer hands off to editor" — named specialists, mostly linear delegation, prompt quality driven by clear role separation. Pick LangGraph when the natural model is a workflow with real branching: parallel fanout merged through reducers, \`interrupt_before\` for a human approval gate, \`MemorySaver\` or \`PostgresSaver\` for crash-safe pause/resume. CrewAI optimizes for *who is doing the work*; LangGraph optimizes for *what state the work is in*.`,
   pickAIf: `Pick CrewAI if your project lives or dies on cleanly separated agent roles collaborating toward a shared output.

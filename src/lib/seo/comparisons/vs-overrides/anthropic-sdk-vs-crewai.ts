@@ -1,17 +1,11 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-The Anthropic Agent SDK is a **single-agent runtime** lifted from Claude Code: one loop, built-in \`bash\`/file/web tools, and 18 lifecycle hooks for intercepting \`pre/post tool call\`, message, and error events. CrewAI is a **multi-agent orchestrator** built around \`Agent(role, goal, backstory)\`, \`Task\`, and \`Crew(process=sequential|hierarchical)\` — the loop is hidden inside each \`Agent\` and the abstractions push you toward role separation.
-
-### Ecosystem
+  headToHead: `The Anthropic Agent SDK is a **single-agent runtime** lifted from Claude Code: one loop, built-in \`bash\`/file/web tools, and 18 lifecycle hooks for intercepting \`pre/post tool call\`, message, and error events. CrewAI is a **multi-agent orchestrator** built around \`Agent(role, goal, backstory)\`, \`Task\`, and \`Crew(process=sequential|hierarchical)\` — the loop is hidden inside each \`Agent\` and the abstractions push you toward role separation.
 
 Both speak MCP, but the gravity is different. The Anthropic SDK ships MCP as a **first-class config line** plus production-grade \`bash\` and file I/O — you get Claude Code's actual tool implementations, not reference code. CrewAI's MCP support exists, but its real ecosystem is the catalog of \`@tool\`-decorated integrations and the \`ShortTermMemory\` / \`LongTermMemory\` / \`EntityMemory\` stack. Picking SDK locks you to Claude; CrewAI is LLM-agnostic via LiteLLM.
 
-### Use case
-
-Reach for the SDK when **one agent needs to touch the real world** — read a repo, run shell commands, drive Playwright via MCP — and you want the hooks for guardrails, logging, and cost tracking. Reach for CrewAI when the work decomposes into **named specialists handing off artifacts** (researcher → writer → editor) and you want \`Crew\` to handle sequential or hierarchical routing. The SDK has no real notion of multi-agent handoff beyond "agent calls agent as a tool"; CrewAI has no equivalent to the SDK's batteries-included tool runtime. If you find yourself wanting both — production tool execution *and* role-based delegation — you're past what either gives you cleanly and into custom orchestration.`,
+Use the SDK when **one agent needs to touch the real world** — read a repo, run shell commands, drive Playwright via MCP — and you want the hooks for guardrails, logging, and cost tracking. Use CrewAI when the work decomposes into **named specialists handing off artifacts** (researcher → writer → editor) and you want \`Crew\` to handle sequential or hierarchical routing. The SDK has no real notion of multi-agent handoff beyond "agent calls agent as a tool"; CrewAI has no equivalent to the SDK's batteries-included tool runtime. If you find yourself wanting both — production tool execution *and* role-based delegation — you're past what either gives you cleanly and into custom orchestration.`,
   pickAIf: `Pick anthropic-sdk if your project lives or dies on a single Claude agent reliably touching files, shells, and external services.
 
 - **Built-in tool runtime**: You need production-grade \`bash\`, file read/write, and web search without writing \`subprocess\` wrappers, sandboxing, or retry logic yourself. These are the same implementations Claude Code ships to hundreds of thousands of developers.

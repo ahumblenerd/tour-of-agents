@@ -1,19 +1,13 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-LangChain is a **general-purpose orchestration layer** — \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, and \`OutputParser\` are designed to be swappable across providers and use cases. LlamaIndex starts from data: \`VectorStoreIndex\` is the primitive, and \`ReActAgent\` + \`QueryEngineTool\` exist to let an agent reason over that index.
+  headToHead: `LangChain is a **general-purpose orchestration layer** — \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, and \`OutputParser\` are designed to be swappable across providers and use cases. LlamaIndex starts from data: \`VectorStoreIndex\` is the primitive, and \`ReActAgent\` + \`QueryEngineTool\` exist to let an agent reason over that index.
 
 LangChain's loop is provider-agnostic plumbing. LlamaIndex's loop is built around **retrieval as a first-class tool call**.
-
-### Ecosystem
 
 LangChain ships the larger catalog: dozens of LLM providers, document loaders, vector stores, plus **LangSmith** for tracing and **LangServe** for deployment. It has Sequoia/Benchmark backing and ~3.4M weekly npm downloads.
 
 LlamaIndex is narrower but deeper on data — **LlamaHub** connectors, document parsers (PDF, HTML, SQL), and pluggable vector stores (Pinecone, Weaviate, pgvector). If you measure ecosystem by integrations-per-domain, LangChain wins on breadth, LlamaIndex on retrieval depth.
-
-### Use case
 
 If your agent juggles APIs, databases, and multiple LLM providers, LangChain's \`AgentExecutor\` + integration catalog is the better fit — and **LangGraph** handles branching workflows across nodes.
 

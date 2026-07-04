@@ -1,17 +1,11 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-Smolagents' headline move is code-as-action: the LLM writes a Python snippet that calls available tools, and \`CodeAgent\` runs it in a sandbox (E2B, Docker, Modal, or Pyodide). One model turn can chain three tool calls. LangChain's \`AgentExecutor\` runs the standard reason-act-observe loop on structured \`tool_calls\` JSON returned by the model, dispatching one \`@tool\`-wrapped function per step. Smolagents ships \`ToolCallingAgent\` for the structured-JSON path too, but that's not why you'd reach for it.
-
-### Ecosystem
+  headToHead: `Smolagents' headline move is code-as-action: the LLM writes a Python snippet that calls available tools, and \`CodeAgent\` runs it in a sandbox (E2B, Docker, Modal, or Pyodide). One model turn can chain three tool calls. LangChain's \`AgentExecutor\` runs the standard reason-act-observe loop on structured \`tool_calls\` JSON returned by the model, dispatching one \`@tool\`-wrapped function per step. Smolagents ships \`ToolCallingAgent\` for the structured-JSON path too, but that's not why you'd reach for it.
 
 LangChain's catalog is the product. Dozens of LLM provider wrappers, vector stores, document loaders, embedding models, plus LangGraph for typed state channels and conditional branching, LangSmith for tracing, LangServe for deploys. Smolagents is intentionally smaller — ~1,000 lines of core logic, model access via LiteLLM and the HuggingFace Hub, four sandbox backends, and not much else. If you need \`PydanticOutputParser\` or a Pinecone retriever, that lives in LangChain. If you need a sandboxed code-writing agent with a Hub-hosted model, that's smolagents.
 
-### Use case
-
-Reach for LangChain when the agent sits inside a larger integration mesh — RAG over a specific vector DB, multi-provider routing, LangGraph state machines, LangSmith eval pipelines. The framework's complexity earns its keep when the integration surface is wide. Reach for smolagents when the workload is computational and the ~30% LLM-call reduction from code-as-action matters more than integration breadth — multi-step data analysis, scripted tool chains, and HuggingFace's own Open Deep Research are the canonical fits.`,
+Use LangChain when the agent sits inside a larger integration mesh — RAG over a specific vector DB, multi-provider routing, LangGraph state machines, LangSmith eval pipelines. The framework's complexity earns its keep when the integration surface is wide. Use smolagents when the workload is computational and the ~30% LLM-call reduction from code-as-action matters more than integration breadth — multi-step data analysis, scripted tool chains, and HuggingFace's own Open Deep Research are the canonical fits.`,
   pickAIf: `Pick smolagents if your agent's value comes from chaining multiple tool calls inside a single model turn.
 
 - **Code-as-action workloads**: Data analysis, multi-step math, or pipelines where one prompt should call three tools. \`CodeAgent\` collapses those into one LLM round and cuts calls by ~30%.

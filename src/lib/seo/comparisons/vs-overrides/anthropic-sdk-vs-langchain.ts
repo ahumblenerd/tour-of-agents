@@ -1,31 +1,31 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
+  headToHead: `These two aren't really in the same category, even though people search for them as if they are.
 
-The Anthropic Agent SDK is a **productized runtime** — Claude Code's loop, \`bash\`/file/web tools, and 18 lifecycle hooks shipped as a library. LangChain is a **component framework** — \`AgentExecutor\`, \`@tool\`, \`ConversationBufferMemory\`, \`OutputParser\`, and a class hierarchy you compose. One hands you a working agent; the other hands you parts.
+The Anthropic Agent SDK is the runtime that powers Claude Code, repackaged as a library. You import \`Agent\`, hand it tools, and call \`run\`. The loop is opinionated, the bash/file/web tools are pre-built, and there are 18 lifecycle hooks for the things you'd otherwise reach in and override. It's a working agent in five lines, and it only speaks Claude.
 
-### Ecosystem
+LangChain is a kit of parts. \`AgentExecutor\` wraps an LLM, \`@tool\` decorates your functions, \`ConversationBufferMemory\` (or its current replacement) handles history, an \`OutputParser\` rescues malformed responses, and you compose those into whatever shape you want. It runs against any model the integration list covers, which is most of them.
 
-Anthropic's catalog is **MCP-shaped**: one-line config to Playwright, Slack, GitHub, databases, and the rest of the MCP server registry — but the loop itself is Claude-only. LangChain spans **provider-agnostic integrations**: document loaders, text splitters, embedding models, vector stores, plus \`LangSmith\` for tracing and \`LangServe\` for deployment. If you swap OpenAI for Anthropic, LangChain changes one class; the Anthropic SDK is a rewrite.
+The cleanest way to think about this: the Anthropic SDK is "Claude with extension points." LangChain is "a way to build any agent that has to talk to several things." If your agent is a Claude assistant that touches files, runs shell, and hits a few MCP servers, the SDK is shorter and the integrations are already wired. If your agent has to swap providers, do RAG over a specific vector store, or live as one node inside a larger pipeline, LangChain pays for its weight.
 
-### Use case
+The MCP question is real. Anthropic's catalog is MCP-shaped — one line of config to Playwright, Slack, GitHub, or any of the registry servers — but the loop is Claude-only. LangChain has the wider catalog (document loaders, embeddings, vector stores, plus \`LangSmith\` for tracing and \`LangServe\` for deployment), but you'll often write the MCP bridge yourself if you want it.`,
+  pickAIf: `Pick the Anthropic SDK when the agent has to actually touch things, and you've already chosen Claude.
 
-Reach for the **Anthropic SDK** when the agent's job is to touch the real world — read a codebase, run shell, hit MCP servers — and you've already committed to Claude. Reach for **LangChain** when the agent is one node in a larger pipeline: RAG over a specific vector store, PDF loaders, multi-provider routing, or \`LangGraph\` state channels with conditional branching. The SDK's lifecycle hooks beat LangChain for **production guardrails on a single Claude agent**; LangChain's catalog beats the SDK when **integration surface area** is the actual problem.`,
-  pickAIf: `Pick anthropic-sdk if your project lives or dies on giving Claude reliable access to tools, files, and external services.
+- The built-in \`bash\`, file, and web tools save you from writing safe \`subprocess.run\` wrappers and a sandbox.
+- MCP is your integration story — Playwright, Slack, GitHub, databases — and you want one-line config, not per-service HTTP clients.
+- You need lifecycle hooks for cost tracking, audit logs, or pre/post tool-call guardrails without forking the loop.
+- You're never going to swap models, so the provider lock-in doesn't bother you.`,
+  pickBIf: `Pick LangChain when the agent is the small part of something larger.
 
-- **Built-in tool implementations**: You want \`bash\`, file read/write, and web search that already handle errors, sandboxing, and edge cases — not \`subprocess.run()\` wrappers you maintain yourself.
-- **MCP as a first-class citizen**: You're plugging into Playwright, Slack, GitHub, or database MCP servers and want one-line config instead of per-service HTTP clients.
-- **Production hooks on a Claude agent**: You need the 18 lifecycle hooks for cost tracking, audit logs, or guardrails on \`pre/post tool call\` events without forking the loop.`,
-  pickBIf: `Pick langchain if your project lives or dies on composing many integrations across providers and data sources.
+- You need to swap OpenAI for Anthropic for an open model without rewriting the agent — the LLM abstraction earns its keep here.
+- The actual work is RAG: document loaders, splitters, embeddings, vector stores wired together. The catalog beats writing each one by hand.
+- \`LangGraph\` is the right tool for what you're building — typed state, conditional branches, parallel nodes — and you want \`LangSmith\` traces in production.
+- You're shipping in a polyglot stack where Python is one of several services, and you want one library that works across them.`,
+  sharedConcerns: `Both come with a vocabulary your team has to learn before they ship anything. LangChain has \`AgentExecutor\`, \`BaseTool\`, \`OutputParser\`, plus LangGraph's state model. The Anthropic SDK has hooks, MCP server configs, and runtime opinions about what a loop should do. When something breaks, you're stepping through framework internals either way.
 
-- **Provider-swappable agents**: You need to switch between OpenAI, Anthropic, and open models without rewriting business logic — \`AgentExecutor\` and the LLM abstraction earn their weight here.
-- **RAG and data plumbing**: You're wiring document loaders, text splitters, embeddings, and vector stores together; LangChain's catalog beats writing each integration by hand.
-- **LangGraph workflows + LangSmith**: You have multi-step graphs with conditional branching, parallel nodes, and persistent state — and you want tracing, evals, and replay via \`LangSmith\` in production.`,
-  sharedConcerns: `Both ship a **dependency tree and a vocabulary** you'll have to learn before you ship anything. With LangChain it's \`AgentExecutor\`, \`BaseTool\`, \`OutputParser\`, and the LangGraph state model; with the Anthropic SDK it's hooks, MCP server config, and the runtime's opinions about how a loop should run. Either way, debugging means stepping through framework code, not yours.
-
-Both also assume you want their **integration catalog** — MCP servers for Anthropic, vector stores and loaders for LangChain. If your agent talks to one LLM and three internal functions, most of that surface area is overhead you'll carry without using.`,
-  codeSideBySide: `Here is the **same task** in both frameworks: an agent that takes a user question, calls a \`web_search\` tool when needed, and returns a natural-language answer.
+Both also assume you want their catalog. MCP servers for Anthropic, vector stores and loaders for LangChain. If your agent talks to one model and three internal functions, most of that surface area is overhead you'll never use — which is the case the bare \`/lesson/agent-function\` walk-through makes.`,
+  codeSideBySide: `Here is the same job in both: an agent that takes a question, searches the web when it needs to, and answers in plain text.
 
 ### Anthropic Agent SDK
 
@@ -43,7 +43,7 @@ result = agent.run("What's the GitHub star count of LangChain today?")
 print(result.text)
 \`\`\`
 
-The runtime owns the loop. \`web_search\` is a stock tool with sandboxing and retries already wired. The 18 lifecycle hooks (omitted here) attach if you want \`pre_tool_call\` cost tracking or output guardrails.
+The runtime owns the loop. \`web_search\` is a stock tool with sandboxing and retries already wired. The lifecycle hooks attach if you want \`pre_tool_call\` cost tracking or output guardrails — none of that is in this snippet, but you don't write the plumbing for it either.
 
 ### LangChain (with LangGraph)
 
@@ -63,33 +63,27 @@ result = agent.invoke({
 print(result["messages"][-1].content)
 \`\`\`
 
-You bring the search provider (Tavily here, but it could be SerpAPI, Brave, etc.). \`create_react_agent\` is LangGraph's prebuilt loop; \`invoke\` returns the full state dict. Swap \`ChatAnthropic\` for \`ChatOpenAI\` and the rest is unchanged — that portability is the trade for the extra wiring.
+You bring the search provider (Tavily, SerpAPI, Brave — your call). \`create_react_agent\` is LangGraph's prebuilt loop. \`invoke\` returns the full state dict, so you fish out the last message. Swap \`ChatAnthropic\` for \`ChatOpenAI\` and nothing else changes — that portability is what the extra setup is buying you.
 
-### What changes between them
+### Side by side
 
 | | Anthropic SDK | LangChain |
 |---|---|---|
-| Provider lock-in | Claude only | Provider-swappable |
-| Search tool | Built-in (\`web_search\`) | BYO (Tavily / SerpAPI / Brave / ...) |
+| Models supported | Claude only | Any provider in the catalog |
+| Search tool | Built-in (\`web_search\`) | BYO (Tavily / SerpAPI / Brave) |
 | Loop primitive | \`agent.run()\` (runtime-driven) | \`create_react_agent(...).invoke()\` (LangGraph) |
 | Lines of code | ~5 | ~10 |
 | Extension points | 18 lifecycle hooks | LangChain callbacks + LangGraph state edits |
 
-For a tool-using single-Claude agent, the SDK is shorter. For anything that needs to swap providers or wire RAG behind the search, LangChain pulls ahead — and \`create_react_agent\` keeps the line count reasonable.`,
-  migrationNotes: `**From LangChain → Anthropic SDK** (you've committed to Claude and want to drop framework weight):
-- Replace \`ChatAnthropic\` + \`@tool\`-decorated functions with \`Agent(model=..., tools=[...])\`. The biggest gain is dropping \`AgentExecutor\` and the surrounding \`PromptTemplate\` / \`OutputParser\` plumbing.
-- LangChain tools port cleanly — most are already plain Python functions; just move them to the SDK's tool list.
-- LangSmith tracing has no direct equivalent yet. The SDK's hooks let you build a thin tracer, but it's not turnkey.
-- \`ConversationBufferMemory\` is replaced by passing the message history into \`agent.run\` directly (the SDK doesn't impose a memory class).
+For a tool-using single-Claude agent, the SDK is shorter and the search is free. For anything that needs to swap providers or wire RAG behind the search, LangChain pulls ahead — and \`create_react_agent\` keeps the line count from getting silly.`,
+  migrationNotes: `LangChain to the Anthropic SDK happens when a team has committed to Claude and wants the framework weight gone. The swap is mostly mechanical. Replace \`ChatAnthropic\` plus \`@tool\`-decorated functions with \`Agent(model=..., tools=[...])\`. \`AgentExecutor\`, \`PromptTemplate\`, and \`OutputParser\` all disappear. Most LangChain tools are already plain Python functions, so they port without ceremony.
 
-**From Anthropic SDK → LangChain** (you need to support multiple providers or add RAG):
-- Wrap your tools as plain functions (or \`@tool\`-decorate them) and pass them to \`create_react_agent\`. The loop semantics are similar — neither framework iterates differently.
-- The SDK's \`web_search\` becomes a \`TavilySearchResults\` (or equivalent). You're now responsible for the search provider key.
-- Lifecycle hooks become LangChain callbacks (\`BaseCallbackHandler\`) or LangGraph node interceptors. Migration cost: a day or two of retrofitting hook logic.
-- The biggest unlock is provider routing: a single \`ChatAnthropic | ChatOpenAI\` switch lets you A/B test models or fall back across providers.
+Two things to plan for. LangSmith doesn't have a turnkey equivalent in the SDK yet — the hooks let you build a thin tracer, but you're writing it. And \`ConversationBufferMemory\` gets replaced by passing the message history into \`agent.run\` directly; the SDK doesn't impose a memory class.
 
-In both directions, the agent's **business logic** (which tools, how to compose them, how to validate output) stays identical. What changes is the runtime layer and the integration catalog around it.`,
-  lastDepthUpdate: "2026-05-07",
+Anthropic SDK to LangChain is the reverse motion, usually triggered by needing multiple providers or RAG that's heavier than what MCP servers cover. Tools wrap as plain functions or \`@tool\`-decorated callables and pass into \`create_react_agent\`. The loop semantics are similar — neither framework iterates differently. The SDK's \`web_search\` becomes \`TavilySearchResults\` (or your search of choice), and now you're managing a search-provider key. Lifecycle hooks become \`BaseCallbackHandler\` subclasses or LangGraph node interceptors. Budget a day or two for that retrofit.
+
+In both directions, the agent's business logic — which tools, how to compose them, how to validate output — stays the same. What changes is the runtime layer and the integration catalog around it.`,
+  lastDepthUpdate: "2026-05-17",
 };
 
 export default copy;

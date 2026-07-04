@@ -1,19 +1,13 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-CrewAI models work as a team: \`Agent(role, goal, backstory)\` objects bound to \`Task\` items, scheduled by a \`Crew\` with \`process=sequential\` or \`hierarchical\`. LangChain models work as a chain: an \`AgentExecutor\` wrapping an \`LLMChain\`, \`PromptTemplate\`, and \`OutputParser\`, with one agent driving a tool registry.
+  headToHead: `CrewAI models work as a team: \`Agent(role, goal, backstory)\` objects bound to \`Task\` items, scheduled by a \`Crew\` with \`process=sequential\` or \`hierarchical\`. LangChain models work as a chain: an \`AgentExecutor\` wrapping an \`LLMChain\`, \`PromptTemplate\`, and \`OutputParser\`, with one agent driving a tool registry.
 
 CrewAI thinks in **roles**; LangChain thinks in **components**.
-
-### Ecosystem
 
 LangChain's surface area is huge — document loaders, vector stores, embedding models, retrievers, plus \`LangSmith\` for tracing and \`LangServe\` for deployment. CrewAI ships a tighter core: \`@tool\`, \`Crew\`, three memory classes (\`ShortTermMemory\`, \`LongTermMemory\`, \`EntityMemory\`), and first-class MCP support.
 
 If you need fourteen vector store integrations on day one, LangChain has them. If you don't, CrewAI's smaller dependency tree is less to maintain.
-
-### Use case
 
 LangChain fits **single-agent, integration-heavy** workflows — RAG pipelines, multi-provider swaps, anything where the LLM is one node in a bigger graph (use \`LangGraph\` for branching state). CrewAI fits **multi-agent role separation** — a researcher hands off to a writer hands off to an editor, each with its own \`backstory\` and \`tools\` list.
 

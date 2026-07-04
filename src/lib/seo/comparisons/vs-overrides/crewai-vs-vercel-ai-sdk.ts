@@ -1,17 +1,11 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-CrewAI is a Python multi-agent orchestrator: you declare \`Agent(role, goal, backstory, tools, llm)\` instances, wrap work in \`Task\` objects, and hand them to a \`Crew(process=sequential|hierarchical)\` that routes execution. Vercel AI SDK is a TypeScript toolkit aimed at a single agent loop — \`generateText({ model, tools, maxSteps })\` runs tool dispatch, \`streamText\` returns a \`ReadableStream\` of deltas, and \`tool({ parameters: z.object(...), execute })\` defines the callable surface. CrewAI thinks in **teams of specialists**; the AI SDK thinks in **one model call you stream to a UI**.
-
-### Ecosystem
+  headToHead: `CrewAI is a Python multi-agent orchestrator: you declare \`Agent(role, goal, backstory, tools, llm)\` instances, wrap work in \`Task\` objects, and hand them to a \`Crew(process=sequential|hierarchical)\` that routes execution. Vercel AI SDK is a TypeScript toolkit aimed at a single agent loop — \`generateText({ model, tools, maxSteps })\` runs tool dispatch, \`streamText\` returns a \`ReadableStream\` of deltas, and \`tool({ parameters: z.object(...), execute })\` defines the callable surface. CrewAI thinks in **teams of specialists**; the AI SDK thinks in **one model call you stream to a UI**.
 
 CrewAI lives in the Python data/ML stack — it leans on \`ShortTermMemory\`, \`LongTermMemory\`, \`EntityMemory\`, and a first-class MCP integration for tools. Vercel AI SDK lives in the JS/React stack — it ships \`useChat\`, \`useCompletion\`, \`streamUI\` for RSC, Zod schemas for \`generateObject\`, and one-line provider swaps (\`openai('gpt-4o')\` → \`anthropic('claude-3-5-sonnet')\`). They do not really overlap on runtime: one is a Python orchestration layer, the other is a TypeScript LLM client + React hook bundle.
 
-### Use case
-
-Reach for CrewAI when the workflow itself has named roles — researcher → writer → editor — and you want \`Crew\` to handle delegation and task ordering for you. Reach for Vercel AI SDK when chat or generation is a **UI feature in a Next.js app** and \`useChat\` plus streaming is the actual hard part. CrewAI optimizes for **multi-agent prompt routing on the server**; Vercel AI SDK optimizes for **single-agent streaming into a browser**. They rarely compete for the same slot in a stack.`,
+Use CrewAI when the workflow itself has named roles — researcher → writer → editor — and you want \`Crew\` to handle delegation and task ordering for you. Use Vercel AI SDK when chat or generation is a **UI feature in a Next.js app** and \`useChat\` plus streaming is the actual hard part. CrewAI optimizes for **multi-agent prompt routing on the server**; Vercel AI SDK optimizes for **single-agent streaming into a browser**. They rarely compete for the same slot in a stack.`,
   pickAIf: `Pick crewai if your project lives or dies on coordinating multiple specialist agents on the server.
 
 - **Named roles drive prompt quality**: When \`role\`, \`goal\`, and \`backstory\` per \`Agent\` materially change output — content pipelines, research crews, analyst → reporter handoffs — CrewAI's vocabulary maps directly to how you already think.

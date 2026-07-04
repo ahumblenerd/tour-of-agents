@@ -1,40 +1,40 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
+  headToHead: `Agno and CrewAI both want to be the framework you reach for, but they have opposite opinions about what an agent looks like.
 
-Agno centers on a single \`Agent\` class — you pass \`model\`, \`tools\`, \`instructions\`, \`knowledge\`, and call \`agent.run()\`. CrewAI splits the world into three primitives: \`Agent\` (with \`role\`, \`goal\`, \`backstory\`), \`Task\` (a unit of work), and \`Crew\` (the orchestrator with \`process=sequential\` or \`hierarchical\`).
+Agno is one class. You write \`Agent(model=..., tools=..., instructions=..., knowledge=...)\`, call \`agent.run()\`, and you're done. If you need a second agent, you wrap it in a \`Team\`. Most of the time you don't.
 
-Agno's mental model is **one configurable agent that happens to support teams**. CrewAI's mental model is **a team-first abstraction** where you can't really avoid the \`Crew\`/\`Task\` ceremony even for trivial workflows.
+CrewAI insists you build a small org chart. There's an \`Agent\` (with a \`role\`, a \`goal\`, and a \`backstory\`), a \`Task\` (the thing it does), and a \`Crew\` (the orchestrator that runs Tasks in \`sequential\` or \`hierarchical\` mode). Even a one-agent script needs the Crew/Task wrapping. The opinion is that this ceremony pays off when you actually have multiple specialists routing work between each other.
 
-### Ecosystem
+The honest split: if your workload is "one capable agent that occasionally asks a helper for help," Agno stays out of your way. If it's "researcher hands off to writer hands off to editor," CrewAI's roles and backstories give the prompts somewhere to live.
 
-Agno ships built-in toolkits (web search, SQL, file ops), first-class **multi-modal support** (vision, audio), and storage backends like \`SqlAgentStorage\` and \`PostgresAgentStorage\`. Memory is one concept — pass \`knowledge\` and let it inject chunks.
+A few practical differences worth knowing before you commit:
 
-CrewAI splits memory into three explicit types: \`ShortTermMemory\`, \`LongTermMemory\`, \`EntityMemory\`. It has no native multi-modal story, but its MCP integration and tool registration via \`@tool\` decorators are clean. CrewAI's hosted enterprise platform exists; Agno's \`AgentOS\` runtime is the equivalent.
+**Multi-modal.** Agno takes vision and audio inputs natively. CrewAI doesn't — you bolt that on yourself.
 
-### Use case
+**Memory.** Agno has one knob (\`knowledge\`). CrewAI splits memory into \`ShortTermMemory\`, \`LongTermMemory\`, and \`EntityMemory\`, which is either useful structure or three things to tune depending on your problem.
 
-Reach for Agno when your workload is **one strong agent** that needs vision, audio, knowledge bases, or persisted sessions — and you only occasionally fan out to a \`Team\` for sequential or parallel sub-steps. The single-class API stays out of your way.
+**Persistence.** Agno ships \`SqlAgentStorage\` and \`PostgresAgentStorage\`. CrewAI has memory backends but the integration story is less direct.
 
-Reach for CrewAI when the **orchestration is the product**: a researcher hands off to a writer, who hands off to an editor, and you want \`role\`/\`goal\`/\`backstory\` to drive prompt quality across distinct specialists. CrewAI's hierarchical process and delegation guardrails matter when agents actually need to route work between each other — not when one agent is doing 90% of the job.
+**Runtime.** Both have a hosted offering — Agno's \`AgentOS\`, CrewAI's enterprise platform — for teams that don't want to self-host.
 
-### Use case
+If you genuinely can't decide, the tiebreaker is whether you're building one agent with side helpers (Agno) or multiple peer agents trading work (CrewAI). Most apps turn out to be the first one.`,
+  pickAIf: `Pick Agno when the work is one strong agent doing most of the job.
 
-If you're not sure which fits, the tiebreaker is whether you have **one agent with side helpers** (Agno) or **N peer agents collaborating** (CrewAI).`,
-  pickAIf: `Pick agno if your project lives or dies on a single capable agent with rich inputs and persistence, not on multi-agent routing.
+- Vision or audio inputs are a hard requirement, not a maybe.
+- You want \`tools=[web_search, sql, file_ops]\` to just work without writing wrappers.
+- Sessions need to survive a server restart — \`SqlAgentStorage\` or Postgres, no custom schema.
+- You'd rather have one class to debug than three.`,
+  pickBIf: `Pick CrewAI when the orchestration is the actual product.
 
-- **Multi-modal is a hard requirement**: Agno treats vision and audio as first-class inputs to \`Agent\`. CrewAI doesn't, and bolting it on means writing the plumbing yourself.
-- **You want batteries-included toolkits**: Built-in web search, SQL, and file toolkits drop into the \`tools\` list with no wrapper code. Knowledge bases (PDF, URL, vector DB) plug in via the \`knowledge\` param.
-- **Sessions need to persist**: \`SqlAgentStorage\` and \`PostgresAgentStorage\` give you durable conversation state without rolling your own schema.`,
-  pickBIf: `Pick crewai if your project lives or dies on multiple agents with distinct roles handing work between each other.
+- Distinct agents need distinct system prompts — a researcher and a writer aren't the same persona with two tool sets.
+- Routing between agents is non-trivial: hierarchical delegation, scoped permissions, guardrails on who can call whom.
+- You want memory shaped on three axes (short-term, long-term, entity) instead of one undifferentiated context blob.
+- The team thinks in roles and tasks already, and the abstraction matches their mental model.`,
+  sharedConcerns: `Both sit between you and the model API. That means when something misbehaves inside \`agent.run()\` or \`crew.kickoff()\`, you're reading framework source, not your own code. Agno's single class is lighter than CrewAI's Agent + Task + Crew trio, but both hide the tool-calling loop you'd otherwise own end to end.
 
-- **Roles drive prompt quality**: \`role\`, \`goal\`, and \`backstory\` give you a structured place to encode specialist behavior — useful when a researcher and a writer need genuinely different system prompts.
-- **Orchestration is non-trivial**: \`Crew(process=hierarchical)\` plus delegation guardrails (agents can only delegate within their crew) is meaningful when routing between agents is the hard part.
-- **Memory needs explicit shape**: \`ShortTermMemory\`, \`LongTermMemory\`, and \`EntityMemory\` give you separate axes to tune, instead of one undifferentiated context blob.`,
-  sharedConcerns: `Both frameworks sit between you and the LLM API. That means **upgrades, breaking changes, and debugging through framework internals** when something misbehaves inside \`Agent.run()\` or \`Crew.kickoff()\`. Agno's \`Agent\` is lighter than CrewAI's \`Crew\`/\`Task\`/\`Agent\` trio, but both still hide the \`tool_calls\` loop you'd otherwise own end-to-end.
-
-Both also pull in opinions about **memory, storage, and tool registration** that you may not need. If your agent is one LLM call, a few tools, and a \`messages\` list, you're paying ramp-up cost and dependency weight for abstractions that aren't earning their keep yet.`,
+You also inherit each project's opinions about memory, storage, and tool registration. If your real workload is one LLM call, two tools, and a list of messages, you're paying ramp-up cost for abstractions that aren't earning their weight yet — and the \`/lesson/agent-function\` walkthrough below shows the version of that with no framework at all.`,
 };
 
 export default copy;

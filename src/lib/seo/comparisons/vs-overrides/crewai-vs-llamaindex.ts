@@ -1,23 +1,17 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-CrewAI models work as a **team of specialists**: each \`Agent\` carries a \`role\`, \`goal\`, and \`backstory\`, and a \`Crew\` runs \`Task\` objects sequentially or hierarchically. LlamaIndex models work as **an agent reasoning over indexed data**: \`AgentRunner\` drives the loop, \`ReActAgent\` handles tool-calling, and \`QueryEngineTool\` turns any \`VectorStoreIndex\` into a callable.
+  headToHead: `CrewAI models work as a **team of specialists**: each \`Agent\` carries a \`role\`, \`goal\`, and \`backstory\`, and a \`Crew\` runs \`Task\` objects sequentially or hierarchically. LlamaIndex models work as **an agent reasoning over indexed data**: \`AgentRunner\` drives the loop, \`ReActAgent\` handles tool-calling, and \`QueryEngineTool\` turns any \`VectorStoreIndex\` into a callable.
 
 The two frameworks barely overlap conceptually. CrewAI's primitive is the role; LlamaIndex's primitive is the index.
-
-### Ecosystem
 
 CrewAI gives you orchestration primitives — \`Process.sequential\`, \`Process.hierarchical\`, delegation guardrails, \`ShortTermMemory\`/\`LongTermMemory\`/\`EntityMemory\` — plus \`@tool\` for custom callables. There's no built-in retrieval story; you bring your own RAG.
 
 LlamaIndex gives you data infrastructure — LlamaHub connectors, document parsers, \`VectorStoreIndex\`, integrations with Pinecone, Weaviate, pgvector, Chroma — plus \`FunctionTool\` and \`ChatMemoryBuffer\`. Multi-agent coordination is thinner; it's a single-agent-with-good-tools story, not a crew story.
 
-### Use case
+Use CrewAI when the hard part is **routing between agents with distinct responsibilities** — a researcher hands off to a writer hands off to an editor, and you want named roles in the prompts and a \`Crew\` to enforce delegation rules.
 
-Reach for CrewAI when the hard part is **routing between agents with distinct responsibilities** — a researcher hands off to a writer hands off to an editor, and you want named roles in the prompts and a \`Crew\` to enforce delegation rules.
-
-Reach for LlamaIndex when the hard part is **letting one agent reason over your documents** — multiple collections, custom retrieval per source, re-ranking, or non-trivial parsing. If your project is RAG-shaped, LlamaIndex; if your project is org-chart-shaped, CrewAI. Picking the wrong one means writing the other framework's strengths from scratch.`,
+Use LlamaIndex when the hard part is **letting one agent reason over your documents** — multiple collections, custom retrieval per source, re-ranking, or non-trivial parsing. If your project is RAG-shaped, LlamaIndex; if your project is org-chart-shaped, CrewAI. Picking the wrong one means writing the other framework's strengths from scratch.`,
   pickAIf: `Pick crewai if your project lives or dies on coordinating multiple agents with distinct responsibilities.
 
 - **Named roles drive prompt quality**: When \`role\`/\`goal\`/\`backstory\` for a \`"Senior Researcher"\` vs a \`"Technical Editor"\` produces materially different outputs, CrewAI's vocabulary is doing real work.

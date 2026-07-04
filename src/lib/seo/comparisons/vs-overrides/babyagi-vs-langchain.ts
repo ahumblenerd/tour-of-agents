@@ -1,21 +1,13 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-BabyAGI is a **single-purpose loop**: an execution agent, a task creation agent, and a prioritization agent passing a \`deque\` of task dicts between three LLM calls. LangChain is a **component framework**: \`AgentExecutor\` orchestrates an \`LLMChain\` over a registry of \`@tool\`-decorated callables, with \`OutputParser\` and \`ConversationBufferMemory\` plugged in around it. One is a pattern you read top-to-bottom in a single file; the other is a class hierarchy you compose.
-
-### Ecosystem
+  headToHead: `BabyAGI is a **single-purpose loop**: an execution agent, a task creation agent, and a prioritization agent passing a \`deque\` of task dicts between three LLM calls. LangChain is a **component framework**: \`AgentExecutor\` orchestrates an \`LLMChain\` over a registry of \`@tool\`-decorated callables, with \`OutputParser\` and \`ConversationBufferMemory\` plugged in around it. One is a pattern you read top-to-bottom in a single file; the other is a class hierarchy you compose.
 
 BabyAGI is ~100 lines, one author, MIT, last meaningful update early 2026 — there is no plugin catalog, no commercial backer, no observability layer. LangChain ships with document loaders, text splitters, embedding models, and vector store adapters, plus \`LangSmith\` for tracing and \`LangServe\` for deployment, backed by Sequoia and Benchmark. If you want a \`PydanticOutputParser\` or a Pinecone retriever wired up, LangChain has it; BabyAGI expects you to glue Pinecone or Chroma in yourself.
 
-### Use case
-
 BabyAGI fits **open-ended task discovery** — you give it an objective, it invents subtasks, reprioritizes, and keeps going until you stop it. LangChain fits **defined workflows with known tools** — \`AgentExecutor.invoke()\` runs a reason-act-observe loop where the tools are fixed and the exit condition is a final answer. BabyAGI leaves stopping criteria open; LangChain expects you to know when you're done.
 
-### Use case
-
-Reach for BabyAGI when the subtasks are unknown at design time and exploration itself is the product. Reach for LangChain when the agent is one component in a larger product and you need integrations — RAG, providers, deployment — to come for free rather than be hand-rolled.`,
+Use BabyAGI when the subtasks are unknown at design time and exploration itself is the product. Use LangChain when the agent is one component in a larger product and you need integrations — RAG, providers, deployment — to come for free rather than be hand-rolled.`,
   pickAIf: `Pick babyagi if your project lives or dies on **dynamic task decomposition** against an open-ended objective.
 
 - **Subtasks are unknown upfront**: The task creation agent earns its keep when you genuinely cannot enumerate steps in advance — research, exploration, or open investigation where the next move depends on the last result.

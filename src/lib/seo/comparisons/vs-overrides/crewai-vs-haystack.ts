@@ -1,21 +1,15 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-CrewAI models work as a **team metaphor** — \`Agent(role, goal, backstory)\` instances assigned to \`Task\` objects, orchestrated by a \`Crew\` with \`process=sequential\` or \`hierarchical\`. Haystack models work as a **typed dataflow graph** — a \`Pipeline\` of \`@component\` classes wired with \`add_component()\` and \`connect()\`, where each \`run()\` method has typed inputs and outputs.
+  headToHead: `CrewAI models work as a **team metaphor** — \`Agent(role, goal, backstory)\` instances assigned to \`Task\` objects, orchestrated by a \`Crew\` with \`process=sequential\` or \`hierarchical\`. Haystack models work as a **typed dataflow graph** — a \`Pipeline\` of \`@component\` classes wired with \`add_component()\` and \`connect()\`, where each \`run()\` method has typed inputs and outputs.
 
 One reasons about *who* does the work; the other reasons about *how data flows* between stages. CrewAI hides the agent loop inside \`Agent\` execution. Haystack exposes every retrieval and generation step as a node you can inspect.
-
-### Ecosystem
 
 Haystack ships a wide catalog for retrieval — \`DocumentStore\` integrations for Elasticsearch, Qdrant, Pinecone, Weaviate, plus PDF/HTML converters, rankers, and \`PromptBuilder\`. Pipelines serialize to YAML and deploy through \`Hayhooks\`.
 
 CrewAI's catalog is thinner on retrieval and richer on agent collaboration — \`@tool\` decorators, \`ShortTermMemory\` / \`LongTermMemory\` / \`EntityMemory\`, and built-in delegation between agents in the same \`Crew\`. Haystack has the older codebase (since 2019) and document-Q&A heritage; CrewAI is newer and focused on multi-agent coordination.
 
-### Use case
-
-Reach for CrewAI when the hard part is **routing work across roles** — a researcher hands off to a writer hands off to an editor, and you want named agents with distinct system prompts and bounded delegation. Reach for Haystack when the hard part is **retrieval** — chunking documents, combining sparse and dense retrievers, re-ranking, and swapping vector stores without rewriting glue code.
+Use CrewAI when the hard part is **routing work across roles** — a researcher hands off to a writer hands off to an editor, and you want named agents with distinct system prompts and bounded delegation. Use Haystack when the hard part is **retrieval** — chunking documents, combining sparse and dense retrievers, re-ranking, and swapping vector stores without rewriting glue code.
 
 A \`Crew\` with sequential tasks looks like a degenerate Haystack pipeline; a Haystack \`Agent\` component with one \`ChatGenerator\` looks like a degenerate \`Crew\` of one. They overlap in the middle and diverge at the edges.`,
   pickAIf: `Pick crewai if your project lives or dies on coordinating multiple specialist agents with distinct prompts.

@@ -1,23 +1,17 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-LangChain is a **class hierarchy** — \`AgentExecutor\`, \`LLMChain\`, \`PromptTemplate\`, \`BaseTool\`, \`ConversationBufferMemory\` — built to abstract over any LLM provider. The Agents SDK is **four primitives** (\`Agent\`, \`Runner\`, handoffs, guardrails) intentionally coupled to OpenAI's chat completions API.
+  headToHead: `LangChain is a **class hierarchy** — \`AgentExecutor\`, \`LLMChain\`, \`PromptTemplate\`, \`BaseTool\`, \`ConversationBufferMemory\` — built to abstract over any LLM provider. The Agents SDK is **four primitives** (\`Agent\`, \`Runner\`, handoffs, guardrails) intentionally coupled to OpenAI's chat completions API.
 
 LangChain inverts control: you compose objects and \`AgentExecutor.invoke()\` runs the loop. The SDK does the same with \`Runner.run()\`, but the surface area is small enough you can read the source in an afternoon.
-
-### Ecosystem
 
 LangChain ships **dozens of integrations** — document loaders, text splitters, embedding models, vector stores — plus LangSmith for tracing and LangServe for deployment. That catalog is the real product.
 
 The Agents SDK ships almost nothing beyond the core loop. **Auto-schema generation** from Python type hints is the one ergonomic win — change a function signature, the JSON tool schema updates. No vector store wrappers, no retriever classes, no memory hierarchy.
 
-### Use case
+Use LangChain when your agent is **one node in a larger pipeline** with retrieval, multiple providers, and observability needs — or when you want **LangGraph** for branching, parallelism, and durable state across nodes.
 
-Reach for LangChain when your agent is **one node in a larger pipeline** with retrieval, multiple providers, and observability needs — or when you want **LangGraph** for branching, parallelism, and durable state across nodes.
-
-Reach for the Agents SDK when you're committed to OpenAI and want **multi-agent routing** via \`Handoff\` plus the \`InputGuardrail\`/\`OutputGuardrail\` tripwire pattern as a standard. It's a reference implementation, not a batteries-included framework — which is the point.`,
+Use the Agents SDK when you're committed to OpenAI and want **multi-agent routing** via \`Handoff\` plus the \`InputGuardrail\`/\`OutputGuardrail\` tripwire pattern as a standard. It's a reference implementation, not a batteries-included framework — which is the point.`,
   pickAIf: `Pick langchain if your project lives or dies on the breadth of integrations and provider portability.
 
 - **Multi-provider swap**: Change one class to move from OpenAI to Anthropic to a local model. If your contract or roadmap requires provider-agnostic code, \`BaseChatModel\` pays for itself.

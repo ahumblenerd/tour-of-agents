@@ -1,15 +1,9 @@
 import type { VsCopy } from "../types";
 
 const copy: VsCopy = {
-  headToHead: `### Paradigm
-
-LangChain is a Python-first class hierarchy: \`AgentExecutor\` orchestrates \`LLMChain\` + \`PromptTemplate\` + \`OutputParser\`, tools extend \`BaseTool\` or wear \`@tool\`, and memory is its own class tree (\`ConversationBufferMemory\`, \`VectorStoreRetrieverMemory\`). Vercel AI SDK is a TypeScript function library: \`generateText({ model, tools, maxSteps })\` runs the loop, \`tool({ parameters: z.object(...), execute })\` defines a tool inline with Zod, and \`streamText\` returns a typed \`ReadableStream\`. One asks you to compose classes; the other asks you to call functions.
-
-### Ecosystem
+  headToHead: `LangChain is a Python-first class hierarchy: \`AgentExecutor\` orchestrates \`LLMChain\` + \`PromptTemplate\` + \`OutputParser\`, tools extend \`BaseTool\` or wear \`@tool\`, and memory is its own class tree (\`ConversationBufferMemory\`, \`VectorStoreRetrieverMemory\`). Vercel AI SDK is a TypeScript function library: \`generateText({ model, tools, maxSteps })\` runs the loop, \`tool({ parameters: z.object(...), execute })\` defines a tool inline with Zod, and \`streamText\` returns a typed \`ReadableStream\`. One asks you to compose classes; the other asks you to call functions.
 
 LangChain's pull is its catalog — document loaders, text splitters, embeddings, dozens of vector stores — plus \`LangSmith\` for tracing and \`LangServe\` for deploy. The AI SDK's pull is the React surface: \`useChat\`, \`useCompletion\`, and \`streamUI\` for RSC streaming, plus provider-portable model imports (\`openai('gpt-4o')\` → \`anthropic('claude-3-5-sonnet')\`) and tight Vercel hosting/AI Gateway integration. LangChain wins on backend integrations; the AI SDK wins on frontend plumbing and streaming protocols.
-
-### Use case
 
 If the agent sits behind a RAG pipeline, talks to Pinecone, ingests PDFs, and needs \`LangSmith\` traces, LangChain's catalog saves real time. If the agent is the chat box inside a Next.js app and you need token-by-token UI updates, \`useChat\` + \`streamText\` save a day of \`useState\` plumbing you'd otherwise write. LangChain assumes Python and a backend; the AI SDK assumes TypeScript and a UI.`,
   pickAIf: `Pick langchain if your project lives or dies on the Python integration catalog and production observability.
