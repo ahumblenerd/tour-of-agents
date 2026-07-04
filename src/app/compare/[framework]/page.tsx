@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { frameworks, getFramework } from "@/lib/seo/comparisons";
+import { isCompareSlugNoindexed } from "@/lib/seo/comparisons/noindex";
 import { ComparisonArticle } from "@/components/compare/comparison-article";
 import { CompareJsonLd } from "@/components/seo/compare-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
@@ -20,6 +21,7 @@ export async function generateMetadata({
   if (!fw) return {};
 
   const url = `${SITE}/compare/${slug}`;
+  const noindex = isCompareSlugNoindexed(slug);
   return {
     title: `${fw.title} — A Tour of Agents`,
     description: fw.description,
@@ -33,6 +35,7 @@ export async function generateMetadata({
     },
     twitter: { card: "summary_large_image", title: fw.title, description: fw.description },
     alternates: { canonical: url },
+    ...(noindex && { robots: { index: false, follow: true } }),
   };
 }
 

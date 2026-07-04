@@ -4,6 +4,7 @@ import type { MetadataRoute } from "next";
 import { allLessons } from "@/lib/lessons/registry";
 import { frameworks } from "@/lib/seo/comparisons";
 import { getAllPairs } from "@/lib/seo/comparisons/pairs";
+import { isCompareSlugNoindexed } from "@/lib/seo/comparisons/noindex";
 import { posts } from "@/lib/blog/posts";
 
 const SITE = "https://tinyagents.dev";
@@ -54,6 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Framework comparisons — lastDepthUpdate when present
   entries.push({ url: `${SITE}/compare`, lastModified: today, changeFrequency: "weekly", priority: 0.8 });
   for (const fw of frameworks) {
+    if (isCompareSlugNoindexed(fw.slug)) continue;
     entries.push({
       url: `${SITE}/compare/${fw.slug}`,
       lastModified: fw.lastDepthUpdate ?? today,
