@@ -3,7 +3,7 @@ import type { FrameworkComparison } from "./types";
 export const googleAdk: FrameworkComparison = {
   slug: "google-adk",
   name: "Google ADK",
-  stats: { githubStars: 18734, githubForks: 3179, githubRepo: "google/adk-python", language: "Python", license: "Apache-2.0", firstRelease: "2025-04-01", lastUpdated: "2026-04-04", createdBy: "Google", backedBy: "Google/Alphabet", productionReady: true, cloudOffering: "Vertex AI" },
+  stats: { githubStars: 18734, githubForks: 3179, githubRepo: "google/adk-python", language: "Python", license: "Apache-2.0", firstRelease: "2025-04-01", lastUpdated: "2026-07-04", createdBy: "Google", backedBy: "Google/Alphabet", productionReady: true, cloudOffering: "Vertex AI" },
   title: "Google ADK vs Building from Scratch",
   description:
     "Compare Google's Agent Development Kit to plain Python. See what hierarchical agents, workflow agents, and Vertex AI integration actually do — in ~60 lines.",
@@ -13,7 +13,7 @@ export const googleAdk: FrameworkComparison = {
     "Agent Development Kit", "Google ADK tutorial",
   ],
   intro:
-    "Google's Agent Development Kit (ADK) is an open-source framework for building multi-agent systems. It provides hierarchical agent trees, workflow agents (Sequential, Parallel, Loop), tight Vertex AI integration, and a rich tool ecosystem. Every one of these maps to plain Python primitives.",
+    "Google's Agent Development Kit (ADK) is an open-source framework for building multi-agent systems. It provides hierarchical agent trees, workflow agents (Sequential, Parallel, Loop), tight Vertex AI integration, and a rich tool ecosystem. ADK 2.0 for Python GA'd in 2026 and Java 1.0.0 shipped the same year, so it's a multi-language SDK now rather than a Python-only one. Every one of these maps to plain Python primitives.",
   rows: [
     { concept: "Agent", framework: "`LlmAgent` class with model, instructions, and `sub_agents` list", plain: "A function that POSTs to `/chat/completions` and returns the response" },
     { concept: "Tools", framework: "`FunctionTool`, built-in tools (Search, Code Exec), third-party integrations", plain: "A dict of callables: `tools = {\"search\": search_web}`" },
@@ -68,6 +68,11 @@ export const googleAdk: FrameworkComparison = {
         title: "ADK Samples on GitHub",
         url: "https://github.com/google/adk-samples",
         description: "Official sample agents from Google demonstrating ADK patterns.",
+      },
+      {
+        title: "Announcing ADK for Java 1.0.0",
+        url: "https://developers.googleblog.com/announcing-adk-for-java-100-building-the-future-of-ai-agents-in-java/",
+        description: "Google's launch post for the JVM port of ADK, confirming ADK is no longer Python-only.",
       },
     ],
   },

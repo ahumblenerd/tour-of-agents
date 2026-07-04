@@ -28,7 +28,7 @@ export const langgraph: FrameworkComparison = {
     "stateful agent workflow", "agent state machine", "LangGraph tutorial",
   ],
   intro:
-    "LangGraph is LangChain's stateful workflow framework — a graph of nodes (functions) connected by edges with shared state. It adds checkpointing, conditional branching, parallel fanout, and human-in-the-loop pauses on top of the core agent loop. Each piece maps to a few lines of Python you can write yourself.",
+    "LangGraph is LangChain's stateful workflow framework — a graph of nodes (functions) connected by edges with shared state. It adds checkpointing, conditional branching, parallel fanout, and human-in-the-loop pauses on top of the core agent loop. LangGraph 1.0 GA'd in October 2025 alongside LangChain 1.0 — the API is now stability-focused, no breaking changes on the roadmap. Each piece maps to a few lines of Python you can write yourself.",
   rows: [
     { concept: "Agent", framework: "A `StateGraph` with nodes, edges, and a typed `State` channel", plain: "A function that calls an LLM and updates a dict" },
     { concept: "Tools", framework: "`ToolNode(tools)` paired with a conditional edge for routing", plain: "A dict of callables: `tools[name](**args)` dispatched in a loop" },

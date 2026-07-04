@@ -3,7 +3,7 @@ import type { FrameworkComparison } from "./types";
 export const mastra: FrameworkComparison = {
   slug: "mastra",
   name: "Mastra",
-  stats: { githubStars: 22660, githubForks: 1839, githubRepo: "mastra-ai/mastra", language: "TypeScript", license: "MIT", firstRelease: "2024-08-06", lastUpdated: "2026-04-04", createdBy: "Mastra AI", weeklyNpmDownloads: 244021 },
+  stats: { githubStars: 22660, githubForks: 1839, githubRepo: "mastra-ai/mastra", language: "TypeScript", license: "Apache-2.0", firstRelease: "2024-08-06", lastUpdated: "2026-07-04", createdBy: "Mastra AI", backedBy: "Spark Capital, Y Combinator", fundingStatus: "Series A ($22M, Apr 2026 — $35M total)", weeklyNpmDownloads: 244021 },
   title: "Mastra vs Building from Scratch",
   description:
     "Compare Mastra's TypeScript agent framework to plain code. See what agents, workflows, RAG, and Mastra Studio actually do — in ~60 lines.",
@@ -43,7 +43,7 @@ export const mastra: FrameworkComparison = {
     },
   ],
   faqs: [
-    { question: "What is Mastra and who created it?", answer: "Mastra is a TypeScript-first AI agent framework created by the team behind Gatsby. It provides agents with tool calling, a workflow engine, built-in RAG, memory systems, and Mastra Studio for visual debugging. It launched from Y Combinator W25 with $13M in funding." },
+    { question: "What is Mastra and who created it?", answer: "Mastra is a TypeScript-first AI agent framework created by the team behind Gatsby. It provides agents with tool calling, a workflow engine, built-in RAG, memory systems, and Mastra Studio for visual debugging. It launched from Y Combinator W25 and raised a $22M Series A led by Spark Capital in April 2026, bringing total funding to $35M. Relicensed from Elastic v2 to Apache 2.0 the same month." },
     { question: "How does Mastra compare to LangChain?", answer: "Mastra is TypeScript-native while LangChain started in Python (LangChain.js is a port). Mastra bundles workflows, RAG, and a visual debugger in one package. LangChain has broader integrations and a larger ecosystem. Choose Mastra for TypeScript-first development; choose LangChain for Python or maximum provider coverage." },
     { question: "Do I need Mastra to build AI agents in TypeScript?", answer: "No. The core agent pattern is about 60 lines of TypeScript: a fetch call to the LLM API, an object of tool functions, and a while loop. Mastra adds value when you need workflows, RAG, memory, and visual debugging in one cohesive TypeScript package." },
   ],

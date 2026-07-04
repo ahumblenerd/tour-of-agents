@@ -3,7 +3,7 @@ import type { FrameworkComparison } from "./types";
 export const pydanticAi: FrameworkComparison = {
   slug: "pydantic-ai",
   name: "Pydantic AI",
-  stats: { githubStars: 16091, githubForks: 1873, githubRepo: "pydantic/pydantic-ai", language: "Python", license: "MIT", firstRelease: "2024-06-21", lastUpdated: "2026-04-04", createdBy: "Pydantic (Samuel Colvin)" },
+  stats: { githubStars: 16091, githubForks: 1873, githubRepo: "pydantic/pydantic-ai", language: "Python", license: "MIT", firstRelease: "2024-06-21", lastUpdated: "2026-07-04", createdBy: "Pydantic (Samuel Colvin)" },
   title: "Pydantic AI vs Building from Scratch",
   description:
     "Compare Pydantic AI's type-safe agent framework to plain Python. See what typed tools, structured outputs, and model-agnostic agents actually do — in ~60 lines.",
@@ -13,7 +13,7 @@ export const pydanticAi: FrameworkComparison = {
     "Pydantic AI tutorial", "structured AI output",
   ],
   intro:
-    "Pydantic AI is a type-safe agent framework built by the Pydantic team. It brings Pydantic's validation philosophy to AI agents: typed tool definitions, structured outputs via Pydantic models, and compile-time checking. Every feature maps to a few lines of plain Python with manual validation.",
+    "Pydantic AI is a type-safe agent framework built by the Pydantic team. It brings Pydantic's validation philosophy to AI agents: typed tool definitions, structured outputs via Pydantic models, and compile-time checking. Version 2.0 shipped in June 2026 (v2.1 followed the same month) — a substantial API refresh after the September 2025 1.0. Every feature maps to a few lines of plain Python with manual validation.",
   rows: [
     { concept: "Agent", framework: "`Agent()` class with typed `result_type`, system prompt, and `model` parameter", plain: "A function that POSTs to `/chat/completions` and validates the response shape" },
     { concept: "Tools", framework: "`@agent.tool` decorator with typed parameters and Pydantic validation", plain: "A dict of callables with a wrapper that validates args: `json.loads` + `isinstance` checks" },

@@ -3,7 +3,7 @@ import type { FrameworkComparison } from "./types";
 export const babyagi: FrameworkComparison = {
   slug: "babyagi",
   name: "BabyAGI",
-  stats: { githubStars: 22208, githubForks: 2843, githubRepo: "yoheinakajima/babyagi", language: "Python", license: "MIT", firstRelease: "2023-04-03", lastUpdated: "2026-01-31", createdBy: "Yohei Nakajima" },
+  stats: { githubStars: 22208, githubForks: 2843, githubRepo: "yoheinakajima/babyagi", language: "Python", license: "MIT", firstRelease: "2023-04-03", lastUpdated: "2024-09-01 (repo archived)", createdBy: "Yohei Nakajima" },
   title: "BabyAGI vs Building from Scratch",
   description:
     "Compare BabyAGI's task-driven agent loop to plain Python. See what task creation, prioritization, and vector memory actually do — in ~60 lines.",
@@ -13,7 +13,7 @@ export const babyagi: FrameworkComparison = {
     "BabyAGI tutorial", "autonomous task agent",
   ],
   intro:
-    "BabyAGI popularized the task-driven autonomous agent in ~100 lines of Python. It runs three LLM-powered sub-agents — execution, task creation, and prioritization — in a loop, storing results in a vector database. The pattern is elegant, and it maps cleanly to plain Python.",
+    "BabyAGI popularized the task-driven autonomous agent in ~100 lines of Python. It runs three LLM-powered sub-agents — execution, task creation, and prioritization — in a loop, storing results in a vector database. The repo was archived by its author in September 2024 — it is a canonical pattern reference, not a maintained framework. The pattern still maps cleanly to plain Python, which is arguably why the author archived it.",
   rows: [
     { concept: "Agent", framework: "Three sub-agents: execution agent, task creation agent, prioritization agent", plain: "Three LLM calls with different system prompts inside one `while` loop" },
     { concept: "Tools", framework: "Task execution via LLM completion with context from vector DB retrieval", plain: "A function that calls the LLM with the task description and relevant context" },
