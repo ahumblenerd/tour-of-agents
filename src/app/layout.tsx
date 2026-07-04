@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "@/components/providers";
 import { CourseJsonLd } from "@/components/seo/course-json-ld";
 import { DeferredGA } from "@/components/analytics/deferred-ga";
+import { ConsultingBanner } from "@/components/consulting-banner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,6 +66,7 @@ export default function RootLayout({
         <DeferredGA gaId="G-1LWH9HJ17W" />
         <CourseJsonLd />
         <Providers>
+          <ConsultingBanner />
           {children}
         </Providers>
       </body>
