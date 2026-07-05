@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LessonDefinition } from "@/lib/lessons/types";
 import { getNextLesson, getPreviousLesson, getLessonCount } from "@/lib/lessons/registry";
 import { getProgress } from "@/lib/settings/progress";
+import { track } from "@/lib/analytics/posthog";
 
 interface LessonNavProps {
   lesson: LessonDefinition;
@@ -59,7 +60,11 @@ export function LessonNav({ lesson, onFinish, canFinish }: LessonNavProps) {
             {lesson.number} / {total}
             <span className="ml-2 text-primary">{completedCount} done</span>
           </span>
-          <Link href={`/lesson/${next.slug}`} className="flex items-center gap-3">
+          <Link
+            href={`/lesson/${next.slug}`}
+            onClick={() => track("next_lesson_clicked", { from: lesson.number, to: next.number, source: "prominent" })}
+            className="flex items-center gap-3"
+          >
             <span className="text-xs text-muted-foreground hidden sm:inline">
               Next: {next.subtitle}
             </span>
@@ -88,7 +93,10 @@ export function LessonNav({ lesson, onFinish, canFinish }: LessonNavProps) {
             )}
           </span>
           {next ? (
-            <Link href={`/lesson/${next.slug}`}>
+            <Link
+              href={`/lesson/${next.slug}`}
+              onClick={() => track("next_lesson_clicked", { from: lesson.number, to: next.number, source: "nav" })}
+            >
               <Button variant="ghost" size="sm" className="text-xs gap-1">
                 <span className="hidden sm:inline">{next.number}. {next.title}</span>
                 <span className="sm:hidden">Next</span>

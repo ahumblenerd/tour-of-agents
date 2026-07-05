@@ -2,6 +2,7 @@ import { useRef, useCallback } from "react";
 import { toast } from "sonner";
 import { LESSON_TOAST, CODE_PRAISE, NEXT_LESSON_SLUG } from "@/lib/lessons/praise";
 import { playSuccess } from "@/lib/audio/sounds";
+import { track } from "@/lib/analytics/posthog";
 
 /**
  * Shows a toast + plays a sound on first successful code run per lesson.
@@ -21,7 +22,10 @@ export function useLessonToast(lessonNumber: number) {
           duration: 5000,
           action: {
             label: "Next lesson",
-            onClick: () => { window.location.href = `/lesson/${nextSlug}`; },
+            onClick: () => {
+              track("next_lesson_clicked", { from: lessonNumber, to: lessonNumber + 1, source: "toast" });
+              window.location.href = `/lesson/${nextSlug}`;
+            },
           },
         });
       }
