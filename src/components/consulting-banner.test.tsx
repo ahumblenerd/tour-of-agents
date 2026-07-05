@@ -25,10 +25,14 @@ describe("ConsultingBanner", () => {
     expect(screen.getByText(/need help with your AI systems/i)).toBeInTheDocument();
   });
 
-  it("links the CTA to the cal.com booking URL", () => {
+  it("links the CTA to the cal.com booking URL with UTM tags", () => {
     render(<ConsultingBanner />);
     const cta = screen.getByRole("link", { name: /book a call/i });
-    expect(cta).toHaveAttribute("href", "https://cal.com/0xahd/30min");
+    const href = cta.getAttribute("href") || "";
+    expect(href).toContain("https://cal.com/0xahd/30min");
+    expect(href).toContain("utm_source=tinyagents");
+    expect(href).toContain("utm_medium=banner");
+    expect(href).toContain("utm_content=");
     expect(cta).toHaveAttribute("target", "_blank");
     expect(cta.getAttribute("rel")).toMatch(/noopener/);
   });

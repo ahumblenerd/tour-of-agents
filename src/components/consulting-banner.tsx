@@ -1,19 +1,32 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { track } from "@/lib/analytics/posthog";
 
 const DISMISSED_KEY = "consulting-banner-dismissed";
-const CAL_URL = "https://cal.com/0xahd/30min";
+const CAL_BASE = "https://cal.com/0xahd/30min";
+
+function buildCalUrl(pathname: string | null): string {
+  const params = new URLSearchParams({
+    utm_source: "tinyagents",
+    utm_medium: "banner",
+    utm_content: pathname || "/",
+  });
+  return `${CAL_BASE}?${params.toString()}`;
+}
 
 export function ConsultingBanner() {
   const [dismissed, setDismissed] = useState(false);
+  const pathname = usePathname();
 
   if (dismissed) return null;
   if (typeof window !== "undefined" && localStorage.getItem(DISMISSED_KEY) === "1") {
     return null;
   }
+
+  const calUrl = buildCalUrl(pathname);
 
   const dismiss = () => {
     setDismissed(true);
@@ -38,10 +51,10 @@ export function ConsultingBanner() {
         </p>
         <div className="flex shrink-0 items-center gap-1">
           <a
-            href={CAL_URL}
+            href={calUrl}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => track("consulting_banner_clicked")}
+            onClick={() => track("consulting_banner_clicked", { path: pathname })}
             className="rounded-md bg-primary px-3 py-1 text-xs font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             Book a call
