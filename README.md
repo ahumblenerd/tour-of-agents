@@ -44,7 +44,7 @@ Nine lessons. Each builds one concept on the previous and runs interactively in 
 | 8 | **Self-Scheduling** | The agent enqueues its own follow-up work; outer loop processes the queue with a budget | 50 |
 | 9 | **The Whole Thing** | All eight concepts composed into ~60 lines of Python | 60 |
 
-There is also a [framework comparison section](https://tinyagents.dev/compare) covering 20 agent frameworks (LangChain, CrewAI, AutoGen, LlamaIndex, DSPy, Mastra, Agno, Semantic Kernel, Smolagents, Pydantic AI, OpenAI Agents SDK, Anthropic Agent SDK, Google ADK, AutoGPT, BabyAGI, CAMEL AI, ControlFlow, Haystack, Rasa, n8n AI) with real GitHub stats, funding data, and per-pair head-to-head pages.
+There is also a [framework comparison section](https://tinyagents.dev/compare) covering 26 agent frameworks — LangChain, LangGraph, CrewAI, AutoGen, LlamaIndex, DSPy, Mastra, Agno, Semantic Kernel, Smolagents, Pydantic AI, OpenAI Agents SDK, Anthropic Agent SDK, Google ADK, AWS Strands, AWS AgentCore, Vercel AI SDK, Eve (Vercel), Flue (Astro/Cloudflare), AutoGPT, BabyAGI, CAMEL AI, ControlFlow, Haystack, Rasa, n8n AI — with real GitHub stats, funding data, and 325 auto-generated head-to-head pages at `/vs/{a}-vs-{b}` covering every pair.
 
 ## Quick start
 
@@ -121,6 +121,26 @@ If this helped you understand agents, the most useful thing you can do is star t
 - ⭐ Star: [github.com/ahumblenerd/tour-of-agents](https://github.com/ahumblenerd/tour-of-agents)
 - 🌐 Live: [tinyagents.dev](https://tinyagents.dev)
 - 🐦 Author: [@ahd_1337](https://x.com/ahd_1337) on X
+
+## Marketing, SEO, and GTM learnings live in this repo — by choice
+
+Most projects keep their growth playbook private. This one doesn't. Every marketing artifact, SEO audit, content strategy note, launch retrospective, and keyword-research doc lives in [`/.agents/`](.agents/) alongside the code — checked into git, visible to anyone who clones the repo.
+
+What's in there:
+
+- [`cmo-tracker.md`](.agents/cmo-tracker.md) — running log of shipped marketing work + baseline metrics
+- [`seo-audit.md`](.agents/seo-audit.md) — technical SEO findings and their fixes
+- [`content-strategy.md`](.agents/content-strategy.md) — content pillars, topic clusters, why they exist
+- [`launch-strategy.md`](.agents/launch-strategy.md) — the initial GTM plan and what actually happened
+- [`keyword-research.md`](.agents/keyword-research.md) — search terms targeted and why
+- [`product-marketing-context.md`](.agents/product-marketing-context.md) — ICP, positioning, and audience thinking
+- [`site-architecture.md`](.agents/site-architecture.md) — information architecture decisions
+- [`social-relaunch-posts.md`](.agents/social-relaunch-posts.md) — social copy that was actually posted
+- [`framework-references.json`](.agents/framework-references.json) — the source data behind the framework comparison pages
+
+Why in the open: this project is as much a learning artifact as a course. If the marketing playbook worked, the receipts should be readable. If it didn't, the failures should be readable too. Treating growth work like code review — versioned, revised, honest — beats treating it like private strategy.
+
+If you're building your own developer-tool site, feel free to lift the parts of this playbook that work for you.
 
 ## License
 
