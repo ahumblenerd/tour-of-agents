@@ -6,7 +6,7 @@ import { useState, useEffect, useSyncExternalStore } from "react";
 import { MoreVertical } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ApiKeyDialog } from "@/components/settings/api-key-dialog";
-import { trackGitHubClicked } from "@/lib/analytics/posthog";
+import { track, trackGitHubClicked } from "@/lib/analytics/posthog";
 import { getProvider, PROVIDER_CONFIGS } from "@/lib/settings/api-keys";
 import { useLessonHeader } from "./lesson-header-context";
 
@@ -46,6 +46,13 @@ export function SiteHeader() {
               <Link href="/compare" className="px-2 py-1 rounded-md hover:bg-muted hover:text-foreground transition-colors">Compare</Link>
               <Link href="/blog" className="px-2 py-1 rounded-md hover:bg-muted hover:text-foreground transition-colors">Blog</Link>
             </nav>
+            <Link
+              href="/lesson/agent-function"
+              onClick={() => track("header_try_lesson_clicked")}
+              className="hidden sm:inline-flex items-center rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Try Lesson 1 &rarr;
+            </Link>
           </div>
         )}
         <div className="ml-auto flex items-center gap-2">
@@ -133,6 +140,12 @@ function MobileOverflow({ onOpenSettings }: { onOpenSettings: () => void }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-48 p-1">
+        <Link href="/lesson/agent-function"
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-colors"
+          onClick={() => { track("header_try_lesson_clicked"); setOpen(false); }}>
+          Try Lesson 1 &rarr;
+        </Link>
+        <div className="h-px bg-border my-1" />
         <Link href="/learn"
           className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
           onClick={() => setOpen(false)}>
