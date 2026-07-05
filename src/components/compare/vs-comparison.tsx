@@ -6,6 +6,7 @@ import { StatsComparison } from "./framework-stats";
 import { MarkdownProse } from "./markdown";
 import { VsVerdict } from "./vs-verdict";
 import { VsJumpNav } from "./vs-jump-nav";
+import { VsCoursePitch } from "./vs-course-pitch";
 
 export function VsComparison({ pair }: { pair: FrameworkPair }) {
   const { frameworkA: a, frameworkB: b, copy } = pair;
@@ -34,6 +35,13 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
       />
 
       <VsJumpNav hasCode={hasCode} hasMigration={hasMigration} />
+
+      <VsCoursePitch
+        nameA={a.name}
+        nameB={b.name}
+        pairSlug={pair.slug}
+        variant="inline"
+      />
 
       {hasCode && (
         <section id="code" data-vs-section="code" className="mb-10 scroll-mt-20">
@@ -121,29 +129,12 @@ export function VsComparison({ pair }: { pair: FrameworkPair }) {
         <VsComparisonTable pair={pair} />
       </section>
 
-      <section
-        id="alternative"
-        data-vs-section="alternative"
-        className="mb-8 p-6 border border-border rounded-lg scroll-mt-20"
-      >
-        <h2 className="text-lg font-semibold mb-2">
-          Or build your own in 60 lines
-        </h2>
-        <p className="text-sm text-muted-foreground mb-1">
-          Both {a.name} and {b.name} implement the same 8 patterns.
-          An agent is a function. Tools are a dict. The loop is a
-          while loop. The whole thing composes in ~60 lines of Python.
-        </p>
-        <p className="text-sm text-muted-foreground mb-4">
-          No framework. No dependencies. No opinions. Just the code.
-        </p>
-        <Link
-          href="/lesson/agent-function"
-          className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:opacity-90"
-        >
-          Build it from scratch &rarr;
-        </Link>
-      </section>
+      <VsCoursePitch
+        nameA={a.name}
+        nameB={b.name}
+        pairSlug={pair.slug}
+        variant="bottom"
+      />
 
       <ComparisonCrossLinks />
     </article>
